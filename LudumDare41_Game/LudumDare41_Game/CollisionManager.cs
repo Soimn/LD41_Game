@@ -22,8 +22,8 @@ class CollisionManager {
     }
 
     public static HitInfo<RectangleCollider, RectangleCollider> RectRectCollisionCheck (RectangleCollider rect_1, RectangleCollider rect_2) {
-        List<Vector2> rect_1_vertecies = GetGlobalVertecies(rect_1.Position, rect_1.Vertecies);
-        List<Vector2> rect_2_vertecies = GetGlobalVertecies(rect_2.Position, rect_2.Vertecies);
+        List<Vector2> rect_1_vertecies = GetGlobalVertecies(rect_1.Position, rect_1.Vertecies, rect_1.Rotation);
+        List<Vector2> rect_2_vertecies = GetGlobalVertecies(rect_2.Position, rect_2.Vertecies, rect_2.Rotation);
         List<Vector2> rect_1_normals = new List<Vector2> { GetAntiClockwiseNormalVector(rect_1_vertecies[1] - rect_1_vertecies[0]), GetAntiClockwiseNormalVector(rect_1_vertecies[2] - rect_1_vertecies[1]) };
         List<Vector2> rect_2_normals = new List<Vector2> { GetAntiClockwiseNormalVector(rect_2_vertecies[1] - rect_2_vertecies[0]), GetAntiClockwiseNormalVector(rect_2_vertecies[2] - rect_2_vertecies[1]) };
         Vector2 minTranslationVector = new Vector2(rect_1.Width + rect_2.Width, rect_1.Height + rect_2.Height);
@@ -64,7 +64,7 @@ class CollisionManager {
     }
 
     public static HitInfo<RectangleCollider, CircleCollider> RectCircleCollisionCheck (RectangleCollider rect, CircleCollider circle) {
-        List<Vector2> rect_vertecies = GetGlobalVertecies(rect.Position, rect.Vertecies);
+        List<Vector2> rect_vertecies = GetGlobalVertecies(rect.Position, rect.Vertecies, rect.Rotation);
         List<Vector2> rect_normals = new List<Vector2> { GetAntiClockwiseNormalVector(rect_vertecies[1] - rect_vertecies[0]), GetAntiClockwiseNormalVector(rect_vertecies[2] - rect_vertecies[1]) };
         Vector2 minTranslationVector = new Vector2(MathHelper.Max(rect.Width, rect.Height) + circle.Radius, MathHelper.Max(rect.Width, rect.Height) + circle.Radius);
 
@@ -102,11 +102,12 @@ class CollisionManager {
 
     #region // private helper methods //
 
-    private static List<Vector2> GetGlobalVertecies (Vector2 position, List<Vector2> vertecies) {
+    private static List<Vector2> GetGlobalVertecies (Vector2 position, List<Vector2> vertecies, float _rotation) {
         List<Vector2> temp = new List<Vector2>();
+        float rot = MathHelper.ToRadians(_rotation);
 
         for (int i = 0; i < vertecies.Count; i++)
-            temp[i] = vertecies[i] + position;
+            temp[i] = Vector2.Transform(vertecies[i] + position, Matrix.CreateRotationZ(rot));
 
         return temp;
     }
