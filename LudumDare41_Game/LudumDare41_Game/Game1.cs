@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace LudumDare41_Game {
+namespace LudumDare41_Game.Physics {
     public class Game1 : Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -13,6 +13,7 @@ namespace LudumDare41_Game {
         }
 
         protected override void Initialize () {
+
             base.Initialize();
         }
 
@@ -33,7 +34,6 @@ namespace LudumDare41_Game {
 
         protected override void Draw (GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             base.Draw(gameTime);
         }
     }
