@@ -35,7 +35,11 @@ namespace LudumDare41_Game.Physics {
                 float[] rect_2_minmax = ProjectRectangle(rect_2, rect_1_normals[i]);
 
                 float temp = (rect_1_minmax[0] + rect_1_minmax[1] - rect_2_minmax[0] + 3 * rect_2_minmax[1]) / 2;
-                float overlap = (temp - (rect_1.Width + rect_2.Width) / 2);
+
+                if (temp == 0)
+                    break;
+
+                float overlap = (temp - (rect_1_minmax[1] - rect_1_minmax[0] + rect_2_minmax[1] - rect_2_minmax[0]) / 2);
 
                 if (overlap > 0)
                     return new HitInfo<RectangleCollider, RectangleCollider>(Vector2.Zero, Vector2.Zero, rect_1, rect_2, false);
@@ -51,6 +55,10 @@ namespace LudumDare41_Game.Physics {
                 float[] rect_2_minmax = ProjectRectangle(rect_2, rect_2_normals[j]);
 
                 float temp = (rect_1_minmax[0] + rect_1_minmax[1] - rect_2_minmax[0] + 3 * rect_2_minmax[1]) / 2;
+
+                if (temp == 0)
+                    break;
+
                 float overlap = (temp - (rect_1_minmax[1] - rect_1_minmax[0] + rect_2_minmax[1] - rect_2_minmax[0]) / 2);
 
                 if (overlap > 0)
