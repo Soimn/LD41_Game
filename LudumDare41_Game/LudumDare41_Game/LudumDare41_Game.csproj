@@ -43,15 +43,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Graphics\Animation.cs" />
-    <Compile Include="Physics\CircleCollider.cs" />
-    <Compile Include="Physics\CollisionManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="CoordHandler.cs" />
-    <Compile Include="Physics\HitInfo.cs" />
-    <Compile Include="Physics\RigidBody.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Physics\RectangleCollider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
