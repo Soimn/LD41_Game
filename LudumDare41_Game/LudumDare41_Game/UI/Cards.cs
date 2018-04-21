@@ -15,7 +15,7 @@ namespace LudumDare41_Game.UI {
         public List<Card> allCards = new List<Card>();
         public static List<HandCard> cardsInHand = new List<HandCard>();
         public static bool anyHeld = false;
-        public static HandCard heldCard = null;
+        HandCard heldCard = null;
 
         KeyboardState newState, oldState;
         MouseState newMouseState, oldMouseState;
@@ -29,12 +29,7 @@ namespace LudumDare41_Game.UI {
         }
 
         public HandCard CurrentlyHeldCard() {
-            if(heldCard != null) {
-                return heldCard;
-            }
-            else {
-                return null;
-            }
+            return heldCard;
         }
 
         public void Load(ContentManager c) {
