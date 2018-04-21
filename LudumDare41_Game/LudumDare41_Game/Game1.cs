@@ -1,4 +1,6 @@
-﻿using LudumDare41_Game.UI;
+using  LudumDare41_Game.UI;
+using LudumDare41_Game.Content;
+using LudumDare41_Game.Towers;
 using LudumDare41_Game.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,18 +12,30 @@ namespace LudumDare41_Game {
     public class Game1 : Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
-        enum GameStates { MENU, INGAME }; //gamestates, legg til om vi trenger
+
+        enum GameStates { MENU, INGAME, PAUSE }; //gamestates, legg til om vi trenger
         GameStates currentState = GameStates.INGAME;
 
         private Camera2D camera;
 
         Level level01;
-
+      
         GUI gui;
         Cards cards;
 
         SpriteFont debugFont;
+
+        #region // Towers //
+
+        private TowerManager towerManager;
+        private ContentManager contentManager;
+        private CoordHandler coordHandler;
+
+        private float towerSpawnCooldown = 0.5f;
+        private float lastTowerSpawn = 0;
+
+        #endregion
+
 
         public Game1 () {
             graphics = new GraphicsDeviceManager(this);
@@ -36,12 +50,20 @@ namespace LudumDare41_Game {
             };
 
             level01 = new Level("level01", GraphicsDevice);
-
+          
             gui = new GUI(GraphicsDevice, Content);
             cards = new Cards();
 
             Window.Title = "Ludum Dare 41: Card game tower defence";
 
+            #region // Towers //
+
+            coordHandler = new CoordHandler(camera);
+            contentManager = new ContentManager(this.Content);
+            towerManager = new TowerManager(coordHandler, contentManager);
+
+            #endregion
+              
             base.Initialize();
         }
 
@@ -88,16 +110,29 @@ namespace LudumDare41_Game {
                     if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                         moveDirection += Vector2.UnitX;
 
-                    var isCameraMoving = moveDirection != Vector2.Zero;
-                    if (isCameraMoving) {
+                    if (moveDirection != Vector2.Zero) {
                         moveDirection.Normalize();
                         camera.Move(moveDirection * cameraSpeed * deltaSeconds);
                     }
 
                     level01.Update(gameTime);
 
+
                     gui.Update(gameTime, Window, camera);
                     cards.Update(gameTime, Window);
+
+                    #region // Towers //
+
+                    if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && lastTowerSpawn > towerSpawnCooldown) {
+                        //towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(selectedTile.X, selectedTile.Y));
+                        lastTowerSpawn = 0;
+                    }
+
+                    towerManager.Update(gameTime);
+
+                    lastTowerSpawn += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    #endregion
                     break;
             }
 
@@ -120,7 +155,18 @@ namespace LudumDare41_Game {
                     gui.Draw(spriteBatch);
                     cards.Draw(spriteBatch, Window);
 
+
                     spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
+                
+                    spriteBatch.Begin();
+                    spriteBatch.Draw(selectTex, new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom), Color.White);
+
+                    #region // Towers //
+
+                    towerManager.Draw(spriteBatch);
+
+                    #endregion
+
                     spriteBatch.End();
                     break;
             }
