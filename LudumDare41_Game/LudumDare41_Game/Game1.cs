@@ -37,6 +37,9 @@ namespace LudumDare41_Game {
             level01 = new Level("level01", GraphicsDevice);
 
             gui = new GUI(GraphicsDevice, Content);
+
+            Window.Title = "Ludum Dare 41: Card game tower defence";
+
             base.Initialize();
         }
 
@@ -55,7 +58,7 @@ namespace LudumDare41_Game {
         }
 
         protected override void Update (GameTime gameTime) {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
             switch (currentState) {

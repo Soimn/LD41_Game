@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LudumDare41_Game.UI {
+    #region Gui Element Interface
     interface IGUIElement {
         Rectangle pos { get; set; }
         Texture2D texture { get; set; }
@@ -20,7 +21,9 @@ namespace LudumDare41_Game.UI {
         void Update(GameTime gt, GameWindow w);
         void Draw(SpriteBatch sb);
     }
+    #endregion
 
+    #region GUI Class
     class GUI {
         GraphicsDevice g { get; set; }
         ContentManager c;
@@ -47,7 +50,7 @@ namespace LudumDare41_Game.UI {
         }
 
         public void Load() {
-            foreach(GUIElement e in elements) {
+            foreach (GUIElement e in elements) {
                 if (!e.isLoaded) {
                     e.Load(c);
                 }
@@ -55,7 +58,7 @@ namespace LudumDare41_Game.UI {
         }
 
         public void Update(GameTime gt, GameWindow w, Camera2D camera) {
-            foreach(GUIElement e in elements) {
+            foreach (GUIElement e in elements) {
                 e.Update(gt, w);
                 cardSelector.Update(gt, w);
                 worldSelector.Update(gt, w, camera);
@@ -68,7 +71,9 @@ namespace LudumDare41_Game.UI {
             }
         }
     }
+    #endregion
 
+    #region GUI Element
     class GUIElement : IGUIElement {
         Rectangle _pos;
         bool _isLoaded;
@@ -98,7 +103,9 @@ namespace LudumDare41_Game.UI {
             sb.Draw(texture, pos, Color.White);
         }
     }
+    #endregion
 
+    #region GUI Classes
     class CardSelector : GUIElement {
 
         int height = 200;
@@ -112,7 +119,7 @@ namespace LudumDare41_Game.UI {
         }
 
         public new void Update(GameTime gt, GameWindow w) {
-            if(Mouse.GetState().Position.Y > pos.Y) {
+            if (Mouse.GetState().Position.Y > pos.Y) {
                 pos = new Rectangle(0, w.ClientBounds.Height - height, w.ClientBounds.Width, height);
                 isActive = true;
             }
@@ -124,7 +131,7 @@ namespace LudumDare41_Game.UI {
     }
 
     class WorldSelector : GUIElement {
-        
+
         Rectangle selectedTile;
 
         public WorldSelector(string name, Rectangle pos) : base(name, pos) {
@@ -146,4 +153,5 @@ namespace LudumDare41_Game.UI {
             }
         }
     }
+    #endregion
 }
