@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
 
-namespace LudumDare41_Game.Physics {
+namespace LudumDare41_Game {
     public class Game1 : Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -112,7 +112,7 @@ namespace LudumDare41_Game.Physics {
                     spriteBatch.Begin(); //UI
                     gui.Draw(spriteBatch);
 
-                    spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black);
+                    spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
                     spriteBatch.End();
                     break;
             }
