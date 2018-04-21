@@ -27,6 +27,9 @@ namespace LudumDare41_Game.Physics {
         private ContentManager contentManager;
         private CoordHandler coordHandler;
 
+        private float towerSpawnCooldown = 0.5f;
+        private float lastTowerSpawn = 0;
+
         #endregion
 
 
@@ -46,6 +49,15 @@ namespace LudumDare41_Game.Physics {
             selectedTile.Width = 32; selectedTile.Height = 32; //DEBUG
 
             level01 = new Level("level01", GraphicsDevice);
+
+            #region // Towers //
+
+            coordHandler = new CoordHandler(camera);
+            contentManager = new ContentManager(this.Content);
+            towerManager = new TowerManager(coordHandler, contentManager);
+
+            #endregion
+
             base.Initialize();
         }
 
@@ -106,6 +118,20 @@ namespace LudumDare41_Game.Physics {
                     selectedTile.Height = 32 * (int)camera.Zoom;
 
                     level01.Update(gameTime);
+
+                    #region // Towers //
+
+                    if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && lastTowerSpawn > towerSpawnCooldown) {
+                        towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(selectedTile.X, selectedTile.Y));
+                        lastTowerSpawn = 0;
+                    }
+
+                    towerManager.Update(gameTime);
+
+                    lastTowerSpawn += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    #endregion
+
                     break;
             }
 
@@ -126,6 +152,13 @@ namespace LudumDare41_Game.Physics {
 
                     spriteBatch.Begin();
                     spriteBatch.Draw(selectTex, new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom), Color.White);
+
+                    #region // Towers //
+
+                    towerManager.Draw(spriteBatch);
+
+                    #endregion
+
                     spriteBatch.End();
                     break;
             }

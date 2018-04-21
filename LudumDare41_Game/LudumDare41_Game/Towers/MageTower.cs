@@ -33,25 +33,36 @@ namespace LudumDare41_Game.Towers {
         }
 
         public override void Init (TileCoord _coord) {
-            Texture2D temp = contentManager.Load<Texture2D>("MageTower_IdleSpritesheet");
-            idleAnimation = new Animation(temp, new Vector2((float)size.Width, (float)size.Height), temp.Width / 32, 3.5f);
-            temp = contentManager.Load<Texture2D>("MageTower_AttackSpritesheet");
-            attackAnimation = new Animation(temp, new Vector2((float)size.Width, (float)size.Height), temp.Width / 32, 3.5f);
+            Texture2D temp = contentManager.Load<Texture2D>("Towers/MageTower/MageTower_IdleSpritesheet");
+            idleAnimation = new Animation(temp, new Vector2(temp.Width / 2, temp.Height), 2, 350f);
+            //temp = contentManager.Load<Texture2D>("MageTower_AttackSpritesheet");
+            //attackAnimation = new Animation(temp, new Vector2((float)size.Width, (float)size.Height), temp.Width / 32, 3.5f);
 
             coord = _coord;
+            animState = AnimationState.Idle;
         }
 
         public override void Update (GameTime gameTime) {
-
+            switch (animState) {
+                case AnimationState.Attack:
+                    //attackAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
+                    break;
+                case AnimationState.Idle:
+                    idleAnimation.updateAnimation(gameTime);
+                    break;
+                default:
+                    break;
+            }
         }
 
         public override void Draw (SpriteBatch spriteBatch) {
             switch (animState) {
                 case AnimationState.Attack:
-                    attackAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
+                    //attackAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
                     break;
                 case AnimationState.Idle:
                     idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
+                    System.Console.WriteLine(towerManager.GetDrawPos(coord));
                     break;
                 default:
                     break;

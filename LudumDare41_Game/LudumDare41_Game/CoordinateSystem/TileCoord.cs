@@ -13,5 +13,9 @@ namespace LudumDare41_Game.CoordinateSystem {
         public Vector2 ToVector2 () {
             return new Vector2(x, y);
         }
+
+        public static TileCoord Zero () {
+            return new TileCoord(0, 0);
+        }
     }
 }
