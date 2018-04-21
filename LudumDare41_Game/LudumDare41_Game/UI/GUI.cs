@@ -22,10 +22,8 @@ namespace LudumDare41_Game.UI {
     }
 
     class GUI {
-        GraphicsDevice _g;
-        ContentManager _c;
-        
-        public GraphicsDevice g { get => _g; set => _g = value; }
+        GraphicsDevice g { get; set; }
+        ContentManager c;
 
         List<GUIElement> elements = new List<GUIElement>();
 
@@ -33,8 +31,8 @@ namespace LudumDare41_Game.UI {
         WorldSelector worldSelector;
 
         public GUI(GraphicsDevice g, ContentManager c) {
-            _g = g;
-            _c = c;
+            this.g = g;
+            this.c = c;
 
             cardSelector = new CardSelector("cardSel", Rectangle.Empty);
             addGuiItem(cardSelector);
@@ -51,7 +49,7 @@ namespace LudumDare41_Game.UI {
         public void Load() {
             foreach(GUIElement e in elements) {
                 if (!e.isLoaded) {
-                    e.Load(_c);
+                    e.Load(c);
                 }
             }
         }
