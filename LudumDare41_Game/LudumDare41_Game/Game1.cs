@@ -96,9 +96,6 @@ namespace LudumDare41_Game.Physics {
                     selectedTile.Width = 32 * (int)camera.Zoom;
                     selectedTile.Height = 32 * (int)camera.Zoom;
 
-                    Console.WriteLine(Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).X / 32));
-                    ;
-
                     level01.Update(gameTime);
                     break;
             }
