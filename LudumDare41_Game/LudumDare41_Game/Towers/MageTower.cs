@@ -33,10 +33,12 @@ namespace LudumDare41_Game.Towers {
         }
 
         public override void Init (TileCoord _coord) {
+
+            size = new TowerSize(TowerWidth.narrow, TowerHeight.tall);
+
             Texture2D temp = contentManager.Load<Texture2D>("Towers/MageTower/MageTower_IdleSpritesheet");
-            idleAnimation = new Animation(temp, new Vector2(temp.Width / 2, temp.Height), 2, 350f);
-            //temp = contentManager.Load<Texture2D>("MageTower_AttackSpritesheet");
-            //attackAnimation = new Animation(temp, new Vector2((float)size.Width, (float)size.Height), temp.Width / 32, 3.5f);
+            idleAnimation = new Animation(temp, new Vector2((int)size.Width, (int)size.Height), 2, 350f);
+            //attack animation
 
             coord = _coord;
             animState = AnimationState.Idle;
@@ -62,7 +64,6 @@ namespace LudumDare41_Game.Towers {
                     break;
                 case AnimationState.Idle:
                     idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
-                    System.Console.WriteLine(towerManager.GetDrawPos(coord));
                     break;
                 default:
                     break;
