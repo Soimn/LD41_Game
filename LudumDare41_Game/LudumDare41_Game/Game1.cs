@@ -7,6 +7,9 @@ namespace LudumDare41_Game.Physics {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        enum GameStates { MENU, INGAME };
+        GameStates currentState = GameStates.INGAME;
+
         public Game1 () {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -29,12 +32,30 @@ namespace LudumDare41_Game.Physics {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            switch (currentState) {
+                case GameStates.MENU: //vente med denne til slutt
+                    break;
+
+                case GameStates.INGAME:
+                    break;
+            }
+
+
             base.Update(gameTime);
         }
 
         protected override void Draw (GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
+
+            switch (currentState) {
+                case GameStates.MENU: //vente med denne til slutt
+                    break;
+
+                case GameStates.INGAME:
+                    break;
+            }
+
         }
     }
 }
