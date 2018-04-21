@@ -51,7 +51,7 @@ namespace LudumDare41_Game.Towers {
             if (!Tower.towerID.TryGetValue(towerID, out Type type))
                 throw new System.ArgumentException("Cannot possibly instantiate tower of type: {0}, because no such type exists", towerID);
 
-            Object[] args = { this, contentManager, false };
+            Object[] args = { this, contentManager, true };
 
             Tower tower = (Tower)Activator.CreateInstance(type, args);
 

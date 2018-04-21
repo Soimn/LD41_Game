@@ -66,7 +66,7 @@ namespace LudumDare41_Game.Towers {
                     //attackAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
                     break;
                 case AnimationState.Idle:
-                    idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord), IsPreviewTower ? new Color(Color.White, 0.5f) : Color.White);
+                    idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord), IsPreviewTower ? (towerManager.TowerAtCoord(this.coord) ? new Color(Color.Red, 0.5f) : new Color(Color.White, 0.5f)) : Color.White);
                     break;
                 default:
                     break;
