@@ -135,7 +135,7 @@ namespace LudumDare41_Game.UI {
 
     class WorldSelector : GUIElement {
 
-        Rectangle selectedTile;
+        public static Rectangle selectedTile;
 
         public WorldSelector(string name, Rectangle pos) : base(name, pos) {
             nameID = name;

@@ -125,7 +125,7 @@ namespace LudumDare41_Game {
                     #region // Towers //
 
                     if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && lastTowerSpawn > towerSpawnCooldown) {
-                        //towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(selectedTile.X, selectedTile.Y));
+                        towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
                         lastTowerSpawn = 0;
                     }
 
