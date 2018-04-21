@@ -144,6 +144,7 @@ namespace LudumDare41_Game {
                             cardHasBeenHeld = true;
                             towerManager.CreatePreviewTower(heldCard.referenceCard.TowerID, new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y), out previewTower);
                             previewTowerInstantiated = true;
+                            heldCard.alpha = 0;
                         }
 
                         else if (heldCard != null && previewTowerInstantiated)
