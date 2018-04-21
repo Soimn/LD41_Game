@@ -10,7 +10,7 @@ namespace LudumDare41_Game.Physics {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         
-        enum GameStates { MENU, INGAME }; //gamestates, legg til om vi trenger
+        enum GameStates { MENU, INGAME, PAUSE }; //gamestates, legg til om vi trenger
         GameStates currentState = GameStates.INGAME;
 
         private Camera2D camera;
@@ -79,8 +79,7 @@ namespace LudumDare41_Game.Physics {
                     if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
                         moveDirection += Vector2.UnitX;
 
-                    var isCameraMoving = moveDirection != Vector2.Zero;
-                    if (isCameraMoving) {
+                    if (moveDirection != Vector2.Zero) {
                         moveDirection.Normalize();
                         camera.Move(moveDirection * cameraSpeed * deltaSeconds);
                     }
