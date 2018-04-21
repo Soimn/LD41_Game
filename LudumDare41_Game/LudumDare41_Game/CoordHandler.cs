@@ -1,21 +1,22 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LudumDare41_Game.CoordinateSystem;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended;
+
 namespace LudumDare41_Game.Physics {
     class CoordHandler {
 
-        private Vector2 reffScreenCoord = Vector2.Zero;
+        private Camera2D cam;
 
-        public static Vector2 ScreenToWorldSpace (Vector2 vector) {
-
-            Vector2 offset = new Vector2(40, 40);
-
-            return new Vector2(vector.X - offset.X, -vector.Y - offset.Y);
+        public CoordHandler (Camera2D _cam) {
+            cam = _cam;
         }
 
-        public static Vector2 WorldToScreenSpace (Vector2 vector) {
+        public Vector2 WorldToScreen (Vector2 world) {
+            return cam.WorldToScreen(world);
+        }
 
-            Vector2 offset = new Vector2(40, 40);
-
-            return new Vector2(vector.X + offset.X, -vector.Y + offset.Y);
+        public int ScaleToZoom (int field) {
+            return (int)(cam.Zoom * field);
         }
     }
 }

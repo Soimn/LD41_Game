@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
 
 namespace LudumDare41_Game.CoordinateSystem {
     struct TileCoord {
@@ -12,6 +8,10 @@ namespace LudumDare41_Game.CoordinateSystem {
         public TileCoord (int _x, int _y) {
             x = _x;
             y = _y;
+        }
+
+        public Vector2 ToVector2 () {
+            return new Vector2(x, y);
         }
     }
 }

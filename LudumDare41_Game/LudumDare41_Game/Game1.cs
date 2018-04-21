@@ -1,4 +1,6 @@
-﻿using LudumDare41_Game.World;
+﻿using LudumDare41_Game.Content;
+using LudumDare41_Game.Towers;
+using LudumDare41_Game.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,7 +11,7 @@ namespace LudumDare41_Game.Physics {
     public class Game1 : Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+
         enum GameStates { MENU, INGAME, PAUSE }; //gamestates, legg til om vi trenger
         GameStates currentState = GameStates.INGAME;
 
@@ -18,6 +20,14 @@ namespace LudumDare41_Game.Physics {
         Level level01;
         Rectangle selectedTile; //Disse to er bare for debug om screen til world coordinater
         Texture2D selectTex;
+
+        #region // Towers //
+
+        private TowerManager towerManager;
+        private ContentManager contentManager;
+        private CoordHandler coordHandler;
+
+        #endregion
 
 
         public Game1 () {
