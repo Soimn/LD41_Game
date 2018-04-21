@@ -14,7 +14,10 @@ namespace LudumDare41_Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        enum GameStates { MENU, INGAME, PAUSE }; //gamestates, legg til om vi trenger
+        KeyboardState oldState;
+
+        enum GameStates { MENU, INGAME}; //gamestates, legg til om vi trenger
+        bool isPaused = false;
         GameStates currentState = GameStates.INGAME;
 
         private Camera2D camera;
@@ -85,45 +88,53 @@ namespace LudumDare41_Game {
         }
 
         protected override void Update (GameTime gameTime) {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-            
-            switch (currentState) {
-                case GameStates.MENU: //vente med denne til slutt
-                    break;
+            KeyboardState newState = Keyboard.GetState();
+            if(newState.IsKeyDown(Keys.Escape) && oldState.IsKeyUp(Keys.Escape)) { 
+                if (isPaused) {
+                    isPaused = false;
+                }
+                else {
+                    isPaused = true;
+                }
+            }
 
-                case GameStates.INGAME:
-                    var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    var keyboardState = Keyboard.GetState();
+            if (!isPaused) {
+                switch (currentState) {
+                    case GameStates.MENU: //vente med denne til slutt
+                        break;
 
-                    const float cameraSpeed = 500f;
+                    case GameStates.INGAME:
+                        var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        var keyboardState = Keyboard.GetState();
 
-                    var moveDirection = Vector2.Zero;
+                        const float cameraSpeed = 500f;
 
-                    if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
-                        moveDirection -= Vector2.UnitY;
+                        var moveDirection = Vector2.Zero;
 
-                    if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-                        moveDirection -= Vector2.UnitX;
+                        if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+                            moveDirection -= Vector2.UnitY;
 
-                    if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
-                        moveDirection += Vector2.UnitY;
+                        if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
+                            moveDirection -= Vector2.UnitX;
 
-                    if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-                        moveDirection += Vector2.UnitX;
+                        if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
+                            moveDirection += Vector2.UnitY;
 
-                    if (moveDirection != Vector2.Zero) {
-                        moveDirection.Normalize();
-                        camera.Move(moveDirection * cameraSpeed * deltaSeconds);
-                    }
+                        if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
+                            moveDirection += Vector2.UnitX;
 
-                    level01.Update(gameTime);
+                        if (moveDirection != Vector2.Zero) {
+                            moveDirection.Normalize();
+                            camera.Move(moveDirection * cameraSpeed * deltaSeconds);
+                        }
+
+                        level01.Update(gameTime);
 
 
-                    gui.Update(gameTime, Window, camera);
-                    cards.Update(gameTime, Window);
+                        gui.Update(gameTime, Window, camera);
+                        cards.Update(gameTime, Window);
 
-                    #region // Towers //
+                        #region // Towers //
 
                     HandCard heldCard = cards.CurrentlyHeldCard();
 
@@ -154,13 +165,14 @@ namespace LudumDare41_Game {
                         }
                     }
 
-                    towerManager.Update(gameTime);
+                        towerManager.Update(gameTime);
 
-                    #endregion
-                    break;
+
+                        #endregion
+                        break;
+                }
             }
-
-
+            oldState = newState;
             base.Update(gameTime);
         }
 
@@ -191,6 +203,11 @@ namespace LudumDare41_Game {
 
 
                     spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
+
+                    if (isPaused) {
+                        string pausedMsg = "Game paused, press ESC to resume.";
+                        spriteBatch.DrawString(debugFont, pausedMsg, new Vector2(Window.ClientBounds.Width / 2 - debugFont.MeasureString(pausedMsg).X / 2, Window.ClientBounds.Height / 2), Color.Black);
+                    }
 
                     spriteBatch.End();
                     break;

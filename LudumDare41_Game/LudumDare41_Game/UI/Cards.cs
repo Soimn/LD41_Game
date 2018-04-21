@@ -54,6 +54,7 @@ namespace LudumDare41_Game.UI {
                     && !anyHeld
                     && CardSelector.isActive) {
                     card.isHeld = true;
+                    card.alpha = 0.4f;
                     anyHeld = true;
                     heldCard = card;
                 }
@@ -62,6 +63,7 @@ namespace LudumDare41_Game.UI {
                     card.isHeld = false;
                     anyHeld = false;
                     heldCard = null;
+                    card.alpha = 1f;
                 }
 
                 if (card.isHeld) {
@@ -123,18 +125,19 @@ namespace LudumDare41_Game.UI {
             isLoaded = true;
         }
 
-        public void Draw(SpriteBatch sb, Vector2 pos) {
-            sb.Draw(bg, new Rectangle((int)pos.X, (int)pos.Y, 200, 350), Color.White);
-            sb.Draw(cardImg, new Rectangle((int)pos.X + 8, (int)pos.Y + 8, 184, 120), Color.White);
-            sb.DrawString(titleFont, title, new Vector2((int)pos.X + 12, (int)pos.Y + 132), Color.Black);
-            sb.Draw(healthPot, new Rectangle((int)pos.X + 8, (int)pos.Y + 162, 64, 64), Color.White);
-            sb.DrawString(healthFont, health.ToString(), new Vector2((int)pos.X + 60, (int)pos.Y + 185), Color.Black);
+        public void Draw(SpriteBatch sb, Vector2 pos, float alpha) {
+            sb.Draw(bg, new Rectangle((int)pos.X, (int)pos.Y, 200, 350), Color.White * alpha);
+            sb.Draw(cardImg, new Rectangle((int)pos.X + 8, (int)pos.Y + 8, 184, 120), Color.White * alpha);
+            sb.DrawString(titleFont, title, new Vector2((int)pos.X + 12, (int)pos.Y + 132), Color.Black * alpha);
+            sb.Draw(healthPot, new Rectangle((int)pos.X + 8, (int)pos.Y + 162, 64, 64), Color.White * alpha);
+            sb.DrawString(healthFont, health.ToString(), new Vector2((int)pos.X + 60, (int)pos.Y + 185), Color.Black * alpha);
         }
     }
 
     class HandCard {
         public Vector2 pos { get; set; }
         public bool isHeld { get; set; }
+        public float alpha { get; set; }
         public Card referenceCard { get; private set; }
 
         public HandCard(Card referenceCard) {
@@ -143,7 +146,7 @@ namespace LudumDare41_Game.UI {
         }
 
         public void Draw(SpriteBatch sb) {
-            referenceCard.Draw(sb, pos);
+            referenceCard.Draw(sb, pos, alpha);
         }
     }
 }
