@@ -1,4 +1,5 @@
-﻿using LudumDare41_Game.World;
+﻿using LudumDare41_Game.UI;
+using LudumDare41_Game.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,7 +18,9 @@ namespace LudumDare41_Game.Physics {
 
         Level level01;
         Rectangle selectedTile; //Disse to er bare for debug om screen til world coordinater
-        Texture2D selectTex;
+        Texture2D selectTex; // --//--
+
+        GUI gui;
 
 
         public Game1 () {
@@ -35,12 +38,16 @@ namespace LudumDare41_Game.Physics {
             selectedTile.Width = 32; selectedTile.Height = 32; //DEBUG
 
             level01 = new Level("level01", GraphicsDevice);
+
+            gui = new GUI(GraphicsDevice, Content);
             base.Initialize();
         }
 
         protected override void LoadContent () {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             level01.Load(Content);
+            gui.Load();
 
             selectTex = Content.Load<Texture2D>("Debug/select"); //DEBUG
         }
@@ -62,7 +69,6 @@ namespace LudumDare41_Game.Physics {
                     var keyboardState = Keyboard.GetState();
 
                     const float cameraSpeed = 500f;
-                    const float zoomSpeed = 0.3f;
 
                     var moveDirection = Vector2.Zero;
 
@@ -90,6 +96,8 @@ namespace LudumDare41_Game.Physics {
                     selectedTile.Height = 32 * (int)camera.Zoom;
 
                     level01.Update(gameTime);
+
+                    gui.Update(gameTime, Window);
                     break;
             }
 
@@ -106,10 +114,11 @@ namespace LudumDare41_Game.Physics {
                     break;
 
                 case GameStates.INGAME:
-                    level01.Draw(spriteBatch, camera, GraphicsDevice);
+                    level01.Draw(spriteBatch, camera, GraphicsDevice); //WORLD
 
-                    spriteBatch.Begin();
+                    spriteBatch.Begin(); //UI
                     spriteBatch.Draw(selectTex, new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom), Color.White);
+                    gui.Draw(spriteBatch);
                     spriteBatch.End();
                     break;
             }
