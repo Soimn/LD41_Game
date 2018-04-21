@@ -189,7 +189,7 @@ namespace LudumDare41_Game {
                 case GameStates.INGAME:
                     level01.Draw(spriteBatch, camera, GraphicsDevice); //WORLD
 
-                    spriteBatch.Begin();
+                    spriteBatch.Begin(samplerState: SamplerState.PointWrap);
 
                     #region // Towers //
 
