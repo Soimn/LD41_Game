@@ -19,6 +19,7 @@ namespace LudumDare41_Game {
         Level level01;
 
         GUI gui;
+        Cards cards;
 
         SpriteFont debugFont;
 
@@ -37,6 +38,7 @@ namespace LudumDare41_Game {
             level01 = new Level("level01", GraphicsDevice);
 
             gui = new GUI(GraphicsDevice, Content);
+            cards = new Cards();
 
             Window.Title = "Ludum Dare 41: Card game tower defence";
 
@@ -48,6 +50,7 @@ namespace LudumDare41_Game {
 
             level01.Load(Content);
             gui.Load();
+            cards.Load(Content);
 
             debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
             
@@ -94,6 +97,7 @@ namespace LudumDare41_Game {
                     level01.Update(gameTime);
 
                     gui.Update(gameTime, Window, camera);
+                    cards.Update(gameTime, Window);
                     break;
             }
 
@@ -114,6 +118,7 @@ namespace LudumDare41_Game {
 
                     spriteBatch.Begin(); //UI
                     gui.Draw(spriteBatch);
+                    cards.Draw(spriteBatch, Window);
 
                     spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
                     spriteBatch.End();

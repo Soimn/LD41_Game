@@ -42,6 +42,7 @@ namespace LudumDare41_Game.UI {
 
             worldSelector = new WorldSelector("select", Rectangle.Empty);
             addGuiItem(worldSelector);
+            
         }
 
         public void addGuiItem(GUIElement elementToAdd) {
@@ -124,8 +125,10 @@ namespace LudumDare41_Game.UI {
                 isActive = true;
             }
             else {
-                pos = new Rectangle(0, w.ClientBounds.Height - minHeight, w.ClientBounds.Width, minHeight);
-                isActive = false;
+                if (Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
+                    pos = new Rectangle(0, w.ClientBounds.Height - minHeight, w.ClientBounds.Width, minHeight);
+                    isActive = false;
+                }
             }
         }
     }
@@ -140,17 +143,12 @@ namespace LudumDare41_Game.UI {
         }
 
         public void Update(GameTime gt, GameWindow w, Camera2D camera) {
-            if (!CardSelector.isActive) {
-                selectedTile.X = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).X / 32) * 32;
-                selectedTile.Y = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).Y / 32) * 32;
-                selectedTile.Width = 32 * (int)camera.Zoom;
-                selectedTile.Height = 32 * (int)camera.Zoom;
+            selectedTile.X = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).X / 32) * 32;
+            selectedTile.Y = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).Y / 32) * 32;
+            selectedTile.Width = 32 * (int)camera.Zoom;
+            selectedTile.Height = 32 * (int)camera.Zoom;
 
-                pos = new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom);
-            }
-            else {
-                pos = Rectangle.Empty;
-            }
+            pos = new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom);
         }
     }
     #endregion
