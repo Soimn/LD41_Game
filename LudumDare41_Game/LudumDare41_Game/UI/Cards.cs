@@ -15,6 +15,7 @@ namespace LudumDare41_Game.UI {
         public List<Card> allCards = new List<Card>();
         public static List<HandCard> cardsInHand = new List<HandCard>();
         public static bool anyHeld = false;
+        public static HandCard heldCard = null;
 
         KeyboardState newState, oldState;
         MouseState newMouseState, oldMouseState;
@@ -25,6 +26,15 @@ namespace LudumDare41_Game.UI {
             TestTower = new Card("Mage Tower", "A test card for a \ntest tower.", "mageTower", "mageBg", 9);//make a test card
             allCards.Add(TestTower);
             cardsInHand.Add(new HandCard(TestTower));
+        }
+
+        public HandCard CurrentlyHeldCard() {
+            if(heldCard != null) {
+                return heldCard;
+            }
+            else {
+                return null;
+            }
         }
 
         public void Load(ContentManager c) {
@@ -50,11 +60,13 @@ namespace LudumDare41_Game.UI {
                     && CardSelector.isActive) {
                     card.isHeld = true;
                     anyHeld = true;
+                    heldCard = card;
                 }
 
                 if (Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
                     card.isHeld = false;
                     anyHeld = false;
+                    heldCard = null;
                 }
 
                 if (card.isHeld) {
