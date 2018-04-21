@@ -138,39 +138,40 @@ namespace LudumDare41_Game {
 
                         #region // Towers //
 
-                    HandCard heldCard = cards.CurrentlyHeldCard();
+                        HandCard heldCard = cards.CurrentlyHeldCard();
 
-                    if (heldCard != null && !cardHasBeenHeld && !previewTowerInstantiated) {
-                        cardHasBeenHeld = true;
-                        towerManager.CreatePreviewTower(heldCard.referenceCard.TowerID, new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y), out previewTower);
-                        previewTowerInstantiated = true;
-                    }
-
-                    else if (heldCard != null && previewTowerInstantiated)
-                        previewTower.MoveTo(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
-
-                    else if (heldCard == null && cardHasBeenHeld) {
-                        if (!towerManager.TowerAtCoord(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y))) {
-                            towerManager.DestroyPreviewTower(previewTower);
-                            previewTowerInstantiated = false;
-                            previewTower = null;
-                            towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
-                            cardHasBeenHeld = false;
-
-                            // remove card from hand
+                        if (heldCard != null && !cardHasBeenHeld && !previewTowerInstantiated) {
+                            cardHasBeenHeld = true;
+                            towerManager.CreatePreviewTower(heldCard.referenceCard.TowerID, new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y), out previewTower);
+                            previewTowerInstantiated = true;
                         }
-                        else {
-                            towerManager.DestroyPreviewTower(previewTower);
-                            previewTowerInstantiated = false;
-                            previewTower = null;
-                            cardHasBeenHeld = false; // return card to hand
+
+                        else if (heldCard != null && previewTowerInstantiated)
+                            previewTower.MoveTo(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
+
+                        else if (heldCard == null && cardHasBeenHeld) {
+                            if (!towerManager.TowerAtCoord(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y))) {
+                                towerManager.DestroyPreviewTower(previewTower);
+                                previewTowerInstantiated = false;
+                                previewTower = null;
+                                towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
+                                cardHasBeenHeld = false;
+
+                                // remove card from hand
+                            }
+                            else {
+                                towerManager.DestroyPreviewTower(previewTower);
+                                previewTowerInstantiated = false;
+                                previewTower = null;
+                                cardHasBeenHeld = false; // return card to hand
+                            }
                         }
-                    }
 
                         towerManager.Update(gameTime);
 
 
                         #endregion
+
                         break;
                 }
             }
