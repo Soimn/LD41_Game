@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace LudumDare41_Game.UI {
         List<GUIElement> elements = new List<GUIElement>();
 
         CardSelector cardSelector;
+        WorldSelector worldSelector;
 
         public GUI(GraphicsDevice g, ContentManager c) {
             _g = g;
@@ -36,6 +38,9 @@ namespace LudumDare41_Game.UI {
 
             cardSelector = new CardSelector("cardSel", Rectangle.Empty);
             addGuiItem(cardSelector);
+
+            worldSelector = new WorldSelector("select", Rectangle.Empty);
+            addGuiItem(worldSelector);
         }
 
         public void addGuiItem(GUIElement elementToAdd) {
@@ -51,10 +56,11 @@ namespace LudumDare41_Game.UI {
             }
         }
 
-        public void Update(GameTime gt, GameWindow w) {
+        public void Update(GameTime gt, GameWindow w, Camera2D camera) {
             foreach(GUIElement e in elements) {
                 e.Update(gt, w);
                 cardSelector.Update(gt, w);
+                worldSelector.Update(gt, w, camera);
             }
         }
 
@@ -100,6 +106,8 @@ namespace LudumDare41_Game.UI {
         int height = 200;
         int minHeight = 50;
 
+        public static bool isActive = false;
+
         public CardSelector(string name, Rectangle pos) : base(name, pos) {
             nameID = name;
             this.pos = pos;
@@ -108,9 +116,35 @@ namespace LudumDare41_Game.UI {
         public new void Update(GameTime gt, GameWindow w) {
             if(Mouse.GetState().Position.Y > pos.Y) {
                 pos = new Rectangle(0, w.ClientBounds.Height - height, w.ClientBounds.Width, height);
+                isActive = true;
             }
             else {
                 pos = new Rectangle(0, w.ClientBounds.Height - minHeight, w.ClientBounds.Width, minHeight);
+                isActive = false;
+            }
+        }
+    }
+
+    class WorldSelector : GUIElement {
+        
+        Rectangle selectedTile;
+
+        public WorldSelector(string name, Rectangle pos) : base(name, pos) {
+            nameID = name;
+            this.pos = pos;
+        }
+
+        public void Update(GameTime gt, GameWindow w, Camera2D camera) {
+            if (!CardSelector.isActive) {
+                selectedTile.X = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).X / 32) * 32;
+                selectedTile.Y = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).Y / 32) * 32;
+                selectedTile.Width = 32 * (int)camera.Zoom;
+                selectedTile.Height = 32 * (int)camera.Zoom;
+
+                pos = new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom);
+            }
+            else {
+                pos = Rectangle.Empty;
             }
         }
     }

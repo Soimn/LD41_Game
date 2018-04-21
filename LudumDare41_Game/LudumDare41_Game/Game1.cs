@@ -17,11 +17,10 @@ namespace LudumDare41_Game.Physics {
         private Camera2D camera;
 
         Level level01;
-        Rectangle selectedTile; //Disse to er bare for debug om screen til world coordinater
-        Texture2D selectTex; // --//--
 
         GUI gui;
 
+        SpriteFont debugFont;
 
         public Game1 () {
             graphics = new GraphicsDeviceManager(this);
@@ -35,8 +34,6 @@ namespace LudumDare41_Game.Physics {
                 Zoom = 2f
             };
 
-            selectedTile.Width = 32; selectedTile.Height = 32; //DEBUG
-
             level01 = new Level("level01", GraphicsDevice);
 
             gui = new GUI(GraphicsDevice, Content);
@@ -49,7 +46,8 @@ namespace LudumDare41_Game.Physics {
             level01.Load(Content);
             gui.Load();
 
-            selectTex = Content.Load<Texture2D>("Debug/select"); //DEBUG
+            debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
+            
         }
 
         protected override void UnloadContent () {
@@ -59,7 +57,7 @@ namespace LudumDare41_Game.Physics {
         protected override void Update (GameTime gameTime) {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            
             switch (currentState) {
                 case GameStates.MENU: //vente med denne til slutt
                     break;
@@ -90,14 +88,9 @@ namespace LudumDare41_Game.Physics {
                         camera.Move(moveDirection * cameraSpeed * deltaSeconds);
                     }
 
-                    selectedTile.X = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).X / 32) * 32;
-                    selectedTile.Y = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).Y / 32) * 32;
-                    selectedTile.Width = 32 * (int)camera.Zoom;
-                    selectedTile.Height = 32 * (int)camera.Zoom;
-
                     level01.Update(gameTime);
 
-                    gui.Update(gameTime, Window);
+                    gui.Update(gameTime, Window, camera);
                     break;
             }
 
@@ -117,8 +110,9 @@ namespace LudumDare41_Game.Physics {
                     level01.Draw(spriteBatch, camera, GraphicsDevice); //WORLD
 
                     spriteBatch.Begin(); //UI
-                    spriteBatch.Draw(selectTex, new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom), Color.White);
                     gui.Draw(spriteBatch);
+
+                    spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black);
                     spriteBatch.End();
                     break;
             }
