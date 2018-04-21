@@ -20,7 +20,7 @@ namespace LudumDare41_Game {
         bool isPaused = false;
         GameStates currentState = GameStates.INGAME;
 
-        private Camera2D camera;
+        public static Camera2D camera { get; private set; }
 
         Level level01;
       

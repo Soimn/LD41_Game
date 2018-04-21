@@ -19,7 +19,7 @@ namespace LudumDare41_Game.Towers {
         public abstract int Tier { get; }
         public abstract WeaponType WpnType { get; }
         public abstract AnimationState AnimState { get; }
-
+        
         public abstract void Init (TileCoord _coord);
         public abstract void Update (GameTime _gameTime);
         public abstract void Draw (SpriteBatch spriteBatch);

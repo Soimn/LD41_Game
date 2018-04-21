@@ -19,13 +19,13 @@ namespace LudumDare41_Game.UI {
 
         KeyboardState newState, oldState;
         MouseState newMouseState, oldMouseState;
-        Card TestTower;
+        Card MageTower;
 
 
         public Cards() {
-            TestTower = new Card("MageTower", "Mage Tower", "A test card for a \ntest tower.", "mageTower", "mageBg", 9);//make a test card
-            allCards.Add(TestTower);
-            cardsInHand.Add(new HandCard(TestTower));
+            MageTower = new Card("MageTower", "Mage Tower", "A test card for a \ntest tower.", "mageTower", "mageBg", 9);//make a test card
+            allCards.Add(MageTower);
+            cardsInHand.Add(new HandCard(MageTower));
         }
 
         public HandCard CurrentlyHeldCard() {
@@ -82,7 +82,7 @@ namespace LudumDare41_Game.UI {
             }
 
             if (newState.IsKeyDown(Keys.Space) && oldState.IsKeyUp(Keys.Space))
-                cardsInHand.Add(new HandCard(TestTower));
+                cardsInHand.Add(new HandCard(MageTower));
 
             oldMouseState = newMouseState;
             oldState = newState;
