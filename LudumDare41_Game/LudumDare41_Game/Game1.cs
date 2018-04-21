@@ -48,6 +48,39 @@ namespace LudumDare41_Game.Physics {
                     break;
 
                 case GameStates.INGAME:
+                    var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    var keyboardState = Keyboard.GetState();
+
+                    const float cameraSpeed = 500f;
+                    const float zoomSpeed = 0.3f;
+
+                    var moveDirection = Vector2.Zero;
+
+                    if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+                        moveDirection -= Vector2.UnitY;
+
+                    if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
+                        moveDirection -= Vector2.UnitX;
+
+                    if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
+                        moveDirection += Vector2.UnitY;
+
+                    if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
+                        moveDirection += Vector2.UnitX;
+
+                    var isCameraMoving = moveDirection != Vector2.Zero;
+                    if (isCameraMoving) {
+                        moveDirection.Normalize();
+                        camera.Move(moveDirection * cameraSpeed * deltaSeconds);
+                    }
+
+                    if (keyboardState.IsKeyDown(Keys.R))
+                        camera.ZoomIn(zoomSpeed * deltaSeconds);
+
+                    if (keyboardState.IsKeyDown(Keys.F))
+                        camera.ZoomOut(zoomSpeed * deltaSeconds);
+
+
                     level01.Update(gameTime);
                     break;
             }
@@ -58,7 +91,7 @@ namespace LudumDare41_Game.Physics {
 
         protected override void Draw (GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            base.Draw(gameTime);
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
             switch (currentState) {
                 case GameStates.MENU: //vente med denne til slutt
@@ -69,6 +102,7 @@ namespace LudumDare41_Game.Physics {
                     break;
             }
 
+            base.Draw(gameTime);
         }
     }
 }
