@@ -25,6 +25,7 @@ namespace LudumDare41_Game.Physics {
 
         protected override void Initialize () {
             camera = new Camera2D(GraphicsDevice);
+            camera.Zoom = 2f;
 
             level01 = new Level("level01", GraphicsDevice);
             base.Initialize();

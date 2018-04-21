@@ -14,11 +14,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Levels/level01.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Levels/level01.tmx
-
 #begin Levels/tileset1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -30,4 +25,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Levels/tileset1.png
+
+#begin Levels/level01.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Levels/level01.tmx
 
