@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using System;
 
 namespace LudumDare41_Game.Physics {
     public class Game1 : Game {
@@ -15,6 +16,9 @@ namespace LudumDare41_Game.Physics {
         private Camera2D camera;
 
         Level level01;
+        Rectangle selectedTile; //Disse to er bare for debug om screen til world coordinater
+        Texture2D selectTex;
+
 
         public Game1 () {
             graphics = new GraphicsDeviceManager(this);
@@ -24,8 +28,12 @@ namespace LudumDare41_Game.Physics {
         }
 
         protected override void Initialize () {
-            camera = new Camera2D(GraphicsDevice);
-            camera.Zoom = 2f;
+            camera = new Camera2D(GraphicsDevice) {
+                Zoom = 2f,
+                Origin = Vector2.Zero
+            };
+
+            selectedTile.Width = 32; selectedTile.Height = 32; //DEBUG
 
             level01 = new Level("level01", GraphicsDevice);
             base.Initialize();
@@ -34,6 +42,8 @@ namespace LudumDare41_Game.Physics {
         protected override void LoadContent () {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             level01.Load(Content);
+
+            selectTex = Content.Load<Texture2D>("Debug/select"); //DEBUG
         }
 
         protected override void UnloadContent () {
@@ -81,6 +91,13 @@ namespace LudumDare41_Game.Physics {
                     if (keyboardState.IsKeyDown(Keys.F))
                         camera.ZoomOut(zoomSpeed * deltaSeconds);
 
+                    selectedTile.X = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).X / 32) * 32;
+                    selectedTile.Y = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).Y / 32) * 32;
+                    selectedTile.Width = 32 * (int)camera.Zoom;
+                    selectedTile.Height = 32 * (int)camera.Zoom;
+
+                    Console.WriteLine(Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).X / 32));
+                    ;
 
                     level01.Update(gameTime);
                     break;
@@ -100,6 +117,10 @@ namespace LudumDare41_Game.Physics {
 
                 case GameStates.INGAME:
                     level01.Draw(spriteBatch, camera, GraphicsDevice);
+
+                    spriteBatch.Begin();
+                    spriteBatch.Draw(selectTex, new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom), Color.White);
+                    spriteBatch.End();
                     break;
             }
 
