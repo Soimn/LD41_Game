@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
+using LudumDare41_Game.Physics;
 
 namespace LudumDare41_Game {
     public class Game1 : Game {
@@ -157,10 +158,10 @@ namespace LudumDare41_Game {
 
 
                     spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
-                
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(selectTex, new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom), Color.White);
 
+                    spriteBatch.End();
+                    spriteBatch.Begin();
+                    
                     #region // Towers //
 
                     towerManager.Draw(spriteBatch);
