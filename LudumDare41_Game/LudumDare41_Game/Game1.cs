@@ -32,8 +32,9 @@ namespace LudumDare41_Game {
         private ContentManager contentManager;
         private CoordHandler coordHandler;
 
-        private float towerSpawnCooldown = 0.5f;
-        private float lastTowerSpawn = 0;
+        private bool cardHasBeenHeld = false;
+        private bool previewTowerInstantiated = false;
+        private Tower previewTower;
 
         #endregion
 
@@ -124,14 +125,36 @@ namespace LudumDare41_Game {
 
                     #region // Towers //
 
-                    if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && lastTowerSpawn > towerSpawnCooldown) {
-                        towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
-                        lastTowerSpawn = 0;
+                    HandCard heldCard = cards.CurrentlyHeldCard();
+
+                    if (heldCard != null && !cardHasBeenHeld && !previewTowerInstantiated) {
+                        cardHasBeenHeld = true;
+                        towerManager.CreatePreviewTower(heldCard.referenceCard.TowerID, new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y), out previewTower);
+                        previewTowerInstantiated = true;
+                    }
+
+                    else if (heldCard != null && previewTowerInstantiated)
+                        previewTower.MoveTo(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
+
+                    else if (heldCard == null && cardHasBeenHeld) {
+                        if (!towerManager.TowerAtCoord(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y))) {
+                            towerManager.DestroyPreviewTower(previewTower);
+                            previewTowerInstantiated = false;
+                            previewTower = null;
+                            towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
+                            cardHasBeenHeld = false;
+
+                            // remove card from hand
+                        }
+                        else {
+                            towerManager.DestroyPreviewTower(previewTower);
+                            previewTowerInstantiated = false;
+                            previewTower = null;
+                            cardHasBeenHeld = false; // return card to hand
+                        }
                     }
 
                     towerManager.Update(gameTime);
-
-                    lastTowerSpawn += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     #endregion
                     break;

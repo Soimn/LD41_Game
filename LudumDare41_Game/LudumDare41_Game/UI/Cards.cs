@@ -23,7 +23,7 @@ namespace LudumDare41_Game.UI {
 
 
         public Cards() {
-            TestTower = new Card("Mage Tower", "A test card for a \ntest tower.", "mageTower", "mageBg", 9);//make a test card
+            TestTower = new Card("MageTower", "Mage Tower", "A test card for a \ntest tower.", "mageTower", "mageBg", 9);//make a test card
             allCards.Add(TestTower);
             cardsInHand.Add(new HandCard(TestTower));
         }
@@ -96,6 +96,7 @@ namespace LudumDare41_Game.UI {
         }
 
     class Card {
+        public string TowerID { get; private set; }
         string title, desc, imgNameSrc, bgNameSrc;
         Texture2D cardImg, bg, healthPot;
         SpriteFont titleFont, healthFont;
@@ -103,7 +104,8 @@ namespace LudumDare41_Game.UI {
         public bool isLoaded { get; private set; }
         public int health { get; private set; }
 
-        public Card(string title, string desc, string imgNameSrc, string bgNameSrc, int health) { //dette er de forskjellige Card typene, som kan bli håndtert i Cards classen?
+        public Card(string _id, string title, string desc, string imgNameSrc, string bgNameSrc, int health) { //dette er de forskjellige Card typene, som kan bli håndtert i Cards classen?
+            TowerID = _id;
             this.title = title;
             this.desc = desc;
             this.imgNameSrc = imgNameSrc;

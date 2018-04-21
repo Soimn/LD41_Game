@@ -3,6 +3,7 @@ using LudumDare41_Game.CoordinateSystem;
 using LudumDare41_Game.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace LudumDare41_Game.Towers {
@@ -18,12 +19,18 @@ namespace LudumDare41_Game.Towers {
             coordHandler = _coordHandler;
             contentManager = _contentManager;
             towers = new List<Tower>();
+            previewTowers = new List<Tower>();
         }
 
         public void Update (GameTime gameTime) {
             if (towers.Count != 0) {
                 for (int i = 0; i < towers.Count; i++)
                     towers[i].Update(gameTime);
+            }
+
+            if (previewTowers.Count != 0) {
+                for (int i = 0; i < previewTowers.Count; i++)
+                    previewTowers[i].Update(gameTime);
             }
         }
 
@@ -32,11 +39,30 @@ namespace LudumDare41_Game.Towers {
                 for (int i = 0; i < towers.Count; i++)
                     towers[i].Draw(spriteBatch);
             }
+
+            if (previewTowers.Count != 0) {
+                for (int i = 0; i < previewTowers.Count; i++)
+                    previewTowers[i].Draw(spriteBatch);
+            }
         }
 
-        public void DrawPreviewTower (SpriteBatch spriteBatch, Tower tower, TileCoord coord, ContentManager contentManager) {
-            Texture2D temp = contentManager.Load<Texture2D>(nameof(tower) + "_IdleSpritesheet");
-            //idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
+        public void CreatePreviewTower (string towerID, TileCoord coord, out Tower retTower) {
+
+            if (!Tower.towerID.TryGetValue(towerID, out Type type))
+                throw new System.ArgumentException("Cannot possibly instantiate tower of type: {0}, because no such type exists", towerID);
+
+            Object[] args = { this, contentManager, false };
+
+            Tower tower = (Tower)Activator.CreateInstance(type, args);
+
+            Texture2D temp = contentManager.Load<Texture2D>("Towers/" + type.Name + "/" + type.Name + "_IdleSpritesheet");
+            tower.Init(coord);
+            previewTowers.Add(tower);
+            retTower = tower;
+        }
+
+        public void DestroyPreviewTower (Tower tower) {
+            previewTowers.Remove(tower);
         }
 
         public void SpawnTower (Tower tower, TileCoord coord) {
@@ -51,6 +77,15 @@ namespace LudumDare41_Game.Towers {
 
         public Vector2 GetDrawPos (TileCoord coord) {
             return new Vector2((int)coordHandler.WorldToScreen(coord.ToVector2()).X + 1, (int)coordHandler.WorldToScreen(coord.ToVector2()).Y + 1);
+        }
+
+        public bool TowerAtCoord (TileCoord coord) {
+            foreach (Tower tower in towers) {
+                if (tower.Coord == coord)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

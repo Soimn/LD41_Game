@@ -19,6 +19,8 @@ namespace LudumDare41_Game.Towers {
         public override WeaponType WpnType { get; }
         private AnimationState animState;
         public override AnimationState AnimState { get { return animState; } }
+
+        public override bool IsPreviewTower { get; }
         #endregion
 
         private Animation idleAnimation;
@@ -27,9 +29,10 @@ namespace LudumDare41_Game.Towers {
         private TowerManager towerManager;
         private ContentManager contentManager;
 
-        public MageTower (TowerManager _towerManager, ContentManager _contentManager) {
+        public MageTower (TowerManager _towerManager, ContentManager _contentManager, bool _isPreviewTower = false) {
             towerManager = _towerManager;
             contentManager = _contentManager;
+            IsPreviewTower = _isPreviewTower;
         }
 
         public override void Init (TileCoord _coord) {
@@ -63,7 +66,7 @@ namespace LudumDare41_Game.Towers {
                     //attackAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
                     break;
                 case AnimationState.Idle:
-                    idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
+                    idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord), IsPreviewTower ? new Color(Color.White, 0.5f) : Color.White);
                     break;
                 default:
                     break;
@@ -76,6 +79,10 @@ namespace LudumDare41_Game.Towers {
 
         public override void Repair (int amount) {
 
+        }
+
+        public override void MoveTo (TileCoord _coord) {
+            coord = _coord;
         }
     }
 }

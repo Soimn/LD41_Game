@@ -55,7 +55,6 @@
     <Compile Include="Towers\Tower.cs" />
     <Compile Include="Towers\TowerManager.cs" />
     <Compile Include="Towers\TowerSize.cs" />
-    <Compile Include="UI\HeldCardInfo.cs" />
     <Compile Include="World\Level.cs" />
   </ItemGroup>
   <ItemGroup>

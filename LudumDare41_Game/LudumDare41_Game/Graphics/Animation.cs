@@ -40,5 +40,10 @@ namespace LudumDare41_Game.Graphics {
             Rectangle source = new Rectangle(Convert.ToInt16(frameIndex * textureSize.X), 0, (int)textureSize.X, (int)textureSize.Y);
             sb.Draw(spritesheet, new Rectangle((int)pos.X, (int)pos.Y, (int)textureSize.X, (int)textureSize.Y), source, Color.White);
         }
+
+        public void drawAnimation (SpriteBatch sb, Vector2 pos, Color color) { //Draw the animation at the position specified w/ pos and in the SpriteBatch sb w/ color.
+            Rectangle source = new Rectangle(Convert.ToInt16(frameIndex * textureSize.X), 0, (int)textureSize.X, (int)textureSize.Y);
+            sb.Draw(spritesheet, new Rectangle((int)pos.X, (int)pos.Y, (int)textureSize.X, (int)textureSize.Y), source, color);
+        }
     }
 }
