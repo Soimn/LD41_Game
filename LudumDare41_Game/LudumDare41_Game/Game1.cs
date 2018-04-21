@@ -41,6 +41,8 @@ namespace LudumDare41_Game {
 
         #endregion
 
+        public const int screenWidth = 1920, screenHeight = 1080;
+
 
         public Game1 () {
             graphics = new GraphicsDeviceManager(this);

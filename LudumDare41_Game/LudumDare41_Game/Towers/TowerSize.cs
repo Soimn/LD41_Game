@@ -9,6 +9,6 @@
         }
     }
 
-    public enum TowerWidth { narrow = 32, medium = 64, wide = 96}
-    public enum TowerHeight { medium = 32, tall = 64}
+    public enum TowerWidth { narrow = 32, medium = 64, wide = 96 }
+    public enum TowerHeight { medium = 32, tall = 64 }
 }
