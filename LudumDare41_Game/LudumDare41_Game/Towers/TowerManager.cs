@@ -12,6 +12,7 @@ namespace LudumDare41_Game.Towers {
         private ContentManager contentManager;
 
         private List<Tower> towers;
+        private List<Tower> previewTowers;
 
         public TowerManager (CoordHandler _coordHandler, ContentManager _contentManager) {
             coordHandler = _coordHandler;
@@ -31,6 +32,11 @@ namespace LudumDare41_Game.Towers {
                 for (int i = 0; i < towers.Count; i++)
                     towers[i].Draw(spriteBatch);
             }
+        }
+
+        public void DrawPreviewTower (SpriteBatch spriteBatch, Tower tower, TileCoord coord, ContentManager contentManager) {
+            Texture2D temp = contentManager.Load<Texture2D>(nameof(tower) + "_IdleSpritesheet");
+            //idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord));
         }
 
         public void SpawnTower (Tower tower, TileCoord coord) {
