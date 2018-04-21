@@ -116,7 +116,7 @@ namespace LudumDare41_Game.Physics {
                     level01.Draw(spriteBatch, camera, GraphicsDevice);
 
                     spriteBatch.Begin();
-                    spriteBatch.Draw(selectTex, new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom), Color.White);
+                    spriteBatch.Draw(selectTex, new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom), Color.White);
                     spriteBatch.End();
                     break;
             }
