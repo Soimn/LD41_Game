@@ -29,8 +29,7 @@ namespace LudumDare41_Game.Physics {
 
         protected override void Initialize () {
             camera = new Camera2D(GraphicsDevice) {
-                Zoom = 2f,
-                Origin = Vector2.Zero
+                Zoom = 2f
             };
 
             selectedTile.Width = 32; selectedTile.Height = 32; //DEBUG
@@ -84,12 +83,6 @@ namespace LudumDare41_Game.Physics {
                         moveDirection.Normalize();
                         camera.Move(moveDirection * cameraSpeed * deltaSeconds);
                     }
-
-                    if (keyboardState.IsKeyDown(Keys.R))
-                        camera.ZoomIn(zoomSpeed * deltaSeconds);
-
-                    if (keyboardState.IsKeyDown(Keys.F))
-                        camera.ZoomOut(zoomSpeed * deltaSeconds);
 
                     selectedTile.X = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).X / 32) * 32;
                     selectedTile.Y = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).Y / 32) * 32;
