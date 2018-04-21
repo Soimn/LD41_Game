@@ -152,21 +152,22 @@ namespace LudumDare41_Game {
                 case GameStates.INGAME:
                     level01.Draw(spriteBatch, camera, GraphicsDevice); //WORLD
 
+                    spriteBatch.Begin();
+
+                    #region // Towers //
+
+                    towerManager.Draw(spriteBatch);
+
+                    #endregion
+
+                    spriteBatch.End();
+
                     spriteBatch.Begin(); //UI
                     gui.Draw(spriteBatch);
                     cards.Draw(spriteBatch, Window);
 
 
                     spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
-
-                    spriteBatch.End();
-                    spriteBatch.Begin();
-                    
-                    #region // Towers //
-
-                    towerManager.Draw(spriteBatch);
-
-                    #endregion
 
                     spriteBatch.End();
                     break;
