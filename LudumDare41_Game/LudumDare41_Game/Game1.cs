@@ -1,4 +1,5 @@
-﻿using LudumDare41_Game.Content;
+using  LudumDare41_Game.UI;
+using LudumDare41_Game.Content;
 using LudumDare41_Game.Towers;
 using LudumDare41_Game.World;
 using Microsoft.Xna.Framework;
@@ -7,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
 
-namespace LudumDare41_Game.Physics {
+namespace LudumDare41_Game {
     public class Game1 : Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -18,8 +19,11 @@ namespace LudumDare41_Game.Physics {
         private Camera2D camera;
 
         Level level01;
-        Rectangle selectedTile; //Disse to er bare for debug om screen til world coordinater
-        Texture2D selectTex;
+      
+        GUI gui;
+        Cards cards;
+
+        SpriteFont debugFont;
 
         #region // Towers //
 
@@ -42,13 +46,15 @@ namespace LudumDare41_Game.Physics {
 
         protected override void Initialize () {
             camera = new Camera2D(GraphicsDevice) {
-                Zoom = 2f,
-                Origin = Vector2.Zero
+                Zoom = 2f
             };
 
-            selectedTile.Width = 32; selectedTile.Height = 32; //DEBUG
-
             level01 = new Level("level01", GraphicsDevice);
+          
+            gui = new GUI(GraphicsDevice, Content);
+            cards = new Cards();
+
+            Window.Title = "Ludum Dare 41: Card game tower defence";
 
             #region // Towers //
 
@@ -57,15 +63,19 @@ namespace LudumDare41_Game.Physics {
             towerManager = new TowerManager(coordHandler, contentManager);
 
             #endregion
-
+              
             base.Initialize();
         }
 
         protected override void LoadContent () {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            level01.Load(Content);
 
-            selectTex = Content.Load<Texture2D>("Debug/select"); //DEBUG
+            level01.Load(Content);
+            gui.Load();
+            cards.Load(Content);
+
+            debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
+            
         }
 
         protected override void UnloadContent () {
@@ -73,9 +83,9 @@ namespace LudumDare41_Game.Physics {
         }
 
         protected override void Update (GameTime gameTime) {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            
             switch (currentState) {
                 case GameStates.MENU: //vente med denne til slutt
                     break;
@@ -85,7 +95,6 @@ namespace LudumDare41_Game.Physics {
                     var keyboardState = Keyboard.GetState();
 
                     const float cameraSpeed = 500f;
-                    const float zoomSpeed = 0.3f;
 
                     var moveDirection = Vector2.Zero;
 
@@ -106,18 +115,11 @@ namespace LudumDare41_Game.Physics {
                         camera.Move(moveDirection * cameraSpeed * deltaSeconds);
                     }
 
-                    if (keyboardState.IsKeyDown(Keys.R))
-                        camera.ZoomIn(zoomSpeed * deltaSeconds);
-
-                    if (keyboardState.IsKeyDown(Keys.F))
-                        camera.ZoomOut(zoomSpeed * deltaSeconds);
-
-                    selectedTile.X = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).X / 32) * 32;
-                    selectedTile.Y = (int)Math.Floor(camera.ScreenToWorld(Mouse.GetState().Position.X, Mouse.GetState().Position.Y).Y / 32) * 32;
-                    selectedTile.Width = 32 * (int)camera.Zoom;
-                    selectedTile.Height = 32 * (int)camera.Zoom;
-
                     level01.Update(gameTime);
+
+
+                    gui.Update(gameTime, Window, camera);
+                    cards.Update(gameTime, Window);
 
                     #region // Towers //
 
@@ -131,7 +133,6 @@ namespace LudumDare41_Game.Physics {
                     lastTowerSpawn += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     #endregion
-
                     break;
             }
 
@@ -148,8 +149,15 @@ namespace LudumDare41_Game.Physics {
                     break;
 
                 case GameStates.INGAME:
-                    level01.Draw(spriteBatch, camera, GraphicsDevice);
+                    level01.Draw(spriteBatch, camera, GraphicsDevice); //WORLD
 
+                    spriteBatch.Begin(); //UI
+                    gui.Draw(spriteBatch);
+                    cards.Draw(spriteBatch, Window);
+
+
+                    spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
+                
                     spriteBatch.Begin();
                     spriteBatch.Draw(selectTex, new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom), Color.White);
 
