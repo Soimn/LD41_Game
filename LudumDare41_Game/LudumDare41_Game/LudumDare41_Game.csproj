@@ -44,6 +44,11 @@
   <ItemGroup>
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="CoordinateSystem\TileCoord.cs" />
+    <Compile Include="Entities\DummyEntity.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\EntityManager.cs" />
+    <Compile Include="Entities\EntitySize.cs" />
+    <Compile Include="Entities\TestEntity.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="CoordHandler.cs" />

@@ -18,6 +18,7 @@ namespace LudumDare41_Game.Towers {
         public abstract TowerMaxHealth MaxHealth { get; }
         public abstract int Tier { get; }
         public abstract WeaponType WpnType { get; }
+        public abstract TowerAttackRadius AttackRadius { get; }
         public abstract AnimationState AnimState { get; }
         
         public abstract void Init (TileCoord _coord);
@@ -33,6 +34,7 @@ namespace LudumDare41_Game.Towers {
     public enum TowerDmgPotential { ExtremlyLow, Low, MediumLow, Medium, MediumHigh, High, ExtremlyHigh }
     public enum TowerMaxHealth { ExtremlyLow, Low, MediumLow, Medium, MediumHigh, High, ExtremlyHigh }
     public enum WeaponType { Ray, Arrow, Bomb }
+    public enum TowerAttackRadius { small = 5, medium = 12, large = 20, xxl = 50, xxxl = 95}
     public enum AnimationState { Attack, Idle }
 
 }

@@ -1,5 +1,6 @@
 ﻿using LudumDare41_Game.Content;
 using LudumDare41_Game.CoordinateSystem;
+using LudumDare41_Game.Entities;
 using LudumDare41_Game.Physics;
 using LudumDare41_Game.UI;
 using Microsoft.Xna.Framework;
@@ -12,21 +13,23 @@ namespace LudumDare41_Game.Towers {
 
         private CoordHandler coordHandler;
         private ContentManager contentManager;
+        private EntityManager entityManager;
 
-        private List<Tower> towers;
+        public List<Tower> Towers { get; }
         private List<Tower> previewTowers;
 
-        public TowerManager (CoordHandler _coordHandler, ContentManager _contentManager) {
+        public TowerManager (CoordHandler _coordHandler, ContentManager _contentManager, EntityManager _entityManager) {
             coordHandler = _coordHandler;
             contentManager = _contentManager;
-            towers = new List<Tower>();
+            entityManager = _entityManager;
+            Towers = new List<Tower>();
             previewTowers = new List<Tower>();
         }
 
         public void Update (GameTime gameTime) {
-            if (towers.Count != 0) {
-                for (int i = 0; i < towers.Count; i++)
-                    towers[i].Update(gameTime);
+            if (Towers.Count != 0) {
+                for (int i = 0; i < Towers.Count; i++)
+                    Towers[i].Update(gameTime);
             }
 
             if (previewTowers.Count != 0) {
@@ -36,9 +39,9 @@ namespace LudumDare41_Game.Towers {
         }
 
         public void Draw (SpriteBatch spriteBatch) {
-            if (towers.Count != 0) {
-                for (int i = 0; i < towers.Count; i++)
-                    towers[i].Draw(spriteBatch);
+            if (Towers.Count != 0) {
+                for (int i = 0; i < Towers.Count; i++)
+                    Towers[i].Draw(spriteBatch);
             }
 
             if (previewTowers.Count != 0) {
@@ -51,7 +54,7 @@ namespace LudumDare41_Game.Towers {
             if (!Tower.towerID.TryGetValue(towerID, out Type type))
                 throw new System.ArgumentException("Cannot possibly instantiate tower of type: {0}, because no such type exists", towerID);
 
-            Object[] args = { this, contentManager, true };
+            Object[] args = { this, contentManager, entityManager, true };
 
             Tower tower = (Tower)Activator.CreateInstance(type, args);
 
@@ -67,7 +70,7 @@ namespace LudumDare41_Game.Towers {
 
         public void SpawnTower (Tower tower, TileCoord coord) {
             tower.Init(coord);
-            towers.Add(tower);
+            Towers.Add(tower);
             Console.WriteLine("Spawned tower at: {0}, {1}", tower.Coord.x, tower.Coord.y);
 
             Cards.cardsInHand.Remove(Cards.previouslyHeldCard); 
@@ -82,7 +85,7 @@ namespace LudumDare41_Game.Towers {
         }
 
         public bool TowerAtCoord (TileCoord coord) {
-            foreach (Tower tower in towers) {
+            foreach (Tower tower in Towers) {
                 if (tower.Coord == coord)
                     return true;
             }

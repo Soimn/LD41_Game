@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
 using LudumDare41_Game.Physics;
+using LudumDare41_Game.Entities;
 
 namespace LudumDare41_Game {
     public class Game1 : Game {
@@ -35,6 +36,7 @@ namespace LudumDare41_Game {
         private TowerManager towerManager;
         private ContentManager contentManager;
         private CoordHandler coordHandler;
+        private EntityManager entityManager;
 
         private bool cardHasBeenHeld = false;
         private bool previewTowerInstantiated = false;
@@ -71,7 +73,8 @@ namespace LudumDare41_Game {
 
             coordHandler = new CoordHandler(camera);
             contentManager = new ContentManager(Content);
-            towerManager = new TowerManager(coordHandler, contentManager);
+            entityManager = new EntityManager(coordHandler, contentManager);
+            towerManager = new TowerManager(coordHandler, contentManager, entityManager);
 
             #endregion
 
@@ -163,7 +166,7 @@ namespace LudumDare41_Game {
                                 towerManager.DestroyPreviewTower(previewTower);
                                 previewTowerInstantiated = false;
                                 previewTower = null;
-                                towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
+                                towerManager.SpawnTower(new MageTower(towerManager, contentManager, entityManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
                                 cardHasBeenHeld = false;
 
                                 // remove card from hand
@@ -180,6 +183,9 @@ namespace LudumDare41_Game {
 
 
                         #endregion
+
+                        if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
+                            entityManager.SpawnEntity(new TestEntity(contentManager), new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y));
 
                         break;
                 }
