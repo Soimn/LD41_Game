@@ -36,9 +36,17 @@ namespace LudumDare41_Game.Graphics {
             drawAnimation(sb, pos, Color.White);
         }
 
-        public void drawAnimation (SpriteBatch sb, Vector2 pos, Color color) { //Draw the animation at the position specified w/ pos and in the SpriteBatch sb w/ color.
-            Rectangle source = new Rectangle(Convert.ToInt16(frameIndex * textureSize.X), 0, (int)textureSize.X, (int)textureSize.Y);
-            sb.Draw(spritesheet, new Rectangle((int)pos.X, (int)pos.Y - (int)textureSize.Y, (int)textureSize.X * (int)Game1.camera.Zoom, (int)textureSize.Y * (int)Game1.camera.Zoom), source, color);
+        public void drawAnimation (SpriteBatch sb, Vector2 pos, Color color, bool bypassScale = false) { //Draw the animation at the position specified w/ pos and in the SpriteBatch sb w/ color.
+            if (bypassScale) {
+                Rectangle source = new Rectangle(Convert.ToInt16(frameIndex * textureSize.X), 0, (int)textureSize.X, (int)textureSize.Y);
+                sb.Draw(spritesheet, new Rectangle((int)pos.X, (int)pos.Y - (int)textureSize.Y, (int)textureSize.X, (int)textureSize.Y), source, color);
+            }
+            else {
+                Rectangle source = new Rectangle(Convert.ToInt16(frameIndex * textureSize.X), 0, (int)textureSize.X, (int)textureSize.Y);
+                sb.Draw(spritesheet, new Rectangle((int)pos.X, (int)pos.Y - (int)textureSize.Y, (int)textureSize.X * (int)Game1.camera.Zoom, (int)textureSize.Y * (int)Game1.camera.Zoom), source, color);
+            }
         }
+
+        public void ResetAnimation() { frameIndex = 0; }
     }
 }

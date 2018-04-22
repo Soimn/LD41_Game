@@ -1,8 +1,10 @@
 ﻿using LudumDare41_Game.Content;
 using LudumDare41_Game.Physics;
+using LudumDare41_Game.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace LudumDare41_Game.Entities {
@@ -15,9 +17,13 @@ namespace LudumDare41_Game.Entities {
         public DummyEntity Dummy { get { return dummy; } }
         private DummyEntity dummy;
 
+        private Random r;
+
         public EntityManager (CoordHandler _coordHandler, ContentManager _contentManager) {
             coordHandler = _coordHandler;
             contentManager = _contentManager;
+
+            r = new Random((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
 
             EnemyEntity enemy = new EnemyEntity(_contentManager, _coordHandler, this);
 
@@ -48,6 +54,8 @@ namespace LudumDare41_Game.Entities {
         public void Kill (Entity entity) {
             Entities.Remove(entity);
             entity = null;
+
+            Cards.manaCurrent += r.Next(1, 3);
             //Effect
         }
 

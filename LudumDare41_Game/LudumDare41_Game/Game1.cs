@@ -269,7 +269,7 @@ namespace LudumDare41_Game {
                     spriteBatch.End();
 
                     //UI
-                    spriteBatch.Begin(); 
+                    spriteBatch.Begin(samplerState: SamplerState.PointWrap); 
                     gui.Draw(spriteBatch);
                     cards.Draw(spriteBatch, Window);
 
