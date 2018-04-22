@@ -5,9 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LudumDare41_Game.UI {
     #region Gui Element Interface
@@ -30,8 +27,8 @@ namespace LudumDare41_Game.UI {
 
         List<GUIElement> elements = new List<GUIElement>();
 
-        CardSelector cardSelector;
-        WorldSelector worldSelector;
+        public CardSelector cardSelector { get; private set; }
+        public WorldSelector worldSelector { get; private set; }
 
         public GUI(GraphicsDevice g, ContentManager c) {
             this.g = g;
@@ -108,11 +105,11 @@ namespace LudumDare41_Game.UI {
 
     #region GUI Classes
     class CardSelector : GUIElement {
-
-        int height = 200;
         int minHeight = 50;
+        int height = 200;
 
         public static bool isActive = false;
+
 
         public CardSelector(string name, Rectangle pos) : base(name, pos) {
             nameID = name;
