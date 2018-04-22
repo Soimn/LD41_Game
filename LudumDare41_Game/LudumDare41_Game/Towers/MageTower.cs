@@ -16,6 +16,9 @@ namespace LudumDare41_Game.Towers {
 
         private int dmgPotential;
         public override TowerDmgPotential DamagePotential { get; }
+        private float timeSinceLastAttack = 0;
+        private TowerAttackCooldown attackCooldown;
+        public override TowerAttackCooldown AttackCooldown { get { return attackCooldown; } }
         public override TowerMaxHealth MaxHealth { get; }
         private int currentHealth;
         public override int Tier { get; }
@@ -27,6 +30,7 @@ namespace LudumDare41_Game.Towers {
         public override TowerAnimationState AnimState { get { return animState; } }
 
         public override bool IsPreviewTower { get; }
+
         #endregion
 
         private Animation idleAnimation;
@@ -65,6 +69,7 @@ namespace LudumDare41_Game.Towers {
             attackRadius = TowerAttackRadius.medium;
             attackRadiusSquared = (float)System.Math.Pow((double)attackRadius, 2);
             dmgPotential = (int)TowerDmgPotential.Medium;
+            attackCooldown = TowerAttackCooldown.medium;
         }
 
         public override void Update (GameTime gameTime) {
@@ -90,7 +95,9 @@ namespace LudumDare41_Game.Towers {
             switch (animState) {
                 case TowerAnimationState.Attack:
                     attackAnimation.updateAnimation(gameTime);
-                    targetEntity.TakeDamage(dmgPotential);
+                    if (timeSinceLastAttack > (int)attackCooldown)
+                        targetEntity.TakeDamage(dmgPotential);
+                    timeSinceLastAttack += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
                 case TowerAnimationState.Idle:
                     idleAnimation.updateAnimation(gameTime);
