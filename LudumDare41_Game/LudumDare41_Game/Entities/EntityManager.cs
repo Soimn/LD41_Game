@@ -17,8 +17,14 @@ namespace LudumDare41_Game.Entities {
         public EntityManager(CoordHandler _coordHandler, ContentManager _contentManager) {
             coordHandler = _coordHandler;
             contentManager = _contentManager;
-            Entities = new List<Entity>();
-            Entities.Add(new DummyEntity(new Vector2(10000, 10000), out dummy));
+
+            TestEntity test = new TestEntity(_contentManager, _coordHandler);
+
+            Entities = new List<Entity> {
+                new DummyEntity(new Vector2(10000, 10000), out dummy)
+            };
+
+            SpawnEntity(test, new Vector2(300, 300));
         }
 
         public void SpawnEntity (Entity entity, Vector2 position) {
