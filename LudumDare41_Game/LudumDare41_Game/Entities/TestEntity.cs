@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using LudumDare41_Game.Content;
 using LudumDare41_Game.Graphics;
+using LudumDare41_Game.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -21,9 +22,11 @@ namespace LudumDare41_Game.Entities {
         private Animation idle;
 
         private ContentManager contentManager;
+        private CoordHandler coordHandler;
 
-        public TestEntity (ContentManager _contentManager) {
+        public TestEntity (ContentManager _contentManager, CoordHandler _coordHandler) {
             contentManager = _contentManager;
+            coordHandler = _coordHandler;
         }
 
         public override void Init (Vector2 _position) {
@@ -31,7 +34,7 @@ namespace LudumDare41_Game.Entities {
             animationState = EntityAnimationState.Idle;
             size = new EntitySize(EntityWidth.narrow, EntityHeight.medium);
 
-            idle = new Animation(contentManager.Load<Texture2D>("Enities/ExampleEntity/ExampleEnemy"), new Vector2((int)size.Width, (int)size.Height), 1, 4f);
+            idle = new Animation(contentManager.Load<Texture2D>("Entities/ExampleEntity/ExampleEnemy"), new Vector2((int)size.Width, (int)size.Height), 1, 4f);
         }
 
         public override void Update (GameTime gameTime) {
@@ -53,7 +56,7 @@ namespace LudumDare41_Game.Entities {
                     //attackAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord), IsPreviewTower ? (towerManager.TowerAtCoord(this.coord) ? new Color(Color.Red, 0.5f) : new Color(Color.White, 0.5f)) : Color.White);
                     break;
                 case EntityAnimationState.Idle:
-                    idle.drawAnimation(spriteBatch, position, Color.White);
+                    idle.drawAnimation(spriteBatch, coordHandler.WorldToScreen(position), Color.White);
                     break;
                 default:
                     break;

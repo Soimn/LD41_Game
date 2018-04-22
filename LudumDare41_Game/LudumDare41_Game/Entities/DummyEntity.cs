@@ -27,11 +27,11 @@ namespace LudumDare41_Game.Entities {
         }
 
         public override void Update (GameTime gameTime) {
-            throw new NotImplementedException();
+            return;
         }
 
         public override void Draw (SpriteBatch spriteBatch) {
-            throw new NotImplementedException();
+            return;
         }
     }
 }

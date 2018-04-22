@@ -179,6 +179,7 @@ namespace LudumDare41_Game {
                         }
 
                         towerManager.Update(gameTime);
+                        entityManager.Update(gameTime);
 
 
                         #endregion
@@ -199,7 +200,7 @@ namespace LudumDare41_Game {
                         }
 
                         if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
-                            entityManager.SpawnEntity(new TestEntity(contentManager), new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y));
+                            entityManager.SpawnEntity(new TestEntity(contentManager, coordHandler), new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y));
 
 
                         break;
@@ -225,6 +226,7 @@ namespace LudumDare41_Game {
                     #region // Towers //
 
                     towerManager.Draw(spriteBatch);
+                    entityManager.Draw(spriteBatch);
 
                     #endregion
 
