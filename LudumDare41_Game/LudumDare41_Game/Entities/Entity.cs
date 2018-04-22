@@ -12,7 +12,7 @@ namespace LudumDare41_Game.Entities {
         public abstract EntityHealth Health { get; }
         public abstract EntityAnimationState AnimationState { get; }
 
-        public abstract void Init (Vector2 _position);
+        public abstract void Init (Vector2 _position, List<PathPoint> _path);
         public abstract void Update (GameTime gameTime);
         public abstract void Draw (SpriteBatch spriteBatch);
 

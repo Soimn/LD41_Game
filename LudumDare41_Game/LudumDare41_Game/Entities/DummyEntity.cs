@@ -22,7 +22,7 @@ namespace LudumDare41_Game.Entities {
             dummyEntity = this;
         }
 
-        public override void Init (Vector2 _position) {
+        public override void Init (Vector2 _position, List<PathPoint> _path) {
             throw new NotImplementedException();
         }
 

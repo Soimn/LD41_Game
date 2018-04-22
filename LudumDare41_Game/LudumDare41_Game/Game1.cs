@@ -46,6 +46,8 @@ namespace LudumDare41_Game {
 
         #endregion
 
+        WaveManager waveManager;
+
         public bool DebugMode { get; private set; }
         private float lastTime, cooldown = 0.5f;
 
@@ -83,6 +85,8 @@ namespace LudumDare41_Game {
             #endregion
 
             menu = new Menu();
+
+            waveManager = new WaveManager();
 
             base.Initialize();
         }
@@ -227,7 +231,7 @@ namespace LudumDare41_Game {
                         }
 
                         if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
-                            entityManager.SpawnEntity(new EnemyEntity(contentManager, coordHandler, entityManager), coordHandler.ScreenToWorld((new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y))));
+                            entityManager.SpawnEntity(new EnemyEntity(contentManager, coordHandler, entityManager), coordHandler.ScreenToWorld((new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y))), waveManager.Path);
 
                         home.Update(gameTime);
 

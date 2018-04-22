@@ -37,27 +37,18 @@ namespace LudumDare41_Game.Entities {
             entityManager = _entityManager;
         }
 
-        public override void Init (Vector2 _position) {
+        public override void Init (Vector2 _position, List<PathPoint> _path) {
             position = _position;
             animationState = EntityAnimationState.Idle;
             size = new EntitySize(EntityWidth.narrow, EntityHeight.medium);
 
             idle = new Animation(contentManager.Load<Texture2D>("Entities/ExampleEntity/ExampleEnemy"), new Vector2((int)size.Width, (int)size.Height), 1, 4f);
-            path = new List<PathPoint> {
-                new PathPoint(320, 100),
-                new PathPoint(570, 300),
-                new PathPoint(600, 300),
-                new PathPoint(780, 480),
-                new PathPoint(780, 545),
-                new PathPoint(720, 580),
-                new PathPoint(630, 580),
-                new PathPoint(440, 470),
-                new PathPoint(210, 470),
-                new PathPoint(210, 550),
-                new PathPoint(470, 780),
-                new PathPoint(575, 780),
-                new PathPoint(686, 930)
-            };
+
+            path = new List<PathPoint>();
+
+            foreach (var point in _path) {
+                path.Add(point);
+            }
 
             for (int i = 0; i < path.Count; i++)
                 path[i].SetScore(i);

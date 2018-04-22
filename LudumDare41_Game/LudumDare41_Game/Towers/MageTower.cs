@@ -101,6 +101,9 @@ namespace LudumDare41_Game.Towers {
             if (targetEntity != null) {
                 animState = TowerAnimationState.Attack;
             }
+            else if (targetEntity == null && sightedEntities.Count != 0) {
+
+            }
             else {
                 animState = TowerAnimationState.Idle;
             }
@@ -108,9 +111,10 @@ namespace LudumDare41_Game.Towers {
             switch (animState) {
                 case TowerAnimationState.Attack:
                     attackAnimation.updateAnimation(gameTime);
-                    if (timeSinceLastAttack > (int)attackCooldown)
+                    if (timeSinceLastAttack > (int)attackCooldown) {
                         targetEntity.TakeDamage(dmgPotential);
-                    timeSinceLastAttack += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        timeSinceLastAttack = 0;
+                    }
                     break;
                 case TowerAnimationState.Idle:
                     idleAnimation.updateAnimation(gameTime);
@@ -118,6 +122,8 @@ namespace LudumDare41_Game.Towers {
                 default:
                     break;
             }
+
+            timeSinceLastAttack += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public override void Draw (SpriteBatch spriteBatch) {
