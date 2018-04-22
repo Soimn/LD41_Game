@@ -15,7 +15,8 @@ namespace LudumDare41_Game.UI {
         public List<Card> allCards = new List<Card>();
         public static List<HandCard> cardsInHand = new List<HandCard>();
         public static bool anyHeld = false;
-        HandCard heldCard = null;
+        public static HandCard heldCard = null;
+        public static HandCard previouslyHeldCard = null;
 
         KeyboardState newState, oldState;
         MouseState newMouseState, oldMouseState;
@@ -57,6 +58,7 @@ namespace LudumDare41_Game.UI {
                     card.alpha = 0.4f;
                     anyHeld = true;
                     heldCard = card;
+                    previouslyHeldCard = heldCard;
                 }
 
                 if (Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {

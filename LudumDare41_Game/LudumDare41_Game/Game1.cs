@@ -28,6 +28,7 @@ namespace LudumDare41_Game {
         Cards cards;
 
         SpriteFont debugFont;
+        
 
         #region // Towers //
 
@@ -40,6 +41,7 @@ namespace LudumDare41_Game {
         private Tower previewTower;
 
         #endregion
+        
 
         public const int screenWidth = 1920, screenHeight = 1080;
 
@@ -49,6 +51,7 @@ namespace LudumDare41_Game {
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
+            
         }
 
         protected override void Initialize () {
@@ -60,17 +63,19 @@ namespace LudumDare41_Game {
           
             gui = new GUI(GraphicsDevice, Content);
             cards = new Cards();
+            
 
             Window.Title = "Ludum Dare 41: Card game tower defence";
 
             #region // Towers //
 
             coordHandler = new CoordHandler(camera);
-            contentManager = new ContentManager(this.Content);
+            contentManager = new ContentManager(Content);
             towerManager = new TowerManager(coordHandler, contentManager);
 
             #endregion
-              
+
+
             base.Initialize();
         }
 
@@ -80,6 +85,7 @@ namespace LudumDare41_Game {
             level01.Load(Content);
             gui.Load();
             cards.Load(Content);
+            
 
             debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
             
@@ -106,6 +112,7 @@ namespace LudumDare41_Game {
                         break;
 
                     case GameStates.INGAME:
+
                         var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
                         var keyboardState = Keyboard.GetState();
 
@@ -132,6 +139,7 @@ namespace LudumDare41_Game {
 
                         level01.Update(gameTime);
 
+                        
 
                         gui.Update(gameTime, Window, camera);
                         cards.Update(gameTime, Window);

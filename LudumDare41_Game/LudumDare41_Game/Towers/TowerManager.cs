@@ -1,6 +1,7 @@
 ﻿using LudumDare41_Game.Content;
 using LudumDare41_Game.CoordinateSystem;
 using LudumDare41_Game.Physics;
+using LudumDare41_Game.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -47,7 +48,6 @@ namespace LudumDare41_Game.Towers {
         }
 
         public void CreatePreviewTower (string towerID, TileCoord coord, out Tower retTower) {
-
             if (!Tower.towerID.TryGetValue(towerID, out Type type))
                 throw new System.ArgumentException("Cannot possibly instantiate tower of type: {0}, because no such type exists", towerID);
 
@@ -68,7 +68,9 @@ namespace LudumDare41_Game.Towers {
         public void SpawnTower (Tower tower, TileCoord coord) {
             tower.Init(coord);
             towers.Add(tower);
-            System.Console.WriteLine("Spawned tower at: {0}, {1}", tower.Coord.x, tower.Coord.y);
+            Console.WriteLine("Spawned tower at: {0}, {1}", tower.Coord.x, tower.Coord.y);
+
+            Cards.cardsInHand.Remove(Cards.previouslyHeldCard); 
         }
 
         public Rectangle GetDrawRectangle (TileCoord coord, TowerWidth width, TowerHeight height) {
