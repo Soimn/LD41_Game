@@ -57,7 +57,9 @@ namespace LudumDare41_Game {
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+
         }
 
         protected override void Initialize () {

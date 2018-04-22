@@ -16,7 +16,7 @@ namespace LudumDare41_Game.Entities {
         private float speed;
 
         private int currentHealth;
-        public int CurrecntHealth { get { return currentHealth; } }
+        public override int CurrentHealth { get => currentHealth; }
         private EntityHealth initHealth;
         public override EntityHealth Health { get { return initHealth; } }
         private EntityAnimationState animationState;
@@ -24,6 +24,7 @@ namespace LudumDare41_Game.Entities {
 
         private EntitySize size;
         public override EntitySize Size { get { return size; } }
+
 
         private Animation idle;
 

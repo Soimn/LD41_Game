@@ -18,10 +18,13 @@ namespace LudumDare41_Game.Entities {
         private DummyEntity dummy;
 
         private Random r;
+        Texture2D healthBar;
 
         public EntityManager (CoordHandler _coordHandler, ContentManager _contentManager) {
             coordHandler = _coordHandler;
             contentManager = _contentManager;
+
+            healthBar = _contentManager.Load<Texture2D>("Entities/entityHealth");
 
             r = new Random((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
 
@@ -47,8 +50,23 @@ namespace LudumDare41_Game.Entities {
         }
 
         public void Draw (SpriteBatch spriteBatch) {
-            for (int i = 0; i < Entities.Count; i++)
+            for (int i = 0; i < Entities.Count; i++) {
                 Entities[i].Draw(spriteBatch);
+
+                if (Entities[i] != dummy) { //Healthbar
+                    Vector2 pos = new Vector2(coordHandler.WorldToScreen(Entities[i].Position).X , coordHandler.WorldToScreen(Entities[i].Position).Y - 45);
+                    float length = (Entities[i].CurrentHealth / (float)Entities[i].Health) * 75;
+                    if(length >= 75) {
+                        spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.LightGreen);
+                    }
+                    else if (length >= 37.5) {
+                        spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.Yellow);
+                    }
+                    else {
+                        spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.Red);
+                    }
+                }    
+            }
         }
 
         public void Kill (Entity entity) {

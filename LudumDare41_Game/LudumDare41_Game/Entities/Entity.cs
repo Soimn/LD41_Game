@@ -9,6 +9,7 @@ namespace LudumDare41_Game.Entities {
         public abstract float Speed { get; }
         public abstract EntitySize Size { get; }
 
+        public abstract int CurrentHealth { get; }
         public abstract EntityHealth Health { get; }
         public abstract EntityAnimationState AnimationState { get; }
 
