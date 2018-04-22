@@ -73,7 +73,7 @@ namespace LudumDare41_Game.Towers {
                 }*/
 
                 if ((entityManager.Entities[i].Position - this.coord.ToVector2()).LengthSquared() < attackRadiusSquared) {
-                    System.Console.WriteLine("ATTACK");
+                    animState = AnimationState.Attack;
                 }
             }
 
@@ -101,7 +101,8 @@ namespace LudumDare41_Game.Towers {
                     break;
             }
 
-            spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - (((int)attackRadius / 32) * circle.Width) / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - (((int)attackRadius / 32) * circle.Height) / 2 + 32, ((int)attackRadius / 32) * circle.Width, ((int)attackRadius / 32) * circle.Height), Color.White);
+            int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
+            spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2 + 32, width, height), Color.White);
 
             System.Console.WriteLine(towerManager.coordHandler.WorldToScreen(coord.ToVector2()));
         }
