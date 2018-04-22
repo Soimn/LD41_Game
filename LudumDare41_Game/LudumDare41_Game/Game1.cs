@@ -148,6 +148,14 @@ namespace LudumDare41_Game {
                             }
                         }
 
+                        if((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels + 10)) {
+                            camera.Move(new Vector2(-1, 0) * 10000 * deltaSeconds);
+                        }
+
+                        if ((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).Y > level01.map.HeightInPixels + 10)) {
+                            camera.Move(new Vector2(0, -1) * 10000 * deltaSeconds);
+                        }
+
                         if (moveDirection != Vector2.Zero) {
                             moveDirection.Normalize();
                             camera.Move(moveDirection * cameraSpeed * deltaSeconds);
