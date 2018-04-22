@@ -43,7 +43,8 @@ namespace LudumDare41_Game {
         private Tower previewTower;
 
         #endregion
-        
+
+        Home home;
 
         public const int screenWidth = 1920, screenHeight = 1080;
 
@@ -88,7 +89,8 @@ namespace LudumDare41_Game {
             level01.Load(Content);
             gui.Load();
             cards.Load(Content);
-            
+
+            home = new Home(new Vector2(10, 10), Content);
 
             debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
             
@@ -115,7 +117,6 @@ namespace LudumDare41_Game {
                         break;
 
                     case GameStates.INGAME:
-
                         var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
                         var keyboardState = Keyboard.GetState();
 
@@ -202,6 +203,7 @@ namespace LudumDare41_Game {
                         if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
                             entityManager.SpawnEntity(new TestEntity(contentManager, coordHandler), coordHandler.ScreenToWorld((new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y))));
 
+                        home.Update(gameTime);
 
                         break;
                 }
@@ -219,24 +221,24 @@ namespace LudumDare41_Game {
                     break;
 
                 case GameStates.INGAME:
-                    level01.Draw(spriteBatch, camera, GraphicsDevice); //WORLD
-
+                    //WORLD
+                    level01.Draw(spriteBatch, camera, GraphicsDevice);
                     spriteBatch.Begin(samplerState: SamplerState.PointWrap);
-
                     #region // Towers //
 
                     towerManager.Draw(spriteBatch);
                     entityManager.Draw(spriteBatch);
 
                     #endregion
-
+                    home.Draw(spriteBatch);
                     spriteBatch.End();
 
-                    spriteBatch.Begin(); //UI
+                    //UI
+                    spriteBatch.Begin(); 
                     gui.Draw(spriteBatch);
                     cards.Draw(spriteBatch, Window);
 
-
+                    #region // DEBUG //
                     spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
 
                     if (isPaused) {
@@ -244,7 +246,9 @@ namespace LudumDare41_Game {
                         spriteBatch.DrawString(debugFont, pausedMsg, new Vector2(Window.ClientBounds.Width / 2 - debugFont.MeasureString(pausedMsg).X / 2, Window.ClientBounds.Height / 2), Color.Black);
                     }
 
+                    
                     spriteBatch.End();
+                    #endregion
                     break;
             }
 
