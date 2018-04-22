@@ -52,9 +52,11 @@ namespace LudumDare41_Game.Entities {
                 new Vector2(440, 470),
                 new Vector2(210, 470),
                 new Vector2(210, 550),
+                new Vector2(470, 780),
+                new Vector2(575, 780),
                 new Vector2(686, 930)
             };
-            speed = 300f;
+            speed = 50f;
 
             initHealth = EntityHealth.medium;
             currentHealth = (int)initHealth;
