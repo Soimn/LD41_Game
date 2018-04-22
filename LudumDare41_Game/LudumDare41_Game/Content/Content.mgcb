@@ -161,6 +161,7 @@
 /build:Entities/ExampleEntity/ExampleEnemy.png
 
 #begin Entities/Home/idleAnim.png
+#begin Towers/Debug/Circle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -171,4 +172,5 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Entities/Home/idleAnim.png
+/build:Towers/Debug/Circle.png
 

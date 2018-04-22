@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace LudumDare41_Game.Entities {
     class TestEntity : Entity {
         private Vector2 position;
-        public override Vector2 Position { get; }
+        public override Vector2 Position { get { return position; } }
         public override List<Vector2> Path { get; }
         public override float Speed { get; }
 
