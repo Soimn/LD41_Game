@@ -34,5 +34,4 @@ namespace LudumDare41_Game.Towers {
     public enum TowerMaxHealth { ExtremlyLow, Low, MediumLow, Medium, MediumHigh, High, ExtremlyHigh }
     public enum WeaponType { Ray, Arrow, Bomb }
     public enum AnimationState { Attack, Idle }
-
 }

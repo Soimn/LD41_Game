@@ -70,7 +70,6 @@ namespace LudumDare41_Game.Towers {
             towers.Add(tower);
             Console.WriteLine("Spawned tower at: {0}, {1}", tower.Coord.x, tower.Coord.y);
 
-            Cards.cardsInHand.Remove(Cards.previouslyHeldCard); 
         }
 
         public Rectangle GetDrawRectangle (TileCoord coord, TowerWidth width, TowerHeight height) {

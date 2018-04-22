@@ -152,7 +152,6 @@ namespace LudumDare41_Game {
                             cardHasBeenHeld = true;
                             towerManager.CreatePreviewTower(heldCard.referenceCard.TowerID, new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y), out previewTower);
                             previewTowerInstantiated = true;
-                            heldCard.alpha = 0;
                         }
 
                         else if (heldCard != null && previewTowerInstantiated)
@@ -166,7 +165,7 @@ namespace LudumDare41_Game {
                                 towerManager.SpawnTower(new MageTower(towerManager, contentManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
                                 cardHasBeenHeld = false;
 
-                                // remove card from hand
+                                Cards.cardsInHand.Remove(Cards.previouslyHeldCard);
                             }
                             else {
                                 towerManager.DestroyPreviewTower(previewTower);
@@ -180,6 +179,21 @@ namespace LudumDare41_Game {
 
 
                         #endregion
+
+                        if(Mouse.GetState().RightButton.Equals(ButtonState.Pressed) && cardHasBeenHeld) {
+                            towerManager.DestroyPreviewTower(previewTower);
+                            previewTowerInstantiated = false;
+                            previewTower = null;
+                            cardHasBeenHeld = false; // return card to hand
+                            Cards.cardsInHand.Remove(Cards.previouslyHeldCard);
+                            Cards.returnToHand = true;
+                            Cards.anyHeld = false;
+                            Cards.heldCard = null;
+                        } else if (Cards.returnToHand 
+                            && Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
+                            Cards.cardsInHand.Add(Cards.previouslyHeldCard);
+                            Cards.returnToHand = false;
+                        }
 
                         break;
                 }
