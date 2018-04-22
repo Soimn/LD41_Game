@@ -32,10 +32,10 @@ namespace LudumDare41_Game.Entities {
         private CoordHandler coordHandler;
         private EntityManager entityManager;
 
-        public EnemyEntity (ContentManager _contentManager, CoordHandler _coordHandler, EntityManager _entityManager) {
-            contentManager = _contentManager;
-            coordHandler = _coordHandler;
+        public EnemyEntity (EntityManager _entityManager) {
             entityManager = _entityManager;
+            contentManager = entityManager.ContentManager;
+            coordHandler = entityManager.CoordHandler;
         }
 
         public override void Init (Vector2 _position, List<PathPoint> _path) {
@@ -49,6 +49,28 @@ namespace LudumDare41_Game.Entities {
 
             foreach (var point in _path) {
                 path.Add(point);
+            }
+
+            for (int i = 0; i < path.Count; i++)
+                path[i].SetScore(i);
+
+            speed = 50f;
+
+            initHealth = EntityHealth.medium;
+            currentHealth = (int)initHealth;
+        }
+
+        public override void Init_Wave (Vector2 _position) {
+            position = _position;
+            animationState = EntityAnimationState.Idle;
+            size = new EntitySize(EntityWidth.narrow, EntityHeight.medium);
+
+            idle = new Animation(contentManager.Load<Texture2D>("Entities/ExampleEntity/ExampleEnemy"), new Vector2((int)size.Width, (int)size.Height), 1, 4f);
+
+            path = new List<PathPoint>();
+
+            foreach (var point in entityManager.WaveManager.Path) {
+                path.Add(new PathPoint(point.Position + new Vector2(((float)entityManager.Random.Next(15, 100)) / 100, ((float)entityManager.Random.Next(15, 100)) / 100)));
             }
 
             for (int i = 0; i < path.Count; i++)
@@ -74,6 +96,8 @@ namespace LudumDare41_Game.Entities {
                     break;
             }
         }
+
+
 
         public override void Draw (SpriteBatch spriteBatch) {
             switch (animationState) {

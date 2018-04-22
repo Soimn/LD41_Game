@@ -40,5 +40,9 @@ namespace LudumDare41_Game.Entities {
         public override void TakeDamage (int amount) {
             throw new NotImplementedException();
         }
+
+        public override void Init_Wave (Vector2 _position) {
+            throw new NotImplementedException();
+        }
     }
 }

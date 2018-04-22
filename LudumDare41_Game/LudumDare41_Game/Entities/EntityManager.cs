@@ -10,25 +10,25 @@ using System.Collections.Generic;
 namespace LudumDare41_Game.Entities {
     class EntityManager {
 
-        private CoordHandler coordHandler;
-        private ContentManager contentManager;
+        public CoordHandler CoordHandler { get; private set; }
+        public ContentManager ContentManager { get; private set; }
+        public WaveManager WaveManager { get; private set; }
 
         public List<Entity> Entities { get; }
         public DummyEntity Dummy { get { return dummy; } }
         private DummyEntity dummy;
 
-        private Random r;
+        public Random Random { get; private set; }
         Texture2D healthBar;
 
-        public EntityManager (CoordHandler _coordHandler, ContentManager _contentManager) {
-            coordHandler = _coordHandler;
-            contentManager = _contentManager;
+        public EntityManager (CoordHandler _coordHandler, ContentManager _contentManager, WaveManager _waveManager) {
+            CoordHandler = _coordHandler;
+            ContentManager = _contentManager;
+            WaveManager = _waveManager;
 
             healthBar = _contentManager.Load<Texture2D>("Entities/entityHealth");
 
-            r = new Random((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
-
-            EnemyEntity enemy = new EnemyEntity(_contentManager, _coordHandler, this);
+            Random = new Random((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
 
             Entities = new List<Entity> {
                 new DummyEntity(new Vector2(10000, 10000), out dummy)
@@ -38,8 +38,11 @@ namespace LudumDare41_Game.Entities {
         public void SpawnEntity (Entity entity, Vector2 position, List<PathPoint> _path) {
             entity.Init(position, _path);
             Entities.Add(entity);
+        }
 
-            System.Console.WriteLine("Spawned entity at {0}, {1}, {2}", position.X, position.Y, Entities.Contains(entity));
+        public void SpawnWaveEntity (Entity entity) {
+            entity.Init_Wave(WaveManager.Path[0].Position + new Vector2(0, 32));
+            Entities.Add(entity);
         }
 
         public void Update (GameTime gameTime) {
@@ -52,9 +55,9 @@ namespace LudumDare41_Game.Entities {
                 Entities[i].Draw(spriteBatch);
 
                 if (Entities[i] != dummy) { //Healthbar
-                    Vector2 pos = new Vector2(coordHandler.WorldToScreen(Entities[i].Position).X , coordHandler.WorldToScreen(Entities[i].Position).Y - 45);
+                    Vector2 pos = new Vector2(CoordHandler.WorldToScreen(Entities[i].Position).X, CoordHandler.WorldToScreen(Entities[i].Position).Y - 45);
                     float length = (Entities[i].CurrentHealth / (float)Entities[i].Health) * 75;
-                    if(length >= 75) {
+                    if (length >= 75) {
                         spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.LightGreen);
                     }
                     else if (length >= 37.5) {
@@ -63,7 +66,7 @@ namespace LudumDare41_Game.Entities {
                     else {
                         spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.Red);
                     }
-                }    
+                }
             }
         }
 
@@ -71,7 +74,7 @@ namespace LudumDare41_Game.Entities {
             Entities.Remove(entity);
             entity = null;
 
-            Cards.manaCurrent += r.Next(1, 3);
+            Cards.manaCurrent += Random.Next(1, 3);
             //Effect
         }
 
@@ -133,6 +136,19 @@ namespace LudumDare41_Game.Entities {
                 }
 
                 return topScoreEntities[index];
+            }
+        }
+
+        public Type GetEntityOfTypeByGrade (int grade = 1) {
+
+            switch (grade) {
+
+                case 1:
+                    return typeof(EnemyEntity);
+
+                default:
+                case 0:
+                    throw new ArgumentException("Parameter grade in GetEntityOfTypeByGrade, cannot possiblt be " + grade);
             }
         }
     }
