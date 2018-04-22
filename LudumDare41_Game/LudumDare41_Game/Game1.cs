@@ -59,7 +59,9 @@ namespace LudumDare41_Game {
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+
         }
 
         protected override void Initialize () {
@@ -273,7 +275,7 @@ namespace LudumDare41_Game {
                     spriteBatch.End();
 
                     //UI
-                    spriteBatch.Begin(); 
+                    spriteBatch.Begin(samplerState: SamplerState.PointWrap); 
                     gui.Draw(spriteBatch);
                     cards.Draw(spriteBatch, Window);
 

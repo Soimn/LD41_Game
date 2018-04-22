@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LudumDare41_Game.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -29,17 +30,26 @@ namespace LudumDare41_Game.UI {
 
         public CardSelector cardSelector { get; private set; }
         public WorldSelector worldSelector { get; private set; }
+        public ManaHandler manaHandler { get; private set; }
+        public WaveInfo waveInfo { get; private set; }
 
         public GUI(GraphicsDevice g, ContentManager c) {
             this.g = g;
             this.c = c;
+
+            waveInfo = new WaveInfo("waveInfo", Rectangle.Empty);
+            addGuiItem(waveInfo);
 
             cardSelector = new CardSelector("cardSel", Rectangle.Empty);
             addGuiItem(cardSelector);
 
             worldSelector = new WorldSelector("select", Rectangle.Empty);
             addGuiItem(worldSelector);
-            
+
+            manaHandler = new ManaHandler("manaHandler", Rectangle.Empty);
+            addGuiItem(manaHandler);
+
+
         }
 
         public void addGuiItem(GUIElement elementToAdd) {
@@ -49,24 +59,34 @@ namespace LudumDare41_Game.UI {
 
         public void Load() {
             foreach (GUIElement e in elements) {
-                if (!e.isLoaded) {
+                if (!e.isLoaded && e.nameID != "waveInfo") {
                     e.Load(c);
                 }
             }
+
+            if (!waveInfo.isLoaded)
+                waveInfo.Load(c);
         }
 
         public void Update(GameTime gt, GameWindow w, Camera2D camera) {
             foreach (GUIElement e in elements) {
                 e.Update(gt, w);
-                cardSelector.Update(gt, w);
-                worldSelector.Update(gt, w, camera);
             }
+
+            cardSelector.Update(gt, w);
+            worldSelector.Update(gt, w, camera);
+            //manaHandler.Update(gt, w);
+            waveInfo.Update(gt, w);
         }
 
         public void Draw(SpriteBatch sb) {
             foreach (GUIElement e in elements) {
-                e.Draw(sb);
+                if(e.nameID != "waveInfo")
+                    e.Draw(sb);
             }
+
+            manaHandler.Draw(sb);
+            waveInfo.Draw(sb);
         }
     }
     #endregion
@@ -110,7 +130,6 @@ namespace LudumDare41_Game.UI {
 
         public static bool isActive = false;
 
-
         public CardSelector(string name, Rectangle pos) : base(name, pos) {
             nameID = name;
             this.pos = pos;
@@ -147,6 +166,75 @@ namespace LudumDare41_Game.UI {
 
             pos = new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom);
         }
+    }
+
+    class ManaHandler : GUIElement {
+        public ManaHandler(string name, Rectangle pos) : base(name, pos) {
+        }
+
+        /*public new void Update(GameTime gt, GameWindow w) {
+        } use later? */
+
+        public new void Draw(SpriteBatch sb) {
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10 + 1, 15), Color.Black);
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10, 15 + 1), Color.Black);
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10 - 1, 15), Color.Black);
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10, 15 - 1), Color.Black);
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10, 15), Color.White);
+        }
+    }
+
+    class WaveInfo : GUIElement {
+        Animation waveCountdown;
+        bool oldRoundState;
+        bool showCountdown = false;
+
+        int countdown = 10; //hent fra Simon <- her skal jeg ha hvor lang tid det er imellom waves.
+
+        public WaveInfo(string name, Rectangle pos) : base(name, pos) {
+        }
+
+        public new void Load(ContentManager c) {
+            waveCountdown = new Animation(c.Load<Texture2D>("GUI/WaveCountdown"), new Vector2(32, 64), 4, 500);
+        }
+        
+        public new void Update(GameTime gt, GameWindow w) {
+            bool newRoundState = false; //hent fra Simon <- her skal jeg se om det er en runde som pågår. bool
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                newRoundState = true;
+
+            if (newRoundState && !oldRoundState) {
+                waveCountdown.ResetAnimation();
+                showCountdown = true;
+            }
+
+            if(!newRoundState && oldRoundState) {
+                showCountdown = false;
+            }
+
+            if (showCountdown) {
+                waveCountdown.updateAnimation(gt);
+                //countdown = ?  oppdatere counter her fra WaveManager?
+            }
+
+            pos = new Rectangle((w.ClientBounds.Width / 2) - 32, 80, 32, 64);
+
+            oldRoundState = newRoundState;
+        }
+
+        public new void Draw(SpriteBatch sb) {
+            if (showCountdown) {
+                waveCountdown.drawAnimation(sb, new Vector2(pos.X, pos.Y), Color.White);
+                if(countdown > 9) {
+                    sb.DrawString(Card.healthFont, countdown.ToString(), new Vector2(pos.X + 45 - Card.healthFont.MeasureString(countdown.ToString()).X, pos.Y + 10), Color.White);
+                }
+                else {
+                    sb.DrawString(Card.healthFont, countdown.ToString(), new Vector2(pos.X + 42 - Card.healthFont.MeasureString(countdown.ToString()).X, pos.Y + 10), Color.White);
+                }
+            }
+        }
+
     }
     #endregion
 }

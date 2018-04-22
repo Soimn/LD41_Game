@@ -18,6 +18,8 @@ namespace LudumDare41_Game.UI {
         public static bool returnToHand = false;
         public static HandCard heldCard = null;
         public static HandCard previouslyHeldCard = null;
+        public static int manaCostCardDraw { get; private set; }
+        public static int manaCurrent { get; set; }
 
         KeyboardState newState, oldState;
         MouseState newMouseState, oldMouseState;
@@ -28,6 +30,8 @@ namespace LudumDare41_Game.UI {
             MageTower = new Card("MageTower", "Mage Tower", "A test card for a \ntest tower.", "mageTower", "mageBg", 9);//make a test card
             allCards.Add(MageTower);
             cardsInHand.Add(new HandCard(MageTower));
+
+            manaCostCardDraw = 10;
         }
 
         public HandCard CurrentlyHeldCard() {
@@ -115,10 +119,12 @@ namespace LudumDare41_Game.UI {
         public string TowerID { get; private set; }
         string title, desc, imgNameSrc, bgNameSrc;
         Texture2D cardImg, bg, healthPot;
-        SpriteFont titleFont, healthFont;
+        public static SpriteFont titleFont { get; private set; }
+        public static SpriteFont healthFont { get; private set; }
 
         public bool isLoaded { get; private set; }
         public int health { get; private set; }
+        public int manaCost { get; private set; }
 
         public Card(string _id, string title, string desc, string imgNameSrc, string bgNameSrc, int health) { //dette er de forskjellige Card typene, som kan bli håndtert i Cards classen?
             TowerID = _id;
@@ -136,6 +142,7 @@ namespace LudumDare41_Game.UI {
             titleFont = c.Load<SpriteFont>("GUI/Cards/TitleFont");
             healthPot = c.Load<Texture2D>("Gui/Cards/HealthBottle");
             healthFont = c.Load<SpriteFont>("GUI/Cards/Health");
+            //manaPot = c.Load<SpriteFont>("GUI/Cards/Mana");
             isLoaded = true;
         }
 

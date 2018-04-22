@@ -11,11 +11,14 @@ namespace LudumDare41_Game.Entities {
 
         public override EntityHealth Health => throw new NotImplementedException();
 
+        public override int CurrentHealth => throw new NotImplementedException();
+
         public override float Speed => throw new NotImplementedException();
 
         public override EntitySize Size => throw new NotImplementedException();
 
         public override EntityAnimationState AnimationState => throw new NotImplementedException();
+
 
         public DummyEntity (Vector2 _position, out DummyEntity dummyEntity) {
             Position = _position;
