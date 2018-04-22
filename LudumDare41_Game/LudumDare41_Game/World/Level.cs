@@ -10,6 +10,7 @@ namespace LudumDare41_Game.World {
         public TiledMap map { get; private set; }
         TiledMapRenderer mapRenderer;
         string mapname;
+        
 
         public Level(string mapToLoad, GraphicsDevice g) {
             mapname = mapToLoad;
