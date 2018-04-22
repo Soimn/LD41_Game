@@ -36,5 +36,4 @@ namespace LudumDare41_Game.Towers {
     public enum WeaponType { Ray, Arrow, Bomb }
     public enum TowerAttackRadius { small = 5, medium = 12, large = 20, xxl = 50, xxxl = 95}
     public enum AnimationState { Attack, Idle }
-
 }

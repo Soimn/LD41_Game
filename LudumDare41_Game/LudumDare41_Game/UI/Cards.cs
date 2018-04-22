@@ -15,6 +15,7 @@ namespace LudumDare41_Game.UI {
         public List<Card> allCards = new List<Card>();
         public static List<HandCard> cardsInHand = new List<HandCard>();
         public static bool anyHeld = false;
+        public static bool returnToHand = false;
         public static HandCard heldCard = null;
         public static HandCard previouslyHeldCard = null;
 
@@ -46,14 +47,15 @@ namespace LudumDare41_Game.UI {
             newMouseState = Mouse.GetState();
 
             int i = 0;
-            foreach(HandCard card in cardsInHand) {
+            foreach(HandCard card in cardsInHand.ToArray()) {
                 if(Mouse.GetState().LeftButton.Equals(ButtonState.Pressed)
                     && Mouse.GetState().Position.X > ((w.ClientBounds.Width / 2) - 100) + (220 * i) - (110 * (cardsInHand.Count - 1))
                     && Mouse.GetState().Position.X < ((w.ClientBounds.Width / 2) - 100) + (220 * i) - (110 * (cardsInHand.Count - 1)) + 200
                     && Mouse.GetState().Position.Y > w.ClientBounds.Height - 360
                     && Mouse.GetState().Position.Y < w.ClientBounds.Height - 10
                     && !anyHeld
-                    && CardSelector.isActive) {
+                    && CardSelector.isActive
+                    && !returnToHand) {
                     card.isHeld = true;
                     card.alpha = 0.4f;
                     anyHeld = true;
@@ -65,6 +67,16 @@ namespace LudumDare41_Game.UI {
                     card.isHeld = false;
                     anyHeld = false;
                     heldCard = null;
+                    card.alpha = 1f;
+                }
+
+                if (returnToHand) {
+                    card.alpha = 0f;
+                }
+                else if(card.isHeld) {
+                    card.alpha = 0.4f;
+                }
+                else {
                     card.alpha = 1f;
                 }
 
