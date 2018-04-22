@@ -47,7 +47,12 @@ namespace LudumDare41_Game.Entities {
 
         public void Kill (Entity entity) {
             Entities.Remove(entity);
+            entity = null;
             //Effect
+        }
+
+        public bool IsAlive (Entity entity) {
+            return Entities.Contains(entity);
         }
     }
 }
