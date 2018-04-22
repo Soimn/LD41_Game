@@ -226,7 +226,12 @@ namespace LudumDare41_Game.UI {
         public new void Draw(SpriteBatch sb) {
             if (showCountdown) {
                 waveCountdown.drawAnimation(sb, new Vector2(pos.X, pos.Y), Color.White);
-                sb.DrawString(Card.healthFont, countdown.ToString(), new Vector2(pos.X + 20, pos.Y + 10), Color.White);
+                if(countdown > 9) {
+                    sb.DrawString(Card.healthFont, countdown.ToString(), new Vector2(pos.X + 45 - Card.healthFont.MeasureString(countdown.ToString()).X, pos.Y + 10), Color.White);
+                }
+                else {
+                    sb.DrawString(Card.healthFont, countdown.ToString(), new Vector2(pos.X + 42 - Card.healthFont.MeasureString(countdown.ToString()).X, pos.Y + 10), Color.White);
+                }
             }
         }
 
