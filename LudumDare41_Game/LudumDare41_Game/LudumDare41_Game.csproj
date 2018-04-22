@@ -48,7 +48,7 @@
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityManager.cs" />
     <Compile Include="Entities\EntitySize.cs" />
-    <Compile Include="Entities\TestEntity.cs" />
+    <Compile Include="Entities\EnemyEntity.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="CoordHandler.cs" />

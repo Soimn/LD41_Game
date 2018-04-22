@@ -2,6 +2,7 @@
 using LudumDare41_Game.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
 namespace LudumDare41_Game.Entities {
@@ -18,13 +19,13 @@ namespace LudumDare41_Game.Entities {
             coordHandler = _coordHandler;
             contentManager = _contentManager;
 
-            TestEntity test = new TestEntity(_contentManager, _coordHandler, this);
+            EnemyEntity enemy = new EnemyEntity(_contentManager, _coordHandler, this);
 
             Entities = new List<Entity> {
                 new DummyEntity(new Vector2(10000, 10000), out dummy)
             };
 
-            SpawnEntity(test, new Vector2(300, 300));
+            SpawnEntity(enemy, new Vector2(320, 20));
         }
 
         public void SpawnEntity (Entity entity, Vector2 position) {

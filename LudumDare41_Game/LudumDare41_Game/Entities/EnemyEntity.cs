@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LudumDare41_Game.Entities {
-    class TestEntity : Entity {
+    class EnemyEntity : Entity {
         private Vector2 position;
         public override Vector2 Position { get { return position; } }
         public override List<Vector2> Path { get => path; }
@@ -29,7 +29,7 @@ namespace LudumDare41_Game.Entities {
         private CoordHandler coordHandler;
         private EntityManager entityManager;
 
-        public TestEntity (ContentManager _contentManager, CoordHandler _coordHandler, EntityManager _entityManager) {
+        public EnemyEntity (ContentManager _contentManager, CoordHandler _coordHandler, EntityManager _entityManager) {
             contentManager = _contentManager;
             coordHandler = _coordHandler;
             entityManager = _entityManager;
@@ -42,10 +42,17 @@ namespace LudumDare41_Game.Entities {
 
             idle = new Animation(contentManager.Load<Texture2D>("Entities/ExampleEntity/ExampleEnemy"), new Vector2((int)size.Width, (int)size.Height), 1, 4f);
             path = new List<Vector2> {
-                new Vector2(0, 0),
-                new Vector2(1000, 1000)
+                new Vector2(320, 100),
+                new Vector2(780, 480),
+                new Vector2(780, 545),
+                new Vector2(720, 580),
+                new Vector2(630, 580),
+                new Vector2(440, 470),
+                new Vector2(210, 470),
+                new Vector2(210, 550),
+                new Vector2(686, 930)
             };
-            speed = 100f;
+            speed = 300f;
 
             currentHealth = (int)Health;
         }
