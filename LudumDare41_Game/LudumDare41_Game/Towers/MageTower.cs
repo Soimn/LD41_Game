@@ -1,4 +1,5 @@
-﻿using LudumDare41_Game.Content;
+﻿using System.Collections.Generic;
+using LudumDare41_Game.Content;
 using LudumDare41_Game.CoordinateSystem;
 using LudumDare41_Game.Entities;
 using LudumDare41_Game.Graphics;
@@ -26,6 +27,8 @@ namespace LudumDare41_Game.Towers {
         private float attackRadiusSquared;
         private TowerAttackRadius attackRadius;
         public override TowerAttackRadius AttackRadius { get { return attackRadius; } }
+        private List<Entity> sightedEntities;
+        public override List<Entity> SightedEntities { get; }
         private TowerAnimationState animState;
         public override TowerAnimationState AnimState { get { return animState; } }
 
@@ -40,7 +43,7 @@ namespace LudumDare41_Game.Towers {
         private ContentManager contentManager;
         private EntityManager entityManager;
 
-        private Entity nearestEntity;
+        //private Entity nearestEntity;
         private Entity targetEntity = null;
 
         private Texture2D circle;
@@ -65,31 +68,41 @@ namespace LudumDare41_Game.Towers {
             coord = _coord;
             animState = TowerAnimationState.Idle;
 
-            nearestEntity = entityManager.Dummy;
+            //nearestEntity = entityManager.Dummy;
             attackRadius = TowerAttackRadius.medium;
             attackRadiusSquared = (float)System.Math.Pow((double)attackRadius, 2);
             dmgPotential = (int)TowerDmgPotential.Medium;
             attackCooldown = TowerAttackCooldown.medium;
+            sightedEntities = new List<Entity>();
         }
 
         public override void Update (GameTime gameTime) {
 
             if (!IsPreviewTower) {
+
+                sightedEntities.Clear();
+
                 for (int i = 0; i < entityManager.Entities.Count; i++) {
                     if ((entityManager.Entities[i].Position - this.coord.ToVector2()).LengthSquared() < attackRadiusSquared) {
-                        if ((entityManager.Entities[i].Position - this.coord.ToVector2()).LengthSquared() < (nearestEntity.Position - this.coord.ToVector2()).LengthSquared()) {
-                            nearestEntity = entityManager.Entities[i];
-                            animState = TowerAnimationState.Attack;
-                            targetEntity = entityManager.Entities[i];
-                        }
+
+                        sightedEntities.Add(entityManager.Entities[i]);
+
+                        //if ((entityManager.Entities[i].Position - this.coord.ToVector2()).LengthSquared() < (nearestEntity.Position - this.coord.ToVector2()).LengthSquared()) {
+                        //    nearestEntity = entityManager.Entities[i];
+                        //    animState = TowerAnimationState.Attack;
+                        //    targetEntity = entityManager.Entities[i];
+                        //}
                     }
                 }
             }
 
-            if (((nearestEntity.Position - this.coord.ToVector2()).LengthSquared() > attackRadiusSquared) || !entityManager.IsAlive(targetEntity)) {
-                nearestEntity = entityManager.Dummy;
+            targetEntity = entityManager.GetLeadingEntity(sightedEntities);
+
+            if (targetEntity != null) {
+                animState = TowerAnimationState.Attack;
+            }
+            else {
                 animState = TowerAnimationState.Idle;
-                targetEntity = null;
             }
 
             switch (animState) {
@@ -128,8 +141,6 @@ namespace LudumDare41_Game.Towers {
                 int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
                 spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2 + 32, width, height), Color.Green * 0.3f);
             }
-
-            System.Console.WriteLine(towerManager.coordHandler.WorldToScreen(coord.ToVector2()));
         }
 
         public override void TakeDamage (int amount) {

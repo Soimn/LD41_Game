@@ -7,7 +7,7 @@ namespace LudumDare41_Game.Entities {
     class DummyEntity : Entity {
         public override Vector2 Position { get; }
 
-        public override List<Vector2> Path => throw new NotImplementedException();
+        public override List<PathPoint> Path => throw new NotImplementedException();
 
         public override EntityHealth Health => throw new NotImplementedException();
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace LudumDare41_Game.Entities {
     abstract class Entity {
         public abstract Vector2 Position { get; }
-        public abstract List<Vector2> Path { get; }
+        public abstract List<PathPoint> Path { get; }
         public abstract float Speed { get; }
         public abstract EntitySize Size { get; }
 

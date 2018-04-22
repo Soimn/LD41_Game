@@ -15,7 +15,7 @@ namespace LudumDare41_Game.Entities {
         public DummyEntity Dummy { get { return dummy; } }
         private DummyEntity dummy;
 
-        public EntityManager(CoordHandler _coordHandler, ContentManager _contentManager) {
+        public EntityManager (CoordHandler _coordHandler, ContentManager _contentManager) {
             coordHandler = _coordHandler;
             contentManager = _contentManager;
 
@@ -53,6 +53,42 @@ namespace LudumDare41_Game.Entities {
 
         public bool IsAlive (Entity entity) {
             return Entities.Contains(entity);
+        }
+
+        public Entity GetLeadingEntity (List<Entity> entities) {
+
+            if (entities.Count == 0)
+                return null;
+
+            int tempScore = 0;
+            List<int> tempIndex = new List<int>();
+            List<Entity> topScoreEntities = new List<Entity>();
+
+            for (int i = 0; i < entities.Count; i++) {
+                if (entities[i].Path[0].Score > tempScore) {
+                    tempScore = entities[i].Path[0].Score;
+                    tempIndex.Clear();
+                    tempIndex.Add(i);
+                }
+
+                else if (entities[i].Path[0].Score == tempScore)
+                    tempIndex.Add(i);
+            }
+
+            for (int i = 0; i < tempIndex.Count; i++) {
+                topScoreEntities.Add(entities[i]);
+            }
+
+            float lenghtSquared = 10000; // arbitrarily large number
+            int index = 0;
+            for (int i = 0; i < topScoreEntities.Count; i++) {
+                if ((topScoreEntities[i].Path[0].Position - topScoreEntities[i].Position).LengthSquared() < lenghtSquared) {
+                    lenghtSquared = (topScoreEntities[i].Path[0].Position - topScoreEntities[i].Position).LengthSquared();
+                    index = i;
+                }
+            }
+
+            return topScoreEntities[index];
         }
     }
 }

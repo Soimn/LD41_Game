@@ -10,8 +10,8 @@ namespace LudumDare41_Game.Entities {
     class EnemyEntity : Entity {
         private Vector2 position;
         public override Vector2 Position { get { return position; } }
-        public override List<Vector2> Path { get => path; }
-        private List<Vector2> path;
+        public override List<PathPoint> Path { get => path; }
+        private List<PathPoint> path;
         public override float Speed { get => speed; }
         private float speed;
 
@@ -43,19 +43,23 @@ namespace LudumDare41_Game.Entities {
             size = new EntitySize(EntityWidth.narrow, EntityHeight.medium);
 
             idle = new Animation(contentManager.Load<Texture2D>("Entities/ExampleEntity/ExampleEnemy"), new Vector2((int)size.Width, (int)size.Height), 1, 4f);
-            path = new List<Vector2> {
-                new Vector2(320, 100),
-                new Vector2(780, 480),
-                new Vector2(780, 545),
-                new Vector2(720, 580),
-                new Vector2(630, 580),
-                new Vector2(440, 470),
-                new Vector2(210, 470),
-                new Vector2(210, 550),
-                new Vector2(470, 780),
-                new Vector2(575, 780),
-                new Vector2(686, 930)
+            path = new List<PathPoint> {
+                new PathPoint(320, 100),
+                new PathPoint(780, 480),
+                new PathPoint(780, 545),
+                new PathPoint(720, 580),
+                new PathPoint(630, 580),
+                new PathPoint(440, 470),
+                new PathPoint(210, 470),
+                new PathPoint(210, 550),
+                new PathPoint(470, 780),
+                new PathPoint(575, 780),
+                new PathPoint(686, 930)
             };
+
+            for (int i = 0; i < path.Count; i++)
+                path[i].SetScore(i);
+
             speed = 50f;
 
             initHealth = EntityHealth.medium;
@@ -69,7 +73,7 @@ namespace LudumDare41_Game.Entities {
                     break;
                 case EntityAnimationState.Idle:
                     idle.updateAnimation(gameTime);
-                    if (path.Count > 0 && MoveTowardsPoint(path[0], gameTime))
+                    if (path.Count > 0 && MoveTowardsPoint(path[0].Position, gameTime))
                         path.RemoveAt(0);
                     break;
                 default:

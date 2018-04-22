@@ -1,4 +1,5 @@
 ﻿using LudumDare41_Game.CoordinateSystem;
+using LudumDare41_Game.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -20,6 +21,7 @@ namespace LudumDare41_Game.Towers {
         public abstract int Tier { get; }
         public abstract WeaponType WpnType { get; }
         public abstract TowerAttackRadius AttackRadius { get; }
+        public abstract List<Entity> SightedEntities { get; }
         public abstract TowerAnimationState AnimState { get; }
         
         public abstract void Init (TileCoord _coord);
