@@ -90,7 +90,7 @@ namespace LudumDare41_Game {
             gui.Load();
             cards.Load(Content);
 
-            home = new Home(new Vector2(10, 10), Content);
+            home = new Home(new Vector2(21, 30), Content);
 
             debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
             
@@ -124,17 +124,29 @@ namespace LudumDare41_Game {
 
                         var moveDirection = Vector2.Zero;
 
-                        if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
-                            moveDirection -= Vector2.UnitY;
+                        if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up)) {
+                            if(!(camera.ScreenToWorld(0f, 0f).Y < Vector2.Zero.Y)) {
+                                moveDirection -= Vector2.UnitY;
+                            }
+                        }
 
-                        if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
-                            moveDirection -= Vector2.UnitX;
+                        if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down)) {
+                            if (!(camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).Y > level01.map.HeightInPixels)) {
+                                moveDirection += Vector2.UnitY;
+                            }
+                        }
 
-                        if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
-                            moveDirection += Vector2.UnitY;
+                        if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left)) {
+                            if (!(camera.ScreenToWorld(0, 0).X < Vector2.Zero.X)) {
+                                moveDirection -= Vector2.UnitX;
+                            }
+                        }
 
-                        if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
-                            moveDirection += Vector2.UnitX;
+                        if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right)) {
+                            if (!(camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels)) {
+                                moveDirection += Vector2.UnitX;
+                            }
+                        }
 
                         if (moveDirection != Vector2.Zero) {
                             moveDirection.Normalize();
@@ -213,7 +225,7 @@ namespace LudumDare41_Game {
         }
 
         protected override void Draw (GameTime gameTime) {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(new Color(133, 167, 94));
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
             switch (currentState) {
