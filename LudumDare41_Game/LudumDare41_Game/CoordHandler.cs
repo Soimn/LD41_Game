@@ -15,6 +15,10 @@ namespace LudumDare41_Game.Physics {
             return cam.WorldToScreen(world);
         }
 
+        public Vector2 ScreenToWorld (Vector2 screen) {
+            return cam.ScreenToWorld(screen);
+        }
+
         public int ScaleToZoom (int field) {
             return (int)(cam.Zoom * field);
         }

@@ -62,7 +62,7 @@ namespace LudumDare41_Game.Towers {
         public override void Update (GameTime gameTime) {
 
             for (int i = 0; i < entityManager.Entities.Count; i++) {
-                if (entityManager.Entities[i].Position.Length() < nearestEntity.Position.Length()) {
+                if ((entityManager.Entities[i].Position - this.coord.ToVector2()).Length() < nearestEntity.Position.Length()) {
                     nearestEntity = entityManager.Entities[i];
                 }
             }
