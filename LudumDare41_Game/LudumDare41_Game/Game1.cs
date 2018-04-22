@@ -29,8 +29,10 @@ namespace LudumDare41_Game {
         Cards cards;
 
         SpriteFont debugFont;
-        
 
+        Home home;
+
+        Menu menu;
         #region // Towers //
 
         private TowerManager towerManager;
@@ -43,8 +45,6 @@ namespace LudumDare41_Game {
         private Tower previewTower;
 
         #endregion
-
-        Home home;
 
         public bool DebugMode { get; private set; }
         private float lastTime, cooldown = 0.5f;
@@ -82,6 +82,7 @@ namespace LudumDare41_Game {
 
             #endregion
 
+            menu = new Menu();
 
             base.Initialize();
         }
@@ -96,7 +97,8 @@ namespace LudumDare41_Game {
             home = new Home(new Vector2(21, 30), Content);
 
             debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
-            
+
+            menu.Load(Content);
         }
 
         protected override void UnloadContent () {
@@ -117,6 +119,7 @@ namespace LudumDare41_Game {
             if (!isPaused) {
                 switch (currentState) {
                     case GameStates.MENU: //vente med denne til slutt
+                        menu.Update(gameTime);
                         break;
 
                     case GameStates.INGAME:
@@ -152,7 +155,7 @@ namespace LudumDare41_Game {
                         }
 
                         if((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels + 10)) {
-                            camera.Move(new Vector2(-1, 0) * 10000 * deltaSeconds);
+                            camera.Move(new Vector2(-1, 0) * 10000 * deltaSeconds); //Nei Simon dette gikk ikke så bra, klarte det i sta før du snakket om det men nå er det helt fillerusk i hue mitt
                         }
 
                         if ((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).Y > level01.map.HeightInPixels + 10)) {
@@ -248,7 +251,8 @@ namespace LudumDare41_Game {
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
             switch (currentState) {
-                case GameStates.MENU: //vente med denne til slutt
+                case GameStates.MENU:
+                    menu.Draw(spriteBatch, Window);
                     break;
 
                 case GameStates.INGAME:

@@ -45,6 +45,8 @@ namespace LudumDare41_Game.Entities {
             idle = new Animation(contentManager.Load<Texture2D>("Entities/ExampleEntity/ExampleEnemy"), new Vector2((int)size.Width, (int)size.Height), 1, 4f);
             path = new List<PathPoint> {
                 new PathPoint(320, 100),
+                new PathPoint(570, 300),
+                new PathPoint(600, 300),
                 new PathPoint(780, 480),
                 new PathPoint(780, 545),
                 new PathPoint(720, 580),
