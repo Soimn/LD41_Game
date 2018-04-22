@@ -16,7 +16,9 @@ namespace LudumDare41_Game.Entities {
         private float speed;
 
         private int currentHealth;
-        public override EntityHealth Health { get; }
+        public int CurrecntHealth { get { return currentHealth; } }
+        private EntityHealth initHealth;
+        public override EntityHealth Health { get { return initHealth; } }
         private EntityAnimationState animationState;
         public override EntityAnimationState AnimationState { get; }
 
@@ -47,7 +49,8 @@ namespace LudumDare41_Game.Entities {
             };
             speed = 100f;
 
-            currentHealth = (int)Health;
+            initHealth = EntityHealth.medium;
+            currentHealth = (int)initHealth;
         }
 
         public override void Update (GameTime gameTime) {
@@ -78,7 +81,7 @@ namespace LudumDare41_Game.Entities {
             }
         }
 
-        private bool MoveTowardsPoint(Vector2 goal, GameTime gameTime) {
+        private bool MoveTowardsPoint (Vector2 goal, GameTime gameTime) {
             // If we're already at the goal return immediatly
             if (position == goal) return true;
 

@@ -69,17 +69,19 @@ namespace LudumDare41_Game.Towers {
 
         public override void Update (GameTime gameTime) {
 
-            for (int i = 0; i < entityManager.Entities.Count; i++) {
-                if ((entityManager.Entities[i].Position - this.coord.ToVector2()).LengthSquared() < attackRadiusSquared) {
-                    if ((entityManager.Entities[i].Position - this.coord.ToVector2()).LengthSquared() < (nearestEntity.Position - this.coord.ToVector2()).LengthSquared()) {
-                        nearestEntity = entityManager.Entities[i];
-                        animState = TowerAnimationState.Attack;
-                        targetEntity = entityManager.Entities[i];
+            if (!IsPreviewTower) {
+                for (int i = 0; i < entityManager.Entities.Count; i++) {
+                    if ((entityManager.Entities[i].Position - this.coord.ToVector2()).LengthSquared() < attackRadiusSquared) {
+                        if ((entityManager.Entities[i].Position - this.coord.ToVector2()).LengthSquared() < (nearestEntity.Position - this.coord.ToVector2()).LengthSquared()) {
+                            nearestEntity = entityManager.Entities[i];
+                            animState = TowerAnimationState.Attack;
+                            targetEntity = entityManager.Entities[i];
+                        }
                     }
                 }
             }
 
-            if (((nearestEntity.Position - this.coord.ToVector2()).LengthSquared() > attackRadiusSquared) || targetEntity == null) {
+            if (((nearestEntity.Position - this.coord.ToVector2()).LengthSquared() > attackRadiusSquared) || !entityManager.IsAlive(targetEntity)) {
                 nearestEntity = entityManager.Dummy;
                 animState = TowerAnimationState.Idle;
                 targetEntity = null;
