@@ -15,16 +15,18 @@ namespace LudumDare41_Game.Towers {
         public CoordHandler coordHandler { get; }
         private ContentManager contentManager;
         private EntityManager entityManager;
+        public Game1 Game { get; }
 
         public List<Tower> Towers { get; }
         private List<Tower> previewTowers;
 
-        public TowerManager (CoordHandler _coordHandler, ContentManager _contentManager, EntityManager _entityManager) {
+        public TowerManager (CoordHandler _coordHandler, ContentManager _contentManager, EntityManager _entityManager, Game1 _game) {
             coordHandler = _coordHandler;
             contentManager = _contentManager;
             entityManager = _entityManager;
             Towers = new List<Tower>();
             previewTowers = new List<Tower>();
+            Game = _game;
         }
 
         public void Update (GameTime gameTime) {

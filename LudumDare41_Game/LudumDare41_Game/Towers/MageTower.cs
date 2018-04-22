@@ -101,8 +101,11 @@ namespace LudumDare41_Game.Towers {
                     break;
             }
 
-            int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
-            spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2 + 32, width, height), Color.White);
+            if (towerManager.Game.DebugMode) {
+                int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
+                System.Console.WriteLine(width + " " + (int)attackRadius * 2 + " " + (int)attackRadius);
+                spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2 + 32, width, height), new Color(Color.Green, 0.1f));
+            }
 
             System.Console.WriteLine(towerManager.coordHandler.WorldToScreen(coord.ToVector2()));
         }

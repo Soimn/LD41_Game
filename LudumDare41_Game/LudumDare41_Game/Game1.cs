@@ -46,6 +46,9 @@ namespace LudumDare41_Game {
 
         Home home;
 
+        public bool DebugMode { get; private set; }
+        private float lastTime, cooldown = 0.5f;
+
         public const int screenWidth = 1920, screenHeight = 1080;
 
 
@@ -75,7 +78,7 @@ namespace LudumDare41_Game {
             coordHandler = new CoordHandler(camera);
             contentManager = new ContentManager(Content);
             entityManager = new EntityManager(coordHandler, contentManager);
-            towerManager = new TowerManager(coordHandler, contentManager, entityManager);
+            towerManager = new TowerManager(coordHandler, contentManager, entityManager, this);
 
             #endregion
 
@@ -209,6 +212,14 @@ namespace LudumDare41_Game {
                 }
             }
             oldState = newState;
+
+            lastTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.CapsLock) && lastTime > cooldown) {
+                DebugMode = !DebugMode;
+                lastTime = 0;
+            }
+
             base.Update(gameTime);
         }
 
