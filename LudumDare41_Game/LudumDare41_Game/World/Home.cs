@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace LudumDare41_Game.World {
     class Home {
         public int health { get; set; }
-        public Vector2 position { get; private set; }
+        public static Vector2 position { get; private set; }
 
         enum AnimationState { Idle, Hurt };
         AnimationState currentAnimation { get; set; }

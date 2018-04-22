@@ -3,6 +3,7 @@ using LudumDare41_Game.CoordinateSystem;
 using LudumDare41_Game.Entities;
 using LudumDare41_Game.Physics;
 using LudumDare41_Game.UI;
+using LudumDare41_Game.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -87,6 +88,17 @@ namespace LudumDare41_Game.Towers {
             foreach (Tower tower in Towers) {
                 if (tower.Coord == coord)
                     return true;
+            }
+
+            TileCoord homeCoord = new TileCoord((int)Home.position.X * 32, (int)Home.position.Y * 32);
+
+            if (coord == homeCoord 
+                || coord == new TileCoord(homeCoord.x + 32, homeCoord.y)
+                || coord == new TileCoord(homeCoord.x + 32, homeCoord.y - 32)
+                || coord == new TileCoord(homeCoord.x, homeCoord.y - 32)
+                || coord == new TileCoord(homeCoord.x, homeCoord.y + 32)
+                || coord == new TileCoord(homeCoord.x + 32, homeCoord.y + 32)) {
+                return true;
             }
 
             return false;

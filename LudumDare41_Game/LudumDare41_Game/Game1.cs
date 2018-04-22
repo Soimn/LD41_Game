@@ -224,13 +224,13 @@ namespace LudumDare41_Game {
                     //WORLD
                     level01.Draw(spriteBatch, camera, GraphicsDevice);
                     spriteBatch.Begin(samplerState: SamplerState.PointWrap);
+                    home.Draw(spriteBatch);
                     #region // Towers //
 
                     towerManager.Draw(spriteBatch);
                     entityManager.Draw(spriteBatch);
 
                     #endregion
-                    home.Draw(spriteBatch);
                     spriteBatch.End();
 
                     //UI
