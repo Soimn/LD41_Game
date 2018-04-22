@@ -16,6 +16,8 @@ namespace LudumDare41_Game.Entities {
         public abstract void Update (GameTime gameTime);
         public abstract void Draw (SpriteBatch spriteBatch);
 
+        public abstract void TakeDamage (int amount);
+
         public static Vector2 GetDirection (Vector2 position, Vector2 point) {
             Vector2 dir = (point - position);
             dir.Normalize();

@@ -33,5 +33,9 @@ namespace LudumDare41_Game.Entities {
         public override void Draw (SpriteBatch spriteBatch) {
             return;
         }
+
+        public override void TakeDamage (int amount) {
+            throw new NotImplementedException();
+        }
     }
 }

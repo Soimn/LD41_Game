@@ -103,6 +103,8 @@ namespace LudumDare41_Game.Towers {
                 return true;
             }
 
+            // TODO: Check if coord is on path
+
             return false;
         }
     }

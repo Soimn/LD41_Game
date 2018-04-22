@@ -18,7 +18,7 @@ namespace LudumDare41_Game.Entities {
             coordHandler = _coordHandler;
             contentManager = _contentManager;
 
-            TestEntity test = new TestEntity(_contentManager, _coordHandler);
+            TestEntity test = new TestEntity(_contentManager, _coordHandler, this);
 
             Entities = new List<Entity> {
                 new DummyEntity(new Vector2(10000, 10000), out dummy)
@@ -42,6 +42,11 @@ namespace LudumDare41_Game.Entities {
         public void Draw (SpriteBatch spriteBatch) {
             for (int i = 0; i < Entities.Count; i++)
                 Entities[i].Draw(spriteBatch);
+        }
+
+        public void Kill (Entity entity) {
+            Entities.Remove(entity);
+            //Effect
         }
     }
 }

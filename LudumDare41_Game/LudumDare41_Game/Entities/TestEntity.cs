@@ -15,6 +15,7 @@ namespace LudumDare41_Game.Entities {
         public override float Speed { get => speed; }
         private float speed;
 
+        private int currentHealth;
         public override EntityHealth Health { get; }
         private EntityAnimationState animationState;
         public override EntityAnimationState AnimationState { get; }
@@ -26,10 +27,12 @@ namespace LudumDare41_Game.Entities {
 
         private ContentManager contentManager;
         private CoordHandler coordHandler;
+        private EntityManager entityManager;
 
-        public TestEntity (ContentManager _contentManager, CoordHandler _coordHandler) {
+        public TestEntity (ContentManager _contentManager, CoordHandler _coordHandler, EntityManager _entityManager) {
             contentManager = _contentManager;
             coordHandler = _coordHandler;
+            entityManager = _entityManager;
         }
 
         public override void Init (Vector2 _position) {
@@ -43,6 +46,8 @@ namespace LudumDare41_Game.Entities {
                 new Vector2(1000, 1000)
             };
             speed = 100f;
+
+            currentHealth = (int)Health;
         }
 
         public override void Update (GameTime gameTime) {
@@ -52,7 +57,7 @@ namespace LudumDare41_Game.Entities {
                     break;
                 case EntityAnimationState.Idle:
                     idle.updateAnimation(gameTime);
-                    if (path.Count > 0 && MoveTowardsPoint(path[0], gameTime.ElapsedGameTime.Seconds))
+                    if (path.Count > 0 && MoveTowardsPoint(path[0], gameTime))
                         path.RemoveAt(0);
                     break;
                 default:
@@ -73,7 +78,7 @@ namespace LudumDare41_Game.Entities {
             }
         }
 
-        private bool MoveTowardsPoint(Vector2 goal, float elapsed) {
+        private bool MoveTowardsPoint(Vector2 goal, GameTime gameTime) {
             // If we're already at the goal return immediatly
             if (position == goal) return true;
 
@@ -81,7 +86,7 @@ namespace LudumDare41_Game.Entities {
             Vector2 direction = Vector2.Normalize(goal - position);
 
             // Move in that direction
-            position += direction * Speed * elapsed;
+            position += direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // If we moved PAST the goal, move it back to the goal
             if (Math.Abs(Vector2.Dot(direction, Vector2.Normalize(goal - position)) + 1) < 0.1f)
@@ -89,6 +94,13 @@ namespace LudumDare41_Game.Entities {
 
             // Return whether we've reached the goal or not
             return position == goal;
+        }
+
+        public override void TakeDamage (int amount) {
+            currentHealth -= amount;
+
+            if (currentHealth <= 0)
+                entityManager.Kill(this);
         }
     }
 }
