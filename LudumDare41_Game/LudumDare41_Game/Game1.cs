@@ -161,7 +161,7 @@ namespace LudumDare41_Game {
                             previewTower.MoveTo(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
 
                         else if (heldCard == null && cardHasBeenHeld) {
-                            if (!towerManager.TowerAtCoord(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y))) {
+                            if (!towerManager.InvalidCoord(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y))) {
                                 towerManager.DestroyPreviewTower(previewTower);
                                 previewTowerInstantiated = false;
                                 previewTower = null;

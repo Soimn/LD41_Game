@@ -25,7 +25,7 @@ namespace LudumDare41_Game.Entities {
             entity.Init(position);
             Entities.Add(entity);
 
-            System.Console.WriteLine("Spawned entity at {0}, {1}", position.X, position.Y);
+            System.Console.WriteLine("Spawned entity at {0}, {1}, {2}", position.X, position.Y, Entities.Contains(entity));
         }
 
         public void Update (GameTime gameTime) {

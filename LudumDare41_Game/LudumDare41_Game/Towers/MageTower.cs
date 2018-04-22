@@ -19,6 +19,7 @@ namespace LudumDare41_Game.Towers {
         private int currentHealth;
         public override int Tier { get; }
         public override WeaponType WpnType { get; }
+        private float attackRadiusSquared;
         private TowerAttackRadius attackRadius;
         public override TowerAttackRadius AttackRadius { get { return attackRadius; } }
         private AnimationState animState;
@@ -37,6 +38,8 @@ namespace LudumDare41_Game.Towers {
         private Entity nearestEntity;
         private Entity targetEntity = null;
 
+        private Texture2D circle;
+
         public MageTower (TowerManager _towerManager, ContentManager _contentManager, EntityManager _entityManager, bool _isPreviewTower = false) {
             towerManager = _towerManager;
             contentManager = _contentManager;
@@ -52,28 +55,26 @@ namespace LudumDare41_Game.Towers {
             attackAnimation = contentManager.LoadAnimation("MageTower", "Attack", (int)size.Width, (int)size.Height, 350f);
             //attack animation
 
+            circle = contentManager.Load<Texture2D>("Towers/Debug/Circle");
+
             coord = _coord;
             animState = AnimationState.Idle;
 
             nearestEntity = entityManager.Dummy;
             attackRadius = TowerAttackRadius.medium;
+            attackRadiusSquared = (float)System.Math.Pow((double)attackRadius, 2);
         }
 
         public override void Update (GameTime gameTime) {
 
             for (int i = 0; i < entityManager.Entities.Count; i++) {
-                if ((entityManager.Entities[i].Position - this.coord.ToVector2()).Length() < nearestEntity.Position.Length()) {
-                    nearestEntity = entityManager.Entities[i];
-                }
-            }
+                /*if ((((entityManager.Entities[i].Position.X - this.coord.ToVector2().X) * (entityManager.Entities[i].Position.X - this.coord.ToVector2().X)) + ((entityManager.Entities[i].Position.Y - this.coord.ToVector2().Y) * (entityManager.Entities[i].Position.Y - this.coord.ToVector2().Y)) < (float)attackRadius * (float)attackRadius)) {
+                    System.Console.WriteLine("ATTACK");
+                }*/
 
-            if (nearestEntity.Position.Length() < (float)attackRadius) {
-                targetEntity = nearestEntity;
-                animState = AnimationState.Attack;
-            }
-            else {
-                targetEntity = null;
-                animState = AnimationState.Idle;
+                if ((entityManager.Entities[i].Position - this.coord.ToVector2()).LengthSquared() < attackRadiusSquared) {
+                    System.Console.WriteLine("ATTACK");
+                }
             }
 
             switch (animState) {
@@ -91,14 +92,18 @@ namespace LudumDare41_Game.Towers {
         public override void Draw (SpriteBatch spriteBatch) {
             switch (animState) {
                 case AnimationState.Attack:
-                    attackAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord), IsPreviewTower ? (towerManager.TowerAtCoord(this.coord) ? new Color(Color.Red, 0.5f) : new Color(Color.White, 0.5f)) : Color.White);
+                    attackAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord), IsPreviewTower ? (towerManager.InvalidCoord(this.coord) ? new Color(Color.Red, 0.5f) : new Color(Color.White, 0.5f)) : Color.White);
                     break;
                 case AnimationState.Idle:
-                    idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord), IsPreviewTower ? (towerManager.TowerAtCoord(this.coord) ? new Color(Color.Red, 0.5f) : new Color(Color.White, 0.5f)) : Color.White);
+                    idleAnimation.drawAnimation(spriteBatch, towerManager.GetDrawPos(coord), IsPreviewTower ? (towerManager.InvalidCoord(this.coord) ? new Color(Color.Red, 0.5f) : new Color(Color.White, 0.5f)) : Color.White);
                     break;
                 default:
                     break;
             }
+
+            spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - (((int)attackRadius / 32) * circle.Width) / 2, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y, ((int)attackRadius / 32) * circle.Width, ((int)attackRadius / 32) * circle.Height), Color.White);
+
+            System.Console.WriteLine(towerManager.coordHandler.WorldToScreen(coord.ToVector2()));
         }
 
         public override void Damage (int amount) {

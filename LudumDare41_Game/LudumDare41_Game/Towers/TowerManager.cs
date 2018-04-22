@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace LudumDare41_Game.Towers {
     class TowerManager {
 
-        private CoordHandler coordHandler;
+        public CoordHandler coordHandler { get; }
         private ContentManager contentManager;
         private EntityManager entityManager;
 
@@ -83,7 +83,7 @@ namespace LudumDare41_Game.Towers {
             return new Vector2((int)coordHandler.WorldToScreen(coord.ToVector2()).X + 1, (int)coordHandler.WorldToScreen(coord.ToVector2()).Y + 1);
         }
 
-        public bool TowerAtCoord (TileCoord coord) {
+        public bool InvalidCoord (TileCoord coord) {
             foreach (Tower tower in Towers) {
                 if (tower.Coord == coord)
                     return true;
