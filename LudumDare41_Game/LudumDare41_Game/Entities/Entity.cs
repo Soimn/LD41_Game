@@ -27,6 +27,6 @@ namespace LudumDare41_Game.Entities {
         }
     }
 
-    public enum EntityHealth { xxsl = 5, low = 10, medium = 20, large = 80, xxl = 200, xxxl = 2000 }
+    public enum EntityHealth { low = 3, medium = 6, large = 12 }
     public enum EntityAnimationState { Idle, Attack }
 }
