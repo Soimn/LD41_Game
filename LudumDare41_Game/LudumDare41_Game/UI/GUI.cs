@@ -38,17 +38,16 @@ namespace LudumDare41_Game.UI {
             this.c = c;
 
             waveInfo = new WaveInfo("waveInfo", Rectangle.Empty);
-            addGuiItem(waveInfo);
 
-            cardSelector = new CardSelector("cardSel", Rectangle.Empty);
-            addGuiItem(cardSelector);
+            cardSelector = new CardSelector("cardSel", new Rectangle(1000, 1000, 0, 0));
 
             worldSelector = new WorldSelector("select", Rectangle.Empty);
-            addGuiItem(worldSelector);
 
             manaHandler = new ManaHandler("manaHandler", Rectangle.Empty);
             addGuiItem(manaHandler);
-
+            addGuiItem(waveInfo);
+            addGuiItem(cardSelector);
+            addGuiItem(worldSelector);
 
         }
 
@@ -63,9 +62,12 @@ namespace LudumDare41_Game.UI {
                     e.Load(c);
                 }
             }
+            
+            waveInfo.Load(c);
+            
+            cardSelector.Load(c);
 
-            if (!waveInfo.isLoaded)
-                waveInfo.Load(c);
+            manaHandler.Load(c);
         }
 
         public void Update(GameTime gt, GameWindow w, Camera2D camera) {
@@ -79,7 +81,7 @@ namespace LudumDare41_Game.UI {
             waveInfo.Update(gt, w);
         }
 
-        public void Draw(SpriteBatch sb) {
+        public void Draw(SpriteBatch sb, GameWindow w) {
             foreach (GUIElement e in elements) {
                 if(e.nameID != "waveInfo")
                     e.Draw(sb);
@@ -87,6 +89,7 @@ namespace LudumDare41_Game.UI {
 
             manaHandler.Draw(sb);
             waveInfo.Draw(sb);
+            cardSelector.DrawTutorial(sb, w);
         }
     }
     #endregion
@@ -130,9 +133,15 @@ namespace LudumDare41_Game.UI {
 
         public static bool isActive = false;
 
+        Texture2D cardSelTutorial;
+
         public CardSelector(string name, Rectangle pos) : base(name, pos) {
             nameID = name;
             this.pos = pos;
+        }
+
+        public new void Load(ContentManager c) {
+            cardSelTutorial = c.Load<Texture2D>("Tutorial/CardSel");
         }
 
         public new void Update(GameTime gt, GameWindow w) {
@@ -146,6 +155,11 @@ namespace LudumDare41_Game.UI {
                     isActive = false;
                 }
             }
+        }
+
+        public void DrawTutorial(SpriteBatch sb, GameWindow w) {
+            if (!isActive && Game1.isTutorial)
+                sb.Draw(cardSelTutorial, new Rectangle((w.ClientBounds.Width / 2) - (cardSelTutorial.Width / 2) - 25, pos.Y - 80, cardSelTutorial.Width, cardSelTutorial.Height), Color.White);
         }
     }
 
@@ -169,7 +183,13 @@ namespace LudumDare41_Game.UI {
     }
 
     class ManaHandler : GUIElement {
+        Texture2D manaTutorial;
+
         public ManaHandler(string name, Rectangle pos) : base(name, pos) {
+        }
+
+        public new void Load(ContentManager c) {
+            manaTutorial = c.Load<Texture2D>("Tutorial/mana");
         }
 
         /*public new void Update(GameTime gt, GameWindow w) {
@@ -181,6 +201,9 @@ namespace LudumDare41_Game.UI {
             sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10 - 1, 15), Color.Black);
             sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10, 15 - 1), Color.Black);
             sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10, 15), Color.White);
+
+            if (Game1.isTutorial)
+                sb.Draw(manaTutorial, new Rectangle(100, 45, manaTutorial.Width, manaTutorial.Height), Color.White);
         }
     }
 
@@ -189,6 +212,8 @@ namespace LudumDare41_Game.UI {
         bool oldRoundState;
         bool showCountdown = false;
 
+        Texture2D waveCounterTutorial;
+
         int countdown = 10; //hent fra Simon <- her skal jeg ha hvor lang tid det er imellom waves.
 
         public WaveInfo(string name, Rectangle pos) : base(name, pos) {
@@ -196,26 +221,32 @@ namespace LudumDare41_Game.UI {
 
         public new void Load(ContentManager c) {
             waveCountdown = new Animation(c.Load<Texture2D>("GUI/WaveCountdown"), new Vector2(32, 64), 4, 500);
+            waveCounterTutorial = c.Load<Texture2D>("Tutorial/Waves");
         }
         
         public new void Update(GameTime gt, GameWindow w) {
             bool newRoundState = false; //hent fra Simon <- her skal jeg se om det er en runde som pågår. bool
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
-                newRoundState = true;
+            if (!Game1.isTutorial) {
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                    newRoundState = true;
 
-            if (newRoundState && !oldRoundState) {
-                waveCountdown.ResetAnimation();
+                if (newRoundState && !oldRoundState) {
+                    waveCountdown.ResetAnimation();
+                    showCountdown = true;
+                }
+
+                if (!newRoundState && oldRoundState) {
+                    showCountdown = false;
+                }
+
+                if (showCountdown) {
+                    waveCountdown.updateAnimation(gt);
+                    //countdown = ?  oppdatere counter her fra WaveManager?
+                }
+            }
+            else {
                 showCountdown = true;
-            }
-
-            if(!newRoundState && oldRoundState) {
-                showCountdown = false;
-            }
-
-            if (showCountdown) {
-                waveCountdown.updateAnimation(gt);
-                //countdown = ?  oppdatere counter her fra WaveManager?
             }
 
             pos = new Rectangle((w.ClientBounds.Width / 2) - 32, 80, 32, 64);
@@ -233,8 +264,10 @@ namespace LudumDare41_Game.UI {
                     sb.DrawString(Card.healthFont, countdown.ToString(), new Vector2(pos.X + 42 - Card.healthFont.MeasureString(countdown.ToString()).X, pos.Y + 10), Color.White);
                 }
             }
-        }
 
+            if (Game1.isTutorial)
+                sb.Draw(waveCounterTutorial, new Rectangle(pos.X - 17, pos.Y - 70, waveCounterTutorial.Width, waveCounterTutorial.Height), Color.White);
+        }
     }
     #endregion
 }

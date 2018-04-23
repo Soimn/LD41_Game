@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,9 @@ namespace LudumDare41_Game.UI {
         }
 
         public void Update(GameTime gt) {
-
+            if(Keyboard.GetState().IsKeyDown(Keys.Enter)) {
+                Game1.currentState = Game1.GameStates.INGAME;
+            }
         }
 
         public void Draw(SpriteBatch sb, GameWindow w) {
