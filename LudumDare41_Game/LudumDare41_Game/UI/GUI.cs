@@ -134,8 +134,10 @@ namespace LudumDare41_Game.UI {
 
         public static bool isActive = false;
 
-        Texture2D cardSelTutorial, drawCard, drawCardSel, drawCardNoMana, drawCardCurrent;
+        Texture2D cardSelTutorial, cardDrawTutorial, drawCard, drawCardSel, drawCardNoMana, drawCardCurrent;
         Rectangle mouseRect, drawCardButton;
+
+        MouseState old;
 
         public CardSelector(string name, Rectangle pos) : base(name, pos) {
             nameID = name;
@@ -144,13 +146,16 @@ namespace LudumDare41_Game.UI {
 
         public new void Load(ContentManager c) {
             cardSelTutorial = c.Load<Texture2D>("Tutorial/CardSel");
+            cardDrawTutorial = c.Load<Texture2D>("Tutorial/drawCard");
             drawCard = c.Load<Texture2D>("GUI/Cards/drawCard");
             drawCardSel = c.Load<Texture2D>("GUI/Cards/drawCardSel");
             drawCardNoMana = c.Load<Texture2D>("GUI/Cards/drawCardSelNoMana");
         }
 
         public new void Update(GameTime gt, GameWindow w) {
+            MouseState New = Mouse.GetState();
             if (Mouse.GetState().Position.Y > pos.Y) {
+
                 pos = new Rectangle(0, w.ClientBounds.Height - height, w.ClientBounds.Width, height);
                 isActive = true;
 
@@ -160,7 +165,7 @@ namespace LudumDare41_Game.UI {
                 if (mouseRect.Intersects(drawCardButton)) {
                     if(Cards.manaCurrent >= Cards.manaCostCardDraw) {
                         drawCardCurrent = drawCardSel;
-                        if (Mouse.GetState().LeftButton.Equals(ButtonState.Pressed)) {
+                        if (New.LeftButton.Equals(ButtonState.Pressed) && old.LeftButton.Equals(ButtonState.Released)) {
                             CardDraw.DrawCard(1);
                             Cards.manaCurrent -= Cards.manaCostCardDraw;
                         }
@@ -172,8 +177,6 @@ namespace LudumDare41_Game.UI {
                 else {
                     drawCardCurrent = drawCard;
                 }
-                    
-
             }
             else {
                 if (Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
@@ -181,12 +184,19 @@ namespace LudumDare41_Game.UI {
                     isActive = false;
                 }
             }
+            old = New;
         }
 
         public void DrawTutorial(SpriteBatch sb, GameWindow w) {
-            if (!isActive && Game1.isTutorial)
-                sb.Draw(cardSelTutorial, new Rectangle((w.ClientBounds.Width / 2) - (cardSelTutorial.Width / 2) - 25, pos.Y - 80, cardSelTutorial.Width, cardSelTutorial.Height), Color.White);
-
+            if (Game1.isTutorial) {
+                if (!CardSelector.isActive) { 
+                    sb.Draw(cardSelTutorial, new Rectangle((w.ClientBounds.Width / 2) - (cardSelTutorial.Width / 2) - 25, pos.Y - 80, cardSelTutorial.Width, cardSelTutorial.Height), Color.White);
+                }
+                else {
+                    sb.Draw(cardDrawTutorial, new Rectangle(drawCardButton.X - 220, drawCardButton.Y - 155, cardDrawTutorial.Width, cardDrawTutorial.Height), Color.White);
+                }
+            }
+                
             if (isActive) {
                 sb.DrawString(Card.healthFont, "Draw a card", new Vector2(drawCardButton.X + (drawCardCurrent.Width / 2) - (Card.healthFont.MeasureString("Draw a card").X / 2), drawCardButton.Y - 30), Color.White);
                 sb.Draw(drawCardCurrent, drawCardButton, Color.White);

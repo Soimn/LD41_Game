@@ -23,13 +23,16 @@ namespace LudumDare41_Game.UI {
 
         KeyboardState newState, oldState;
         MouseState newMouseState, oldMouseState;
-        Card MageTower;
+        Card MageTower, BombTower;
 
 
         public Cards() {
-            MageTower = new Card("MageTower", "Mage Tower", "A test card for a \ntest tower.", "mageTower", "mageBg", 9);//make a test card
+            MageTower = new Card("MageTower", "Mage Tower", "A magical tower that \nshoots energy.\nZwoop!", "mageTower", "mageBg", 3);
+            BombTower = new Card("BombTower", "Bomb Tower", "Hey, see that enemy?\nBOOM!\nNow they're gone.", "bombTower", "bombBg", 3);
             allCards.Add(MageTower);
+            allCards.Add(BombTower);
             cardsInHand.Add(new HandCard(MageTower));
+            cardsInHand.Add(new HandCard(BombTower));
 
             manaCostCardDraw = 5;
         }
@@ -118,20 +121,21 @@ namespace LudumDare41_Game.UI {
     class Card {
         public string TowerID { get; private set; }
         string title, desc, imgNameSrc, bgNameSrc;
-        Texture2D cardImg, bg, healthPot;
+        Texture2D cardImg, bg, sword;
         public static SpriteFont titleFont { get; private set; }
         public static SpriteFont healthFont { get; private set; }
+        public static SpriteFont flavourText { get; private set; }
 
         public bool isLoaded { get; private set; }
-        public int health { get; private set; }
+        public int damage { get; private set; }
 
-        public Card(string _id, string title, string desc, string imgNameSrc, string bgNameSrc, int health) { //dette er de forskjellige Card typene, som kan bli håndtert i Cards classen?
+        public Card(string _id, string title, string desc, string imgNameSrc, string bgNameSrc, int damage) { //dette er de forskjellige Card typene, som kan bli håndtert i Cards classen?
             TowerID = _id;
             this.title = title;
             this.desc = desc;
             this.imgNameSrc = imgNameSrc;
             this.bgNameSrc = bgNameSrc;
-            this.health = health;
+            this.damage = damage;
             isLoaded = false;
         }
 
@@ -139,8 +143,9 @@ namespace LudumDare41_Game.UI {
             cardImg = c.Load<Texture2D>("GUI/Cards/" + title + "/" + imgNameSrc);
             bg = c.Load<Texture2D>("GUI/Cards/" + title + "/" + bgNameSrc);
             titleFont = c.Load<SpriteFont>("GUI/Cards/TitleFont");
-            healthPot = c.Load<Texture2D>("Gui/Cards/HealthBottle");
+            sword = c.Load<Texture2D>("Gui/Cards/attack");
             healthFont = c.Load<SpriteFont>("GUI/Cards/Health");
+            flavourText = c.Load<SpriteFont>("GUI/Cards/flavourText");
             isLoaded = true;
         }
 
@@ -148,8 +153,9 @@ namespace LudumDare41_Game.UI {
             sb.Draw(bg, new Rectangle((int)pos.X, (int)pos.Y, 200, 350), Color.White * alpha);
             sb.Draw(cardImg, new Rectangle((int)pos.X + 8, (int)pos.Y + 8, 184, 120), Color.White * alpha);
             sb.DrawString(titleFont, title, new Vector2((int)pos.X + 12, (int)pos.Y + 132), Color.Black * alpha);
-            sb.Draw(healthPot, new Rectangle((int)pos.X + 8, (int)pos.Y + 162, 64, 64), Color.White * alpha);
-            sb.DrawString(healthFont, health.ToString(), new Vector2((int)pos.X + 60, (int)pos.Y + 185), Color.Black * alpha);
+            sb.Draw(sword, new Rectangle((int)pos.X + 24, (int)pos.Y + 182, 32, 32), Color.White * alpha);
+            sb.DrawString(healthFont, damage.ToString(), new Vector2((int)pos.X + 60, (int)pos.Y + 185), Color.Black * alpha);
+            sb.DrawString(flavourText, desc, new Vector2((int)pos.X + 16, (int)pos.Y + 230), Color.Black * alpha);
         }
     }
 
