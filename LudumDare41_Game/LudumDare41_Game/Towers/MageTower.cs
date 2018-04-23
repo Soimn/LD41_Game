@@ -46,8 +46,6 @@ namespace LudumDare41_Game.Towers {
         //private Entity nearestEntity;
         private Entity targetEntity = null;
 
-        private Texture2D circle;
-
         public MageTower (TowerManager _towerManager, ContentManager _contentManager, EntityManager _entityManager, bool _isPreviewTower = false) {
             towerManager = _towerManager;
             contentManager = _contentManager;
@@ -62,8 +60,6 @@ namespace LudumDare41_Game.Towers {
             idleAnimation = contentManager.LoadAnimation("MageTower", "Idle", (int)size.Width, (int)size.Height, 350f);
             attackAnimation = contentManager.LoadAnimation("MageTower", "Attack", (int)size.Width, (int)size.Height, 350f);
             //attack animation
-
-            circle = contentManager.Load<Texture2D>("Towers/Debug/Circle");
 
             coord = _coord;
             animState = TowerAnimationState.Idle;
@@ -154,15 +150,11 @@ namespace LudumDare41_Game.Towers {
             }
 
             if (IsPreviewTower) {
-                //int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
-                //spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2, width, height), Color.Gray * 0.3f);
                 MonoGame.Extended.ShapeExtensions.DrawCircle(spriteBatch, new MonoGame.Extended.CircleF(new Point((int)entityManager.CoordHandler.WorldToScreen(coord.ToVector2()).X + 32, (int)entityManager.CoordHandler.WorldToScreen(coord.ToVector2()).Y + 32), (float)attackRadius * 2), 30, Color.White, 10);
             }
 
             if (towerManager.Game.DebugMode) {
                 if (!this.IsPreviewTower) {
-                    //int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
-                    //spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2 + 32, width, height), Color.Green * 0.3f);
                     MonoGame.Extended.ShapeExtensions.DrawCircle(spriteBatch, new MonoGame.Extended.CircleF(new Point ((int)entityManager.CoordHandler.WorldToScreen(coord.ToVector2()).X + 32, (int)entityManager.CoordHandler.WorldToScreen(coord.ToVector2()).Y + 32), (float)attackRadius * 2), 30, Color.Green * 0.4f, 10);
                 }
             }
