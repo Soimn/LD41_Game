@@ -63,7 +63,7 @@ namespace LudumDare41_Game {
         public const int screenWidth = 1920, screenHeight = 1080;
 
 
-        public Game1 () {
+        public Game1() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -73,7 +73,7 @@ namespace LudumDare41_Game {
 
         }
 
-        protected override void Initialize () {
+        protected override void Initialize() {
             camera = new Camera2D(GraphicsDevice) {
                 Zoom = 2f
             };
@@ -106,7 +106,7 @@ namespace LudumDare41_Game {
             base.Initialize();
         }
 
-        protected override void LoadContent () {
+        protected override void LoadContent() {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             level01.Load(Content);
@@ -120,7 +120,7 @@ namespace LudumDare41_Game {
             menu.Load(Content);
         }
 
-        protected override void UnloadContent () {
+        protected override void UnloadContent() {
             // TODO: Unload any non ContentManager content here
         }
 
@@ -288,7 +288,7 @@ namespace LudumDare41_Game {
             base.Update(gameTime);
         }
 
-        protected override void Draw (GameTime gameTime) {
+        protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(new Color(133, 167, 94));
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
