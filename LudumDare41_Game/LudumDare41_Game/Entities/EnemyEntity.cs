@@ -75,8 +75,6 @@ namespace LudumDare41_Game.Entities {
             }
         }
 
-
-
         public override void Draw (SpriteBatch spriteBatch) {
             switch (animationState) {
                 case EntityAnimationState.Attack:

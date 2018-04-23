@@ -5,9 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LudumDare41_Game.Entities {
     class Entity_Bob : Entity{
@@ -28,6 +25,10 @@ namespace LudumDare41_Game.Entities {
         private EntitySize size;
         public override EntitySize Size { get { return size; } }
 
+        private EntityAttackPower entityAttackPower;
+        public override EntityAttackPower AttackPower { get { return entityAttackPower; } }
+        private EntityAttackSpeed entityAttackSpeed;
+        public override EntityAttackSpeed AttackSpeed { get { return entityAttackSpeed; } }
 
         private Animation idle;
 
@@ -63,6 +64,9 @@ namespace LudumDare41_Game.Entities {
 
             initHealth = EntityHealth.large;
             currentHealth = (int)initHealth;
+
+            entityAttackPower = EntityAttackPower.high;
+            entityAttackSpeed = EntityAttackSpeed.low;
         }
 
         public override void Update (GameTime gameTime) {
