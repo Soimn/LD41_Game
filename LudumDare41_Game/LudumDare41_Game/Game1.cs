@@ -10,6 +10,7 @@ using System;
 using LudumDare41_Game.Physics;
 using LudumDare41_Game.Entities;
 using MonoGame.Extended.Tiled;
+using Microsoft.Xna.Framework.Media;
 
 namespace LudumDare41_Game {
     public class Game1 : Game {
@@ -23,6 +24,7 @@ namespace LudumDare41_Game {
         public enum GameStates { MENU, INGAME }; //gamestates, legg til om vi trenger
         bool isPaused = false;
         public static GameStates currentState = GameStates.MENU;
+        GameStates lastState;
 
         public static Camera2D camera { get; private set; }
         public static bool isTutorial { get; set; }
@@ -38,6 +40,8 @@ namespace LudumDare41_Game {
         Home home;
 
         Menu menu;
+
+        Song ingame;
 
         #region // Towers //
 
@@ -117,6 +121,7 @@ namespace LudumDare41_Game {
             home = new Home(new Vector2(19, 30), Content);
 
             debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
+            ingame = Content.Load<Song>("Audio/ingame");
 
             menu.Load(Content);
         }
@@ -128,6 +133,7 @@ namespace LudumDare41_Game {
         protected override void Update (GameTime gameTime) {
 
             KeyboardState newState = Keyboard.GetState();
+            GameStates newGameState = currentState;
 
             if (!isPaused) {
                 switch (currentState) {
@@ -138,6 +144,12 @@ namespace LudumDare41_Game {
                     case GameStates.INGAME:
                         if (!isTutorial)
                             waveManager.Update(gameTime);
+
+                        if (newGameState == GameStates.INGAME && lastState == GameStates.MENU) {
+                            MediaPlayer.Play(ingame);
+                            MediaPlayer.IsRepeating = true;
+                            MediaPlayer.Volume = 0.1f;
+                        }
 
                         level01.Update(gameTime);
 
@@ -281,6 +293,8 @@ namespace LudumDare41_Game {
                     }
                 }
             }
+
+            lastState = newGameState;
             oldState = newState;
 
             lastTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
