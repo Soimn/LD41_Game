@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace LudumDare41_Game.UI {
 
     class Cards {
-        public List<Card> allCards = new List<Card>();
+        public static List<Card> allCards = new List<Card>();
         public static List<HandCard> cardsInHand = new List<HandCard>();
         public static bool anyHeld = false;
         public static bool returnToHand = false;
@@ -100,7 +100,7 @@ namespace LudumDare41_Game.UI {
             }
 
             if (newState.IsKeyDown(Keys.Space) && oldState.IsKeyUp(Keys.Space))
-                cardsInHand.Add(new HandCard(MageTower));
+                CardDraw.DrawCard(1);
 
             oldMouseState = newMouseState;
             oldState = newState;
@@ -168,6 +168,14 @@ namespace LudumDare41_Game.UI {
 
         public void Draw(SpriteBatch sb) {
             referenceCard.Draw(sb, pos, alpha);
+        }
+    }
+
+    class CardDraw {
+        static Random r = new Random((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
+        public static void DrawCard(int times) {
+            for(int i = 0; i < times; i++)
+                Cards.cardsInHand.Add(new HandCard(Cards.allCards[r.Next(0, Cards.allCards.Count)]));
         }
     }
 }

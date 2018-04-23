@@ -54,7 +54,7 @@ namespace LudumDare41_Game.Entities {
             for (int i = 0; i < path.Count; i++)
                 path[i].SetScore(i);
 
-            speed = 50f;
+            speed = 40f;
 
             initHealth = EntityHealth.medium;
             currentHealth = (int)initHealth;
