@@ -34,7 +34,7 @@ namespace LudumDare41_Game.Towers {
         public abstract void RepairDamage (int amount);
     }
 
-    public enum TowerDmgPotential { ExtremlyLow, Low, MediumLow, Medium, MediumHigh, High, ExtremlyHigh }
+    public enum TowerDmgPotential { ExtremlyLow = 1, Low = 2, Medium = 3, High = 5, ExtremlyHigh = 10 }
     public enum TowerAttackCooldown { fast = 1, medium = 2, slow = 4}
     public enum TowerMaxHealth { ExtremlyLow, Low, MediumLow, Medium, MediumHigh, High, ExtremlyHigh }
     public enum WeaponType { Ray, Arrow, Bomb }

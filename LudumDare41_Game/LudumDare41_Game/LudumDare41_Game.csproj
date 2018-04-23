@@ -48,6 +48,8 @@
     <Compile Include="Entities\EntityManager.cs" />
     <Compile Include="Entities\EntitySize.cs" />
     <Compile Include="Entities\EnemyEntity.cs" />
+    <Compile Include="Entities\Entity_Bart.cs" />
+    <Compile Include="Entities\Entity_Bob.cs" />
     <Compile Include="Entities\PathPoint.cs" />
     <Compile Include="Entities\WaveManager.cs" />
     <Compile Include="Graphics\Animation.cs" />

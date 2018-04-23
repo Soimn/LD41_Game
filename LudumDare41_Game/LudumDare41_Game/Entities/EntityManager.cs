@@ -30,11 +30,6 @@ namespace LudumDare41_Game.Entities {
             Entities = new List<Entity>();
         }
 
-        public void SpawnEntity (Entity entity, Vector2 position, List<PathPoint> _path) {
-            entity.Init(position, _path);
-            Entities.Add(entity);
-        }
-
         public void SpawnWaveEntity (Entity entity) {
             entity.Init_Wave(WaveManager.Path[0].Position + new Vector2(0, -96));
             Entities.Add(entity);
@@ -139,7 +134,9 @@ namespace LudumDare41_Game.Entities {
             switch (grade) {
 
                 case 1:
-                    return typeof(EnemyEntity);
+                    return typeof(Entity_Bart);
+                case 2:
+                    return typeof(Entity_Bob);
 
                 default:
                 case 0:

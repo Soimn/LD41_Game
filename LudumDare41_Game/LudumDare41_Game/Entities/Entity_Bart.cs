@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using LudumDare41_Game.Content;
+﻿using LudumDare41_Game.Content;
 using LudumDare41_Game.Graphics;
 using LudumDare41_Game.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace LudumDare41_Game.Entities {
-    class EnemyEntity : Entity {
+    class Entity_Bart : Entity {
         private Vector2 position;
         public override Vector2 Position { get { return position; } }
         public override List<PathPoint> Path { get => path; }
@@ -32,7 +32,7 @@ namespace LudumDare41_Game.Entities {
         private CoordHandler coordHandler;
         private EntityManager entityManager;
 
-        public EnemyEntity (EntityManager _entityManager) {
+        public Entity_Bart (EntityManager _entityManager) {
             entityManager = _entityManager;
             contentManager = entityManager.ContentManager;
             coordHandler = entityManager.CoordHandler;
@@ -43,20 +43,22 @@ namespace LudumDare41_Game.Entities {
             animationState = EntityAnimationState.Idle;
             size = new EntitySize(EntityWidth.narrow, EntityHeight.medium);
 
-            idle = new Animation(contentManager.Load<Texture2D>("Entities/ExampleEntity/ExampleEnemy"), new Vector2((int)size.Width, (int)size.Height), 1, 4f);
+            idle = new Animation(contentManager.Load<Texture2D>("Entities/LightEnemy"), new Vector2((int)size.Width, (int)size.Height), 1, 4f);
 
             path = new List<PathPoint>();
 
-            foreach (var point in entityManager.WaveManager.Path) {
-                path.Add(new PathPoint(point.Position + new Vector2(((float)entityManager.Random.Next(15, 100)) / 100, ((float)entityManager.Random.Next(15, 100)) / 100)));
+            for (int i = 0; i < entityManager.WaveManager.Path.Count-1; i++) {
+                path.Add(new PathPoint(entityManager.WaveManager.Path[i].Position));
             }
+
+            path.Add(new PathPoint(entityManager.WaveManager.Path[entityManager.WaveManager.Path.Count - 1].Position + new Vector2(((float)entityManager.Random.Next(-64, 64)), 0)));
 
             for (int i = 0; i < path.Count; i++)
                 path[i].SetScore(i);
 
             speed = 50f;
 
-            initHealth = EntityHealth.medium;
+            initHealth = EntityHealth.low;
             currentHealth = (int)initHealth;
         }
 

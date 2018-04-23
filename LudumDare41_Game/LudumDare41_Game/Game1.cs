@@ -253,9 +253,6 @@ namespace LudumDare41_Game {
                                 Cards.returnToHand = false;
                             }
 
-                            if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
-                                entityManager.SpawnEntity(new EnemyEntity(entityManager), coordHandler.ScreenToWorld((new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y))), waveManager.Path);
-
                         }
                         else {
                             if (newState.IsKeyDown(Keys.Escape) && oldState.IsKeyUp(Keys.Escape)) {

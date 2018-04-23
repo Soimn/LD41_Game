@@ -31,7 +31,7 @@ namespace LudumDare41_Game.Entities {
         public void Init (EntityManager _entityManager) {
             entityManager = _entityManager;
 
-            Round = new Round(new List<Wave> { CreateWave(1, 3, 0, 0, 0), CreateWave (1, 10, 0, 0), CreateWave (1, 15, 0, 0)}, entityManager);
+            Round = new Round(new List<Wave> { CreateWave(), CreateWave(1, 3, 0, 0, 0), CreateWave(1, 10, 0, 0), CreateWave(1, 15, 0, 0, 0, 0.5f), CreateWave(1, 0, 1, 0, 0, 1), CreateWave(1, 30, 5, 0, 0, 1) }, entityManager);
         }
 
         public void Update (GameTime gameTime) {
@@ -46,7 +46,7 @@ namespace LudumDare41_Game.Entities {
             return 10 - (int)Round.lastTime;
         }
 
-        public Wave CreateWave (int pauseGrade = 1, int numOfLightEnemies = 1, int numOfMediumEnemies = 0, int numOfHeavyEnemies = 0, int numOfBosses = 0) {
+        public Wave CreateWave (int pauseGrade = 1, int numOfLightEnemies = 0, int numOfMediumEnemies = 0, int numOfHeavyEnemies = 0, int numOfBosses = 0, float timeBetween = 1) {
             List<Type> temp = new List<Type>();
 
             for (int i = 0; i < numOfLightEnemies; i++) {
@@ -67,35 +67,43 @@ namespace LudumDare41_Game.Entities {
 
             List<KeyValuePair<int, float>> pauses = new List<KeyValuePair<int, float>>();
 
-            if (temp.Count > 16) {
+            //if (temp.Count > 16) {
 
-                switch (pauseGrade) {
-                    case 1:
-                        pauses.Add(new KeyValuePair<int, float>(entityManager.Random.Next(0 + 8, temp.Count - 8), (float)WavePause.minor + entityManager.Random.Next(0, 1)));
-                        break;
-                    case 2:
-                        for (int i = 0; i < 2; i++) {
-                            pauses.Add(new KeyValuePair<int, float>(entityManager.Random.Next(0 + 8, temp.Count - 8), (float)WavePause.low + entityManager.Random.Next(0, 2)));
-                        }
-                        break;
-                    case 3:
-                        for (int i = 0; i < 2; i++) {
-                            pauses.Add(new KeyValuePair<int, float>(entityManager.Random.Next(0 + 8, temp.Count - 8), (float)WavePause.medium + entityManager.Random.Next(0, 3)));
-                        }
-                        break;
-                    case 4:
-                        for (int i = 0; i < 2; i++) {
-                            pauses.Add(new KeyValuePair<int, float>(entityManager.Random.Next(0 + 8, temp.Count - 8), (float)WavePause.large + entityManager.Random.Next(0, 5)));
-                        }
-                        break;
+            //    switch (pauseGrade) {
+            //        case 1:
+            //            pauses.Add(new KeyValuePair<int, float>(entityManager.Random.Next(0 + 8, temp.Count - 8), (float)WavePause.minor + entityManager.Random.Next(0, 1)));
+            //            break;
+            //        case 2:
+            //            for (int i = 0; i < 2; i++) {
+            //                pauses.Add(new KeyValuePair<int, float>(entityManager.Random.Next(0 + 8, temp.Count - 8), (float)WavePause.low + entityManager.Random.Next(0, 2)));
+            //            }
+            //            break;
+            //        case 3:
+            //            for (int i = 0; i < 2; i++) {
+            //                pauses.Add(new KeyValuePair<int, float>(entityManager.Random.Next(0 + 8, temp.Count - 8), (float)WavePause.medium + entityManager.Random.Next(0, 3)));
+            //            }
+            //            break;
+            //        case 4:
+            //            for (int i = 0; i < 2; i++) {
+            //                pauses.Add(new KeyValuePair<int, float>(entityManager.Random.Next(0 + 8, temp.Count - 8), (float)WavePause.large + entityManager.Random.Next(0, 5)));
+            //            }
+            //            break;
 
-                    default:
-                        throw new ArgumentException("No such pausegrade as pausegrade: " + pauseGrade);
-                }
+            //        default:
+            //            throw new ArgumentException("No such pausegrade as pausegrade: " + pauseGrade);
+            //    }
+            //}
+
+            var count = temp.Count;
+            var last = count - 1;
+            for (var i = 0; i < last; ++i) {
+                var r = entityManager.Random.Next(i, count);
+                var tmp = temp[i];
+                temp[i] = temp[r];
+                temp[r] = tmp;
             }
 
-
-            return new Wave(temp, entityManager, new WaveInstructor(temp, pauses).CreateInstructions(), numOfBosses != 0 ? 4 : (numOfHeavyEnemies != 0 ? 3 : (numOfMediumEnemies != 0 ? 2 : 1)), this);
+            return new Wave(temp, entityManager, new WaveInstructor(temp, pauses).CreateInstructions(), numOfBosses != 0 ? 4 : (numOfHeavyEnemies != 0 ? 3 : (numOfMediumEnemies != 0 ? 2 : 1)), this, timeBetween);
         }
     }
 
@@ -114,11 +122,12 @@ namespace LudumDare41_Game.Entities {
         private WaveInstruction currentInstruction;
         private float timeToWait = 0;
         private float timeSinceLastWait = 0;
+        private float timeBetween;
         private Round round;
 
         private bool isAlive;
 
-        public Wave (List<Type> _enemies, EntityManager _entityManager, Stack<WaveInstruction> _waveInstructions, int _highestGrade, WaveManager _waveManager) {
+        public Wave (List<Type> _enemies, EntityManager _entityManager, Stack<WaveInstruction> _waveInstructions, int _highestGrade, WaveManager _waveManager, float _timeBetween) {
             enemies = _enemies;
             totalAmntOfEnemies = enemies.Count;
             entityManager = _entityManager;
@@ -126,6 +135,7 @@ namespace LudumDare41_Game.Entities {
             highestGrade = _highestGrade;
             waveManager = _waveManager;
             isAlive = true;
+            timeBetween = _timeBetween;
         }
 
         public void Update (GameTime gameTime) {
@@ -133,11 +143,11 @@ namespace LudumDare41_Game.Entities {
             if (timeSinceLastWait > timeToWait) {
                 if (waveInstructions.Count != 0)
                     NextInstruction();
-                else if (isAlive){
+                else if (isAlive) {
                     waveManager.Round.WaveInstructionFinished();
                     isAlive = false;
                 }
-                    
+
                 timeSinceLastWait = 0;
             }
 
@@ -153,7 +163,7 @@ namespace LudumDare41_Game.Entities {
                 entityManager.SpawnWaveEntity((Entity)Activator.CreateInstance(currentInstruction.Entity, args));
             }
 
-            timeToWait = WaveManager.TimeBetweenEnemySpawn + entityManager.Random.Next(0, 1);
+            timeToWait = WaveManager.TimeBetweenEnemySpawn * timeBetween;
         }
     }
 
