@@ -126,8 +126,6 @@ namespace LudumDare41_Game {
 
         protected override void Update (GameTime gameTime) {
 
-            waveManager.Update(gameTime);
-
             KeyboardState newState = Keyboard.GetState();
 
             if (!isPaused) {
@@ -137,6 +135,9 @@ namespace LudumDare41_Game {
                         break;
 
                     case GameStates.INGAME:
+                        if (!isTutorial)
+                            waveManager.Update(gameTime);
+
                         level01.Update(gameTime);
 
                         gui.Update(gameTime, Window, camera);
