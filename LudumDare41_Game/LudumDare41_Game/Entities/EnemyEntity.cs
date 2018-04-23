@@ -25,6 +25,11 @@ namespace LudumDare41_Game.Entities {
         private EntitySize size;
         public override EntitySize Size { get { return size; } }
 
+        private EntityAttackPower attackPower = EntityAttackPower.medium;
+        private EntityAttackSpeed attackSpeed = EntityAttackSpeed.medium;
+
+        public override EntityAttackPower AttackPower { get => attackPower; }
+        public override EntityAttackSpeed AttackSpeed { get => attackSpeed; }
 
         private Animation idle;
 

@@ -28,7 +28,7 @@ namespace LudumDare41_Game.UI {
 
         public Cards() {
             MageTower = new Card("MageTower", "Mage Tower", "A magical tower that \nshoots energy.\nZwoop!", "mageTower", "mageBg", 3);
-            BombTower = new Card("BombTower", "Bomb Tower", "Hey, see that enemy?\nBOOM!\nNow they're gone.", "bombTower", "bombBg", 3);
+            BombTower = new Card("BombTower", "Bomb Tower", "Hey, see that enemy?\nBOOM!\nNow they're gone.", "bombTower", "bombBg", 10);
             allCards.Add(MageTower);
             allCards.Add(BombTower);
             cardsInHand.Add(new HandCard(MageTower));

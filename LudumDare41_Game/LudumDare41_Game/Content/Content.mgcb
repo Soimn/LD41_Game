@@ -71,18 +71,6 @@
 /processorParam:TextureFormat=Color
 /build:GUI/Cards/Mage Tower/mageBg.png
 
-#begin GUI/Cards/Mage Tower/mageTower.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:GUI/Cards/Mage Tower/mageTower.png
-
 #begin Towers/MageTower/MageTower_IdleSpritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -118,18 +106,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Entities/ExampleEntity/ExampleEnemy.png
-
-#begin Towers/Debug/Circle.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Towers/Debug/Circle.png
 
 #begin GUI/Menu/title.png
 /importer:TextureImporter
@@ -400,18 +376,6 @@
 /processorParam:TextureFormat=Color
 /build:GUI/Cards/Bomb Tower/bombBg.png
 
-#begin GUI/Cards/Bomb Tower/bombTower.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:GUI/Cards/Bomb Tower/bombTower.png
-
 #begin GUI/Cards/flavourText.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -430,4 +394,34 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Tutorial/drawCard.png
+
+#begin GUI/Cards/Mage Tower/mageTower.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:GUI/Cards/Mage Tower/mageTower.png
+
+#begin GUI/Cards/Bomb Tower/bombTower.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:GUI/Cards/Bomb Tower/bombTower.png
+
+#begin Audio/ambiance.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/ambiance.mp3
 
