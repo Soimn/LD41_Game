@@ -41,8 +41,6 @@ namespace LudumDare41_Game {
 
         Menu menu;
 
-        Song ingame;
-
         #region // Towers //
 
         private TowerManager towerManager;
@@ -121,7 +119,6 @@ namespace LudumDare41_Game {
             home = new Home(new Vector2(19, 30), Content);
 
             debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
-            ingame = Content.Load<Song>("Audio/ingame");
 
             menu.Load(Content);
         }
@@ -146,9 +143,7 @@ namespace LudumDare41_Game {
                             waveManager.Update(gameTime);
 
                         if (newGameState == GameStates.INGAME && lastState == GameStates.MENU) {
-                            MediaPlayer.Play(ingame);
-                            MediaPlayer.IsRepeating = true;
-                            MediaPlayer.Volume = 0.1f;
+                            MediaPlayer.Stop();
                         }
 
                         level01.Update(gameTime);

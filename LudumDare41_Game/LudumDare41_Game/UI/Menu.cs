@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace LudumDare41_Game.UI {
     class Menu {
         Texture2D title, play, playSelect, exit, exitSelect;
         Rectangle mouseRect, playRect, exitRect;
+        Song menuSong;
 
         public Menu() {
 
@@ -25,6 +27,12 @@ namespace LudumDare41_Game.UI {
 
             exit = c.Load<Texture2D>("GUI/Menu/exit");
             exitSelect = c.Load<Texture2D>("GUI/Menu/exitSelect");
+
+            menuSong = c.Load<Song>("Audio/mainSong");
+
+            MediaPlayer.Play(menuSong);
+            MediaPlayer.Volume = 0.3f;
+            MediaPlayer.IsRepeating = true;
         }
 
         public void Update(GameTime gt, Game1 game) {
@@ -68,6 +76,5 @@ namespace LudumDare41_Game.UI {
 
             sb.End();
         }
-
     }
 }

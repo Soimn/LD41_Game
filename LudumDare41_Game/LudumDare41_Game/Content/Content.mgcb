@@ -394,3 +394,9 @@
 /processorParam:Quality=Best
 /build:Audio/ingame.mp3
 
+#begin Audio/mainSong.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/mainSong.mp3
+
