@@ -9,6 +9,8 @@ using MonoGame.Extended;
 using System;
 using LudumDare41_Game.Physics;
 using LudumDare41_Game.Entities;
+using MonoGame.Extended.Tiled;
+using Microsoft.Xna.Framework.Media;
 
 namespace LudumDare41_Game {
     public class Game1 : Game {
@@ -22,6 +24,7 @@ namespace LudumDare41_Game {
         public enum GameStates { MENU, INGAME }; //gamestates, legg til om vi trenger
         bool isPaused = false;
         public static GameStates currentState = GameStates.MENU;
+        GameStates lastState;
 
         public static Camera2D camera { get; private set; }
         public static bool isTutorial { get; set; }
@@ -113,7 +116,7 @@ namespace LudumDare41_Game {
             gui.Load();
             cards.Load(Content);
 
-            home = new Home(new Vector2(21, 30), Content);
+            home = new Home(new Vector2(19, 31), Content);
 
             debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
 
@@ -127,6 +130,7 @@ namespace LudumDare41_Game {
         protected override void Update (GameTime gameTime) {
 
             KeyboardState newState = Keyboard.GetState();
+            GameStates newGameState = currentState;
 
             if (!isPaused) {
                 switch (currentState) {
@@ -137,6 +141,10 @@ namespace LudumDare41_Game {
                     case GameStates.INGAME:
                         if (!isTutorial)
                             waveManager.Update(gameTime);
+
+                        if (newGameState == GameStates.INGAME && lastState == GameStates.MENU) {
+                            MediaPlayer.Stop();
+                        }
 
                         level01.Update(gameTime);
 
@@ -161,6 +169,7 @@ namespace LudumDare41_Game {
                             const float cameraSpeed = 500f;
 
                             var moveDirection = Vector2.Zero;
+
 
                             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up)) {
                                 if (!(camera.ScreenToWorld(0f, 0f).Y < Vector2.Zero.Y)) {
@@ -187,18 +196,24 @@ namespace LudumDare41_Game {
                             }
 
                             if ((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels + 10)) {
-                                camera.Move(new Vector2(-1, 0) * 10000 * deltaSeconds); //Nei Simon dette gikk ikke så bra, klarte det i sta før du snakket om det men nå er det helt fillerusk i hue mitt
+                                camera.Move(new Vector2(-1, 0) * 10000 * deltaSeconds); 
+                            }
+
+                            if ((camera.ScreenToWorld(0, 0).X < Vector2.Zero.X - 10)) {
+                                camera.Move(new Vector2(1, 0) * 10000 * deltaSeconds);
                             }
 
                             if ((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).Y > level01.map.HeightInPixels + 10)) {
                                 camera.Move(new Vector2(0, -1) * 10000 * deltaSeconds);
                             }
+                            
 
-                            if (moveDirection != Vector2.Zero) {
+                            var isCameraMoving = moveDirection != Vector2.Zero;
+                            if (isCameraMoving) {
                                 moveDirection.Normalize();
                                 camera.Move(moveDirection * cameraSpeed * deltaSeconds);
                             }
-
+                            
 
                             #region // Towers //
 
@@ -274,6 +289,8 @@ namespace LudumDare41_Game {
                     }
                 }
             }
+
+            lastState = newGameState;
             oldState = newState;
 
             lastTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -330,6 +347,14 @@ namespace LudumDare41_Game {
             }
 
             base.Draw(gameTime);
+        }
+
+        private void LookAtMapCenter() {
+            switch (level01.map.Orientation) {
+                case TiledMapOrientation.Orthogonal:
+                    camera.LookAt(new Vector2(level01.map.WidthInPixels, level01.map.HeightInPixels) * 0.5f);
+                    break;
+            }
         }
     }
 }
