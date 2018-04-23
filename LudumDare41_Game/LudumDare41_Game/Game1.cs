@@ -21,7 +21,7 @@ namespace LudumDare41_Game {
 
         public enum GameStates { MENU, INGAME }; //gamestates, legg til om vi trenger
         bool isPaused = false;
-        public static GameStates currentState = GameStates.MENU;
+        public static GameStates currentState = GameStates.INGAME;
 
         public static Camera2D camera { get; private set; }
         public static bool isTutorial { get; set; }
@@ -93,6 +93,7 @@ namespace LudumDare41_Game {
             waveManager = new WaveManager();
             entityManager = new EntityManager(coordHandler, contentManager, waveManager);
             towerManager = new TowerManager(coordHandler, contentManager, entityManager, this);
+            waveManager.Init(entityManager);
 
             #endregion
 
@@ -123,7 +124,10 @@ namespace LudumDare41_Game {
             // TODO: Unload any non ContentManager content here
         }
 
-        protected override void Update(GameTime gameTime) {
+        protected override void Update (GameTime gameTime) {
+
+            waveManager.Update(gameTime);
+
             KeyboardState newState = Keyboard.GetState();
 
             if (!isPaused) {
