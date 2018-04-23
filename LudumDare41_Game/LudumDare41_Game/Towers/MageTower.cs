@@ -96,7 +96,22 @@ namespace LudumDare41_Game.Towers {
                 }
             }
 
-            targetEntity = entityManager.GetLeadingEntity(sightedEntities);
+            if (sightedEntities.Count != 0) {
+                int min = 1000;
+                int index = 0;
+
+                for (int i = 0; i < sightedEntities.Count; i++)
+                    if (sightedEntities[i].CurrentHealth > min) {
+                        min = sightedEntities[i].CurrentHealth;
+                        index = i;
+                    }
+
+
+                targetEntity = sightedEntities[index];
+            }
+            else {
+                targetEntity = null;
+            }
 
             if (targetEntity != null) {
                 animState = TowerAnimationState.Attack;
@@ -111,7 +126,7 @@ namespace LudumDare41_Game.Towers {
             switch (animState) {
                 case TowerAnimationState.Attack:
                     attackAnimation.updateAnimation(gameTime);
-                    if (timeSinceLastAttack > (int)attackCooldown) {
+                    if (timeSinceLastAttack > (int)attackCooldown / 2) {
                         targetEntity.TakeDamage(dmgPotential);
                         timeSinceLastAttack = 0;
                     }
@@ -139,13 +154,17 @@ namespace LudumDare41_Game.Towers {
             }
 
             if (IsPreviewTower) {
-                int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
-                spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2 + 32, width, height), Color.Gray * 0.3f);
+                //int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
+                //spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2, width, height), Color.Gray * 0.3f);
+                MonoGame.Extended.ShapeExtensions.DrawCircle(spriteBatch, new MonoGame.Extended.CircleF(new Point((int)entityManager.CoordHandler.WorldToScreen(coord.ToVector2()).X + 32, (int)entityManager.CoordHandler.WorldToScreen(coord.ToVector2()).Y + 32), (float)attackRadius * 2), 30, Color.White, 10);
             }
 
             if (towerManager.Game.DebugMode) {
-                int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
-                spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2 + 32, width, height), Color.Green * 0.3f);
+                if (!this.IsPreviewTower) {
+                    //int width = 4 * (int)attackRadius + 64, height = 4 * (int)attackRadius + 64;
+                    //spriteBatch.Draw(circle, new Rectangle((int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).X - width / 2 + 32, (int)towerManager.coordHandler.WorldToScreen(coord.ToVector2()).Y - height / 2 + 32, width, height), Color.Green * 0.3f);
+                    MonoGame.Extended.ShapeExtensions.DrawCircle(spriteBatch, new MonoGame.Extended.CircleF(new Point ((int)entityManager.CoordHandler.WorldToScreen(coord.ToVector2()).X + 32, (int)entityManager.CoordHandler.WorldToScreen(coord.ToVector2()).Y + 32), (float)attackRadius * 2), 30, Color.Green * 0.4f, 10);
+                }
             }
         }
 

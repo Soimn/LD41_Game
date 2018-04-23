@@ -15,8 +15,6 @@ namespace LudumDare41_Game.Entities {
         public WaveManager WaveManager { get; private set; }
 
         public List<Entity> Entities { get; }
-        public DummyEntity Dummy { get { return dummy; } }
-        private DummyEntity dummy;
 
         public Random Random { get; private set; }
         Texture2D healthBar;
@@ -29,10 +27,7 @@ namespace LudumDare41_Game.Entities {
             healthBar = _contentManager.Load<Texture2D>("Entities/entityHealth");
 
             Random = new Random((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
-
-            Entities = new List<Entity> {
-                new DummyEntity(new Vector2(10000, 10000), out dummy)
-            };
+            Entities = new List<Entity>();
         }
 
         public void SpawnEntity (Entity entity, Vector2 position, List<PathPoint> _path) {
@@ -41,7 +36,7 @@ namespace LudumDare41_Game.Entities {
         }
 
         public void SpawnWaveEntity (Entity entity) {
-            entity.Init_Wave(WaveManager.Path[0].Position + new Vector2(0, 32));
+            entity.Init_Wave(WaveManager.Path[0].Position + new Vector2(0, -96));
             Entities.Add(entity);
         }
 
@@ -54,18 +49,18 @@ namespace LudumDare41_Game.Entities {
             for (int i = 0; i < Entities.Count; i++) {
                 Entities[i].Draw(spriteBatch);
 
-                if (Entities[i] != dummy) { //Healthbar
-                    Vector2 pos = new Vector2(CoordHandler.WorldToScreen(Entities[i].Position).X, CoordHandler.WorldToScreen(Entities[i].Position).Y - 45);
-                    float length = (Entities[i].CurrentHealth / (float)Entities[i].Health) * 75;
-                    if (length >= 75) {
-                        spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.LightGreen);
-                    }
-                    else if (length >= 37.5) {
-                        spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.Yellow);
-                    }
-                    else {
-                        spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.Red);
-                    }
+
+                Vector2 pos = new Vector2(CoordHandler.WorldToScreen(Entities[i].Position).X, CoordHandler.WorldToScreen(Entities[i].Position).Y - 45);
+                float length = (Entities[i].CurrentHealth / (float)Entities[i].Health) * 75;
+                if (length >= 75) {
+                    spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.LightGreen);
+                }
+                else if (length >= 37.5) {
+                    spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.Yellow);
+                }
+                else {
+                    spriteBatch.Draw(healthBar, new Rectangle((int)pos.X, (int)pos.Y, (int)length, 5), Color.Red);
+
                 }
             }
         }

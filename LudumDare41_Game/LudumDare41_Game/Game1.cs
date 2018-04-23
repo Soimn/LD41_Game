@@ -85,6 +85,8 @@ namespace LudumDare41_Game {
             entityManager = new EntityManager(coordHandler, contentManager, waveManager);
             towerManager = new TowerManager(coordHandler, contentManager, entityManager, this);
 
+            waveManager.Init(entityManager);
+
             #endregion
 
             menu = new Menu();
@@ -128,6 +130,9 @@ namespace LudumDare41_Game {
                         break;
 
                     case GameStates.INGAME:
+
+                        waveManager.Update(gameTime);
+
                         var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
                         var keyboardState = Keyboard.GetState();
 

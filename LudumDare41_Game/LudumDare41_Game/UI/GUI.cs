@@ -1,4 +1,5 @@
-﻿using LudumDare41_Game.Graphics;
+﻿using LudumDare41_Game.Entities;
+using LudumDare41_Game.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -189,7 +190,7 @@ namespace LudumDare41_Game.UI {
         bool oldRoundState;
         bool showCountdown = false;
 
-        int countdown = 10; //hent fra Simon <- her skal jeg ha hvor lang tid det er imellom waves.
+        int countdown = 10;
 
         public WaveInfo(string name, Rectangle pos) : base(name, pos) {
         }
@@ -198,8 +199,8 @@ namespace LudumDare41_Game.UI {
             waveCountdown = new Animation(c.Load<Texture2D>("GUI/WaveCountdown"), new Vector2(32, 64), 4, 500);
         }
         
-        public new void Update(GameTime gt, GameWindow w) {
-            bool newRoundState = false; //hent fra Simon <- her skal jeg se om det er en runde som pågår. bool
+        public new void Update(GameTime gt, GameWindow w, WaveManager waveManager) {
+            bool newRoundState = waveManager.IsWaveOngoing();
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                 newRoundState = true;
@@ -215,7 +216,7 @@ namespace LudumDare41_Game.UI {
 
             if (showCountdown) {
                 waveCountdown.updateAnimation(gt);
-                //countdown = ?  oppdatere counter her fra WaveManager?
+                countdown = waveManager.SecondsTillNextWave();
             }
 
             pos = new Rectangle((w.ClientBounds.Width / 2) - 32, 80, 32, 64);
