@@ -9,6 +9,32 @@
     <frame tileid="16" duration="250"/>
    </animation>
   </tile>
+  <tile id="5" type="unpass"/>
+  <tile id="6" type="unpass"/>
+  <tile id="7" type="unpass"/>
+  <tile id="13" type="unpass"/>
+  <tile id="14" type="unpass"/>
+  <tile id="15" type="unpass"/>
+  <tile id="21" type="unpass"/>
+  <tile id="22" type="unpass"/>
+  <tile id="23" type="unpass"/>
+  <tile id="37" type="unpass"/>
+  <tile id="38" type="unpass"/>
+  <tile id="39" type="unpass"/>
+  <tile id="40" type="unpass"/>
+  <tile id="41" type="unpass"/>
+  <tile id="42" type="unpass"/>
+  <tile id="43" type="unpass"/>
+  <tile id="45" type="unpass"/>
+  <tile id="46" type="unpass"/>
+  <tile id="47" type="unpass"/>
+  <tile id="48" type="unpass"/>
+  <tile id="49" type="unpass"/>
+  <tile id="50" type="unpass"/>
+  <tile id="51" type="unpass"/>
+  <tile id="53" type="unpass"/>
+  <tile id="54" type="unpass"/>
+  <tile id="55" type="unpass"/>
  </tileset>
  <layer name="lay1" width="32" height="32">
   <data encoding="csv">

@@ -6,8 +6,10 @@ using LudumDare41_Game.UI;
 using LudumDare41_Game.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LudumDare41_Game.Towers {
     class TowerManager {
@@ -86,7 +88,7 @@ namespace LudumDare41_Game.Towers {
             return new Vector2((int)coordHandler.WorldToScreen(coord.ToVector2()).X + 1, (int)coordHandler.WorldToScreen(coord.ToVector2()).Y + 1);
         }
 
-        public bool InvalidCoord (TileCoord coord) {
+        public bool InvalidCoord(TileCoord coord) {
             foreach (Tower tower in Towers) {
                 if (tower.Coord == coord)
                     return true;
@@ -94,7 +96,7 @@ namespace LudumDare41_Game.Towers {
 
             TileCoord homeCoord = new TileCoord((int)Home.position.X * 32, (int)Home.position.Y * 32);
 
-            if (coord == homeCoord 
+            if (coord == homeCoord
                 || coord == new TileCoord(homeCoord.x + 32, homeCoord.y)
                 || coord == new TileCoord(homeCoord.x + 32, homeCoord.y - 32)
                 || coord == new TileCoord(homeCoord.x, homeCoord.y - 32)
@@ -103,7 +105,14 @@ namespace LudumDare41_Game.Towers {
                 return true;
             }
 
-            // TODO: Check if coord is on path
+            //Console.WriteLine(Game1.Level01.map.TileLayers[0].Tiles[coord.x].);
+            var tileLayer = Game1.Level01.map.GetLayer<TiledMapTileLayer>("lay1");
+            Console.WriteLine((tileLayer.Tiles[(int)Math.Floor((double)coord.x / 32) + 32 * (int)Math.Floor((double)coord.y / 32)].GlobalIdentifier - 1) + "=" + Math.Floor((double)coord.x / 32) + ":" + Math.Floor((double)coord.y / 32));
+
+
+
+            if (new[] { 5, 6, 7, 13, 14, 15, 21, 22, 23, 37, 38, 39, 45, 47, 40, 41, 42, 43, 48, 49, 50, 51, 53, 54}.Contains(tileLayer.Tiles[(int)Math.Floor((double)coord.x / 32) + 32 * (int)Math.Floor((double)coord.y / 32)].GlobalIdentifier - 1))
+                return true;
 
             return false;
         }

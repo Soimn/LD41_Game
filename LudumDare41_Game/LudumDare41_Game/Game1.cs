@@ -26,8 +26,9 @@ namespace LudumDare41_Game {
         public static Camera2D camera { get; private set; }
         public static bool isTutorial { get; set; }
 
-        Level level01;
-      
+        private static Level level01;
+        internal static Level Level01 { get => level01; }
+
         GUI gui;
         Cards cards;
 
@@ -56,6 +57,7 @@ namespace LudumDare41_Game {
         Texture2D tutorialStart;
 
         public bool DebugMode { get; private set; }
+
         private float lastTime, cooldown = 0.5f;
 
         public const int screenWidth = 1920, screenHeight = 1080;
@@ -256,7 +258,6 @@ namespace LudumDare41_Game {
 
                             camera.Position = new Vector2(-320, -150);
                         }
-                        
                         break;
                 }
             }
