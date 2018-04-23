@@ -109,9 +109,10 @@ namespace LudumDare41_Game.Towers {
             var tileLayer = Game1.Level01.map.GetLayer<TiledMapTileLayer>("lay1");
             Console.WriteLine((tileLayer.Tiles[(int)Math.Floor((double)coord.x / 32) + 32 * (int)Math.Floor((double)coord.y / 32)].GlobalIdentifier - 1) + "=" + Math.Floor((double)coord.x / 32) + ":" + Math.Floor((double)coord.y / 32));
 
-
-
             if (new[] { 5, 6, 7, 13, 14, 15, 21, 22, 23, 37, 38, 39, 45, 47, 40, 41, 42, 43, 48, 49, 50, 51, 53, 54}.Contains(tileLayer.Tiles[(int)Math.Floor((double)coord.x / 32) + 32 * (int)Math.Floor((double)coord.y / 32)].GlobalIdentifier - 1))
+                return true;
+
+            if (coord.y > 24 * 64)
                 return true;
 
             return false;

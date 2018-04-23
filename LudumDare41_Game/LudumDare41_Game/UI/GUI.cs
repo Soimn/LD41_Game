@@ -134,7 +134,8 @@ namespace LudumDare41_Game.UI {
 
         public static bool isActive = false;
 
-        Texture2D cardSelTutorial;
+        Texture2D cardSelTutorial, drawCard, drawCardSel, drawCardNoMana, drawCardCurrent;
+        Rectangle mouseRect, drawCardButton;
 
         public CardSelector(string name, Rectangle pos) : base(name, pos) {
             nameID = name;
@@ -143,12 +144,36 @@ namespace LudumDare41_Game.UI {
 
         public new void Load(ContentManager c) {
             cardSelTutorial = c.Load<Texture2D>("Tutorial/CardSel");
+            drawCard = c.Load<Texture2D>("GUI/Cards/drawCard");
+            drawCardSel = c.Load<Texture2D>("GUI/Cards/drawCardSel");
+            drawCardNoMana = c.Load<Texture2D>("GUI/Cards/drawCardSelNoMana");
         }
 
         public new void Update(GameTime gt, GameWindow w) {
             if (Mouse.GetState().Position.Y > pos.Y) {
                 pos = new Rectangle(0, w.ClientBounds.Height - height, w.ClientBounds.Width, height);
                 isActive = true;
+
+                mouseRect = new Rectangle((int)Mouse.GetState().Position.X, (int)Mouse.GetState().Position.Y, 1, 1);
+                drawCardButton = new Rectangle(w.ClientBounds.Width - 128, w.ClientBounds.Height - 128, 64, 64);
+
+                if (mouseRect.Intersects(drawCardButton)) {
+                    if(Cards.manaCurrent >= Cards.manaCostCardDraw) {
+                        drawCardCurrent = drawCardSel;
+                        if (Mouse.GetState().LeftButton.Equals(ButtonState.Pressed)) {
+                            CardDraw.DrawCard(1);
+                            Cards.manaCurrent -= Cards.manaCostCardDraw;
+                        }
+                    }
+                    else {
+                        drawCardCurrent = drawCardNoMana;
+                    }
+                }
+                else {
+                    drawCardCurrent = drawCard;
+                }
+                    
+
             }
             else {
                 if (Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
@@ -161,6 +186,14 @@ namespace LudumDare41_Game.UI {
         public void DrawTutorial(SpriteBatch sb, GameWindow w) {
             if (!isActive && Game1.isTutorial)
                 sb.Draw(cardSelTutorial, new Rectangle((w.ClientBounds.Width / 2) - (cardSelTutorial.Width / 2) - 25, pos.Y - 80, cardSelTutorial.Width, cardSelTutorial.Height), Color.White);
+
+            if (isActive) {
+                sb.DrawString(Card.healthFont, "Draw a card", new Vector2(drawCardButton.X + (drawCardCurrent.Width / 2) - (Card.healthFont.MeasureString("Draw a card").X / 2), drawCardButton.Y - 30), Color.White);
+                sb.Draw(drawCardCurrent, drawCardButton, Color.White);
+                if(Cards.manaCurrent < Cards.manaCostCardDraw)
+                    sb.DrawString(Card.healthFont, "Not enough \nmana", new Vector2(drawCardButton.X + (drawCardCurrent.Width / 2) - (Card.healthFont.MeasureString("Draw a card").X / 2), drawCardButton.Y + 60), Color.Red);
+
+            }
         }
     }
 
@@ -179,7 +212,13 @@ namespace LudumDare41_Game.UI {
             selectedTile.Width = 32 * (int)camera.Zoom;
             selectedTile.Height = 32 * (int)camera.Zoom;
 
-            pos = new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom);
+            if (!CardSelector.isActive) {
+                pos = new Rectangle((int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).X + 1, (int)camera.WorldToScreen(selectedTile.X, selectedTile.Y).Y + 1, 32 * (int)camera.Zoom, 32 * (int)camera.Zoom);
+            }
+            else {
+                pos = new Rectangle(0, 0, 0, 0);
+            }
+                
         }
     }
 
@@ -191,17 +230,18 @@ namespace LudumDare41_Game.UI {
 
         public new void Load(ContentManager c) {
             manaTutorial = c.Load<Texture2D>("Tutorial/mana");
+            
         }
 
         /*public new void Update(GameTime gt, GameWindow w) {
         } use later? */
 
         public new void Draw(SpriteBatch sb) {
-            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10 + 1, 15), Color.Black);
-            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10, 15 + 1), Color.Black);
-            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10 - 1, 15), Color.Black);
-            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10, 15 - 1), Color.Black);
-            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent, new Vector2(10, 15), Color.White);
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent + "/" + Cards.manaCostCardDraw, new Vector2(10 + 1, 15), Color.Black);
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent + "/" + Cards.manaCostCardDraw, new Vector2(10, 15 + 1), Color.Black);
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent + "/" + Cards.manaCostCardDraw, new Vector2(10 - 1, 15), Color.Black);
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent + "/" + Cards.manaCostCardDraw, new Vector2(10, 15 - 1), Color.Black);
+            sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent + "/" + Cards.manaCostCardDraw, new Vector2(10, 15), Color.White);
 
             if (Game1.isTutorial)
                 sb.Draw(manaTutorial, new Rectangle(100, 45, manaTutorial.Width, manaTutorial.Height), Color.White);
@@ -229,9 +269,6 @@ namespace LudumDare41_Game.UI {
             bool newRoundState = !waveManager.IsWaveOngoing();
 
             if (!Game1.isTutorial) {
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
-                    newRoundState = true;
-
                 if (newRoundState && !oldRoundState) {
                     waveCountdown.ResetAnimation();
                     showCountdown = true;
@@ -245,13 +282,12 @@ namespace LudumDare41_Game.UI {
                     waveCountdown.updateAnimation(gt);
                     countdown = waveManager.SecondsTillNextWave();
                 }
-            }
-            else {
+            } else {
                 showCountdown = true;
+                newRoundState = true;
             }
 
-            pos = new Rectangle((w.ClientBounds.Width / 2) - 32, 80, 32, 64);
-
+            pos = new Rectangle((int)Game1.camera.WorldToScreen(320, 80).X, (int)Game1.camera.WorldToScreen(400, 80).Y, 32, 64);
             oldRoundState = newRoundState;
         }
 

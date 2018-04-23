@@ -187,8 +187,6 @@ namespace LudumDare41_Game.Entities {
             noEnemiesLeft = entityManager.Entities.Count == 0 ? true : false;
             currentWave.Update(gameTime);
 
-            System.Console.WriteLine(lastTime);
-
             if (noEnemiesLeft && waveInstructionsFinished) {
 
                 isWaveOngoing = false;
