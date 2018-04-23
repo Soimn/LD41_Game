@@ -1,4 +1,5 @@
-﻿using LudumDare41_Game.Graphics;
+﻿using LudumDare41_Game.Entities;
+using LudumDare41_Game.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -224,8 +225,8 @@ namespace LudumDare41_Game.UI {
             waveCounterTutorial = c.Load<Texture2D>("Tutorial/Waves");
         }
         
-        public new void Update(GameTime gt, GameWindow w) {
-            bool newRoundState = false; //hent fra Simon <- her skal jeg se om det er en runde som pågår. bool
+        public new void Update(GameTime gt, GameWindow w, WaveManager waveManager) {
+            bool newRoundState = waveManager.IsWaveOngoing();
 
             if (!Game1.isTutorial) {
                 if (Keyboard.GetState().IsKeyDown(Keys.Enter))
@@ -242,7 +243,7 @@ namespace LudumDare41_Game.UI {
 
                 if (showCountdown) {
                     waveCountdown.updateAnimation(gt);
-                    //countdown = ?  oppdatere counter her fra WaveManager?
+                    countdown = waveManager.SecondsTillNextWave();
                 }
             }
             else {

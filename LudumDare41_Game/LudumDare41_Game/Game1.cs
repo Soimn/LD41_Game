@@ -94,6 +94,8 @@ namespace LudumDare41_Game {
             entityManager = new EntityManager(coordHandler, contentManager, waveManager);
             towerManager = new TowerManager(coordHandler, contentManager, entityManager, this);
 
+            waveManager.Init(entityManager);
+
             #endregion
 
             menu = new Menu();
@@ -150,8 +152,18 @@ namespace LudumDare41_Game {
                                 }
                             }
 
-                            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            var keyboardState = Keyboard.GetState();
+            if (!isPaused) {
+                switch (currentState) {
+                    case GameStates.MENU: //vente med denne til slutt
+                        menu.Update(gameTime);
+                        break;
+
+                    case GameStates.INGAME:
+
+                        waveManager.Update(gameTime);
+
+                        var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        var keyboardState = Keyboard.GetState();
 
                             const float cameraSpeed = 500f;
 

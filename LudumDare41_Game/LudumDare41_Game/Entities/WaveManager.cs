@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace LudumDare41_Game.Entities {
     class WaveManager {
 
-        public const float TimeBetweenEnemySpawn = 0.5f;
+        public const float TimeBetweenEnemySpawn = 1;
 
         private List<PathPoint> path = new List<PathPoint> {
                 new PathPoint(320, 100),
@@ -26,33 +26,27 @@ namespace LudumDare41_Game.Entities {
         public List<PathPoint> Path { get { return path; } }
 
         private EntityManager entityManager;
+        public Round Round { get; private set; }
 
         public void Init (EntityManager _entityManager) {
             entityManager = _entityManager;
+
+            Round = new Round(new List<Wave> { CreateWave(1, 3, 0, 0, 0), CreateWave (1, 10, 0, 0), CreateWave (2, 15, 0, 0)}, entityManager);
         }
 
         public void Update (GameTime gameTime) {
-            
+            Round.Update(gameTime);
         }
 
-        public Round CreateRound (int grade = 1) {
-
-            Round round = new Round();
-
-            switch (grade) {
-                case 1:
-                    for (int i = 0; i < 10; i++) {
-                        round.waves.Add(CreateWave(1, 0, 0, entityManager.Random.Next(5, 20), 0));
-                    }
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-
-            return round;
+        public bool IsWaveOngoing () {
+            return Round.IsWaveOngoing;
         }
 
-        public Wave CreateWave (int pauseGrade = 1, int numOfHeavyEnemies = 0, int numOfMediumEnemies = 0, int numOfLightEnemies = 1, int numOfBosses = 0) {
+        public int SecondsTillNextWave () {
+            return 10 - (int)Round.timeToWait;
+        }
+
+        public Wave CreateWave (int pauseGrade = 1, int numOfLightEnemies = 1, int numOfMediumEnemies = 0, int numOfHeavyEnemies = 0, int numOfBosses = 0) {
             List<Type> temp = new List<Type>();
 
             for (int i = 0; i < numOfLightEnemies; i++) {
@@ -101,7 +95,7 @@ namespace LudumDare41_Game.Entities {
             }
 
 
-            return new Wave(temp, entityManager, new WaveInstructor(temp, pauses).CreateInstructions(), numOfBosses != 0 ? 4 : (numOfHeavyEnemies != 0 ? 3 : (numOfMediumEnemies != 0 ? 2 : 1)));
+            return new Wave(temp, entityManager, new WaveInstructor(temp, pauses).CreateInstructions(), numOfBosses != 0 ? 4 : (numOfHeavyEnemies != 0 ? 3 : (numOfMediumEnemies != 0 ? 2 : 1)), this);
         }
     }
 
@@ -114,24 +108,37 @@ namespace LudumDare41_Game.Entities {
         public int HighestGrade { get { return highestGrade; } }
 
         private EntityManager entityManager;
+        private WaveManager waveManager;
 
         private Stack<WaveInstruction> waveInstructions;
         private WaveInstruction currentInstruction;
         private float timeToWait = 0;
         private float timeSinceLastWait = 0;
+        private Round round;
 
-        public Wave (List<Type> _enemies, EntityManager _entityManager, Stack<WaveInstruction> _waveInstructions, int _highestGrade) {
+        private bool isAlive;
+
+        public Wave (List<Type> _enemies, EntityManager _entityManager, Stack<WaveInstruction> _waveInstructions, int _highestGrade, WaveManager _waveManager) {
             enemies = _enemies;
             totalAmntOfEnemies = enemies.Count;
             entityManager = _entityManager;
             waveInstructions = _waveInstructions;
             highestGrade = _highestGrade;
+            waveManager = _waveManager;
+            isAlive = true;
         }
 
         public void Update (GameTime gameTime) {
 
             if (timeSinceLastWait > timeToWait) {
-                NextInstruction();
+                if (waveInstructions.Count != 0)
+                    NextInstruction();
+                else if (isAlive){
+                    waveManager.Round.WaveInstructionFinished();
+                    isAlive = false;
+                }
+                    
+                timeSinceLastWait = 0;
             }
 
             timeSinceLastWait += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -140,19 +147,66 @@ namespace LudumDare41_Game.Entities {
         public void NextInstruction () {
             currentInstruction = waveInstructions.Pop();
 
-            if (currentInstruction.IsPause) {
-                timeToWait = currentInstruction.WaitDuration;
-            }
-            else {
+            if (!currentInstruction.IsPause) {
                 Object[] args = { entityManager };
 
                 entityManager.SpawnWaveEntity((Entity)Activator.CreateInstance(currentInstruction.Entity, args));
             }
+
+            timeToWait = WaveManager.TimeBetweenEnemySpawn + entityManager.Random.Next(0, 1);
         }
     }
 
-    struct Round {
+    class Round {
         public List<Wave> waves;
+        private Wave currentWave;
+        private EntityManager entityManager;
+        private bool isWaveDone = true;
+        public bool IsWaveOngoing { get { return !isWaveDone; } }
+        public float timeToWait = 0;
+        private float lastTime = 0;
+        private bool noEnemiesLeft = false;
+        private bool waveInstructionsFinished = false;
+        private int enemyCount;
+
+
+        public Round (List<Wave> _waves, EntityManager _entityManager) {
+            waves = _waves;
+            entityManager = _entityManager;
+        }
+
+        public void NextWave () {
+            if (waves.Count != 0)
+                currentWave = waves[0];
+        }
+
+        public void Update (GameTime gameTime) {
+            if (currentWave == null)
+                NextWave();
+
+            noEnemiesLeft = entityManager.Entities.Count == 0 ? true : false;
+            currentWave.Update(gameTime);
+
+            System.Console.WriteLine(lastTime);
+
+            if ((noEnemiesLeft && waveInstructionsFinished) && lastTime > timeToWait) {
+                if (waves.Count != 0) {
+                    NextWave();
+                    waveInstructionsFinished = false;
+                    timeToWait = 0;
+                }
+            }
+
+            if (noEnemiesLeft)
+                lastTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+
+        public void WaveInstructionFinished () {
+            waveInstructionsFinished = true;
+            lastTime = 0;
+            timeToWait = 10;
+            waves.RemoveAt(0);
+        }
     }
 
     class WaveInstructor {
@@ -163,7 +217,7 @@ namespace LudumDare41_Game.Entities {
             entities = _enemies;
 
             for (int i = 0; i < entities.Count + pauses.Count; i++) {
-                timeInstructions[i] = 1;
+                timeInstructions.Add(1);
             }
 
             for (int i = 0; i < pauses.Count; i++) {
