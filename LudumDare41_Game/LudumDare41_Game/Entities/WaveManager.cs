@@ -43,7 +43,7 @@ namespace LudumDare41_Game.Entities {
         }
 
         public int SecondsTillNextWave () {
-            return 10 - (int)Round.timeToWait;
+            return 10 - (int)Round.lastTime;
         }
 
         public Wave CreateWave (int pauseGrade = 1, int numOfLightEnemies = 1, int numOfMediumEnemies = 0, int numOfHeavyEnemies = 0, int numOfBosses = 0) {
@@ -163,8 +163,8 @@ namespace LudumDare41_Game.Entities {
         private EntityManager entityManager;
         private bool isWaveDone = true;
         public bool IsWaveOngoing { get { return !isWaveDone; } }
-        public float timeToWait = 0;
-        private float lastTime = 0;
+        private float timeToWait = 0;
+        public float lastTime = 0;
         private bool noEnemiesLeft = false;
         private bool waveInstructionsFinished = false;
         private int enemyCount;
