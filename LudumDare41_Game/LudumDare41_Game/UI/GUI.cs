@@ -226,7 +226,7 @@ namespace LudumDare41_Game.UI {
         }
         
         public void ActualUpdate(GameTime gt, GameWindow w, WaveManager waveManager) {
-            bool newRoundState = waveManager.IsWaveOngoing();
+            bool newRoundState = !waveManager.IsWaveOngoing();
 
             if (!Game1.isTutorial) {
                 if (Keyboard.GetState().IsKeyDown(Keys.Enter))

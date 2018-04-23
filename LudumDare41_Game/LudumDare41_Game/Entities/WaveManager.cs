@@ -31,7 +31,7 @@ namespace LudumDare41_Game.Entities {
         public void Init (EntityManager _entityManager) {
             entityManager = _entityManager;
 
-            Round = new Round(new List<Wave> { CreateWave(1, 3, 0, 0, 0), CreateWave (1, 10, 0, 0), CreateWave (2, 15, 0, 0)}, entityManager);
+            Round = new Round(new List<Wave> { CreateWave(1, 3, 0, 0, 0), CreateWave (1, 10, 0, 0), CreateWave (1, 15, 0, 0)}, entityManager);
         }
 
         public void Update (GameTime gameTime) {
@@ -161,8 +161,8 @@ namespace LudumDare41_Game.Entities {
         public List<Wave> waves;
         private Wave currentWave;
         private EntityManager entityManager;
-        private bool isWaveDone = true;
-        public bool IsWaveOngoing { get { return !isWaveDone; } }
+        private bool isWaveOngoing = true;
+        public bool IsWaveOngoing { get { return isWaveOngoing; } }
         private float timeToWait = 0;
         public float lastTime = 0;
         private bool noEnemiesLeft = false;
@@ -189,11 +189,17 @@ namespace LudumDare41_Game.Entities {
 
             System.Console.WriteLine(lastTime);
 
-            if ((noEnemiesLeft && waveInstructionsFinished) && lastTime > timeToWait) {
-                if (waves.Count != 0) {
-                    NextWave();
-                    waveInstructionsFinished = false;
-                    timeToWait = 0;
+            if (noEnemiesLeft && waveInstructionsFinished) {
+
+                isWaveOngoing = false;
+
+                if (lastTime > timeToWait) {
+                    if (waves.Count != 0) {
+                        NextWave();
+                        waveInstructionsFinished = false;
+                        timeToWait = 0;
+                        isWaveOngoing = true;
+                    }
                 }
             }
 
