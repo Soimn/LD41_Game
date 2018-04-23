@@ -25,6 +25,10 @@ namespace LudumDare41_Game.Entities {
         private EntitySize size;
         public override EntitySize Size { get { return size; } }
 
+        private EntityAttackPower entityAttackPower;
+        public override EntityAttackPower AttackPower { get { return entityAttackPower; } }
+        private EntityAttackSpeed entityAttackSpeed;
+        public override EntityAttackSpeed AttackSpeed { get { return entityAttackSpeed; } }
 
         private Animation idle;
 
@@ -60,6 +64,9 @@ namespace LudumDare41_Game.Entities {
 
             initHealth = EntityHealth.low;
             currentHealth = (int)initHealth;
+
+            entityAttackPower = EntityAttackPower.medium;
+            entityAttackSpeed = EntityAttackSpeed.medium;
         }
 
         public override void Update (GameTime gameTime) {
