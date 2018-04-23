@@ -254,7 +254,7 @@ namespace LudumDare41_Game.UI {
             sb.DrawString(Card.healthFont, "Mana: " + Cards.manaCurrent + "/" + Cards.manaCostCardDraw, new Vector2(10, 15), Color.White);
 
             if (Game1.isTutorial)
-                sb.Draw(manaTutorial, new Rectangle(100, 45, manaTutorial.Width, manaTutorial.Height), Color.White);
+                sb.Draw(manaTutorial, new Rectangle(115, 45, manaTutorial.Width, manaTutorial.Height), Color.White);
         }
     }
 
