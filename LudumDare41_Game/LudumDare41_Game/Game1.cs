@@ -1,4 +1,4 @@
-using  LudumDare41_Game.UI;
+using LudumDare41_Game.UI;
 using LudumDare41_Game.Content;
 using LudumDare41_Game.Towers;
 using LudumDare41_Game.World;
@@ -19,7 +19,7 @@ namespace LudumDare41_Game {
 
         Texture2D tutorial;
 
-        public enum GameStates { MENU, INGAME}; //gamestates, legg til om vi trenger
+        public enum GameStates { MENU, INGAME }; //gamestates, legg til om vi trenger
         bool isPaused = false;
         public static GameStates currentState = GameStates.MENU;
 
@@ -63,7 +63,7 @@ namespace LudumDare41_Game {
         public const int screenWidth = 1920, screenHeight = 1080;
 
 
-        public Game1 () {
+        public Game1() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -73,16 +73,16 @@ namespace LudumDare41_Game {
 
         }
 
-        protected override void Initialize () {
+        protected override void Initialize() {
             camera = new Camera2D(GraphicsDevice) {
                 Zoom = 2f
             };
 
             level01 = new Level("level01", GraphicsDevice);
-          
+
             gui = new GUI(GraphicsDevice, Content);
             cards = new Cards();
-            
+
 
             Window.Title = "Ludum Dare 41: Card game tower defence";
 
@@ -93,8 +93,6 @@ namespace LudumDare41_Game {
             waveManager = new WaveManager();
             entityManager = new EntityManager(coordHandler, contentManager, waveManager);
             towerManager = new TowerManager(coordHandler, contentManager, entityManager, this);
-
-            waveManager.Init(entityManager);
 
             #endregion
 
@@ -107,7 +105,7 @@ namespace LudumDare41_Game {
             base.Initialize();
         }
 
-        protected override void LoadContent () {
+        protected override void LoadContent() {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             level01.Load(Content);
@@ -121,11 +119,11 @@ namespace LudumDare41_Game {
             menu.Load(Content);
         }
 
-        protected override void UnloadContent () {
+        protected override void UnloadContent() {
             // TODO: Unload any non ContentManager content here
         }
 
-        protected override void Update (GameTime gameTime) {
+        protected override void Update(GameTime gameTime) {
             KeyboardState newState = Keyboard.GetState();
 
             if (!isPaused) {
@@ -136,7 +134,7 @@ namespace LudumDare41_Game {
 
                     case GameStates.INGAME:
                         level01.Update(gameTime);
-                        
+
                         gui.Update(gameTime, Window, camera);
                         cards.Update(gameTime, Window, isTutorial);
 
@@ -152,25 +150,15 @@ namespace LudumDare41_Game {
                                 }
                             }
 
-            if (!isPaused) {
-                switch (currentState) {
-                    case GameStates.MENU: //vente med denne til slutt
-                        menu.Update(gameTime);
-                        break;
-
-                    case GameStates.INGAME:
-
-                        waveManager.Update(gameTime);
-
-                        var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        var keyboardState = Keyboard.GetState();
+                            var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            var keyboardState = Keyboard.GetState();
 
                             const float cameraSpeed = 500f;
 
                             var moveDirection = Vector2.Zero;
 
                             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up)) {
-                                if(!(camera.ScreenToWorld(0f, 0f).Y < Vector2.Zero.Y)) {
+                                if (!(camera.ScreenToWorld(0f, 0f).Y < Vector2.Zero.Y)) {
                                     moveDirection -= Vector2.UnitY;
                                 }
                             }
@@ -193,7 +181,7 @@ namespace LudumDare41_Game {
                                 }
                             }
 
-                            if((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels + 10)) {
+                            if ((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels + 10)) {
                                 camera.Move(new Vector2(-1, 0) * 10000 * deltaSeconds); //Nei Simon dette gikk ikke så bra, klarte det i sta før du snakket om det men nå er det helt fillerusk i hue mitt
                             }
 
@@ -244,7 +232,7 @@ namespace LudumDare41_Game {
 
                             #endregion
 
-                            if(Mouse.GetState().RightButton.Equals(ButtonState.Pressed) && cardHasBeenHeld) {
+                            if (Mouse.GetState().RightButton.Equals(ButtonState.Pressed) && cardHasBeenHeld) {
                                 towerManager.DestroyPreviewTower(previewTower);
                                 previewTowerInstantiated = false;
                                 previewTower = null;
@@ -253,8 +241,9 @@ namespace LudumDare41_Game {
                                 Cards.returnToHand = true;
                                 Cards.anyHeld = false;
                                 Cards.heldCard = null;
-                            } else if (Cards.returnToHand 
-                                && Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
+                            }
+                            else if (Cards.returnToHand
+                              && Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
                                 Cards.cardsInHand.Add(Cards.previouslyHeldCard);
                                 Cards.returnToHand = false;
                             }
@@ -295,7 +284,7 @@ namespace LudumDare41_Game {
             base.Update(gameTime);
         }
 
-        protected override void Draw (GameTime gameTime) {
+        protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(new Color(133, 167, 94));
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
@@ -319,20 +308,20 @@ namespace LudumDare41_Game {
 
                     //UI
                     spriteBatch.Begin(samplerState: SamplerState.PointWrap);
-                    if(isTutorial)
+                    if (isTutorial)
                         spriteBatch.Draw(tutorialStart, new Rectangle((Window.ClientBounds.Width / 2) - (tutorialStart.Width / 2), (Window.ClientBounds.Height / 2) - (tutorialStart.Height / 2), tutorialStart.Width, tutorialStart.Height), Color.White);
 
                     gui.Draw(spriteBatch, Window);
                     cards.Draw(spriteBatch, Window);
                     #region // DEBUG //
-                    spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
+                    spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000 / gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
 
                     if (isPaused) {
                         string pausedMsg = "Game paused, press ESC to resume.";
                         spriteBatch.DrawString(debugFont, pausedMsg, new Vector2(Window.ClientBounds.Width / 2 - debugFont.MeasureString(pausedMsg).X / 2, Window.ClientBounds.Height / 2), Color.Black);
                     }
 
-                    
+
                     spriteBatch.End();
                     #endregion
                     break;
