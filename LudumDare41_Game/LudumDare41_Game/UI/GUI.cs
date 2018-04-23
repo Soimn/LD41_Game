@@ -71,7 +71,7 @@ namespace LudumDare41_Game.UI {
             manaHandler.Load(c);
         }
 
-        public void Update(GameTime gt, GameWindow w, Camera2D camera) {
+        public void Update(GameTime gt, GameWindow w, Camera2D camera, WaveManager wave) {
             foreach (GUIElement e in elements) {
                 e.Update(gt, w);
             }
@@ -79,7 +79,7 @@ namespace LudumDare41_Game.UI {
             cardSelector.Update(gt, w);
             worldSelector.Update(gt, w, camera);
             //manaHandler.Update(gt, w);
-            waveInfo.Update(gt, w);
+            waveInfo.ActualUpdate(gt, w, wave);
         }
 
         public void Draw(SpriteBatch sb, GameWindow w) {
@@ -225,7 +225,7 @@ namespace LudumDare41_Game.UI {
             waveCounterTutorial = c.Load<Texture2D>("Tutorial/Waves");
         }
         
-        public new void Update(GameTime gt, GameWindow w, WaveManager waveManager) {
+        public void ActualUpdate(GameTime gt, GameWindow w, WaveManager waveManager) {
             bool newRoundState = waveManager.IsWaveOngoing();
 
             if (!Game1.isTutorial) {

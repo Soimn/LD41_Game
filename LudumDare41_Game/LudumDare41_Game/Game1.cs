@@ -135,7 +135,7 @@ namespace LudumDare41_Game {
                     case GameStates.INGAME:
                         level01.Update(gameTime);
 
-                        gui.Update(gameTime, Window, camera);
+                        gui.Update(gameTime, Window, camera, waveManager);
                         cards.Update(gameTime, Window, isTutorial);
 
                         home.Update(gameTime);
