@@ -46,32 +46,34 @@ namespace LudumDare41_Game.UI {
             }
         }
 
-        public void Update(GameTime gt, GameWindow w) {
+        public void Update(GameTime gt, GameWindow w, bool isTutorial) {
             newState = Keyboard.GetState();
             newMouseState = Mouse.GetState();
 
             int i = 0;
             foreach(HandCard card in cardsInHand.ToArray()) {
-                if(Mouse.GetState().LeftButton.Equals(ButtonState.Pressed)
-                    && Mouse.GetState().Position.X > ((w.ClientBounds.Width / 2) - 100) + (220 * i) - (110 * (cardsInHand.Count - 1))
-                    && Mouse.GetState().Position.X < ((w.ClientBounds.Width / 2) - 100) + (220 * i) - (110 * (cardsInHand.Count - 1)) + 200
-                    && Mouse.GetState().Position.Y > w.ClientBounds.Height - 360
-                    && Mouse.GetState().Position.Y < w.ClientBounds.Height - 10
-                    && !anyHeld
-                    && CardSelector.isActive
-                    && !returnToHand) {
-                    card.isHeld = true;
-                    card.alpha = 0.4f;
-                    anyHeld = true;
-                    heldCard = card;
-                    previouslyHeldCard = heldCard;
-                }
+                if (!isTutorial) { 
+                    if(Mouse.GetState().LeftButton.Equals(ButtonState.Pressed)
+                        && Mouse.GetState().Position.X > ((w.ClientBounds.Width / 2) - 100) + (220 * i) - (110 * (cardsInHand.Count - 1))
+                        && Mouse.GetState().Position.X < ((w.ClientBounds.Width / 2) - 100) + (220 * i) - (110 * (cardsInHand.Count - 1)) + 200
+                        && Mouse.GetState().Position.Y > w.ClientBounds.Height - 360
+                        && Mouse.GetState().Position.Y < w.ClientBounds.Height - 10
+                        && !anyHeld
+                        && CardSelector.isActive
+                        && !returnToHand) {
+                        card.isHeld = true;
+                        card.alpha = 0.4f;
+                        anyHeld = true;
+                        heldCard = card;
+                        previouslyHeldCard = heldCard;
+                    }
 
-                if (Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
-                    card.isHeld = false;
-                    anyHeld = false;
-                    heldCard = null;
-                    card.alpha = 1f;
+                    if (Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
+                        card.isHeld = false;
+                        anyHeld = false;
+                        heldCard = null;
+                        card.alpha = 1f;
+                    }
                 }
 
                 if (returnToHand) {
@@ -84,6 +86,7 @@ namespace LudumDare41_Game.UI {
                     card.alpha = 1f;
                 }
 
+                
                 if (card.isHeld) {
                     card.pos = new Vector2(card.pos.X + (newMouseState.Position.X - oldMouseState.Position.X), card.pos.Y + (newMouseState.Position.Y - oldMouseState.Position.Y));
                 }

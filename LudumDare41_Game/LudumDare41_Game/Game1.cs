@@ -17,11 +17,14 @@ namespace LudumDare41_Game {
 
         KeyboardState oldState;
 
-        enum GameStates { MENU, INGAME}; //gamestates, legg til om vi trenger
+        Texture2D tutorial;
+
+        public enum GameStates { MENU, INGAME}; //gamestates, legg til om vi trenger
         bool isPaused = false;
-        GameStates currentState = GameStates.INGAME;
+        public static GameStates currentState = GameStates.MENU;
 
         public static Camera2D camera { get; private set; }
+        public static bool isTutorial { get; set; }
 
         Level level01;
       
@@ -33,6 +36,7 @@ namespace LudumDare41_Game {
         Home home;
 
         Menu menu;
+
         #region // Towers //
 
         private TowerManager towerManager;
@@ -47,6 +51,9 @@ namespace LudumDare41_Game {
         #endregion
 
         private WaveManager waveManager;
+
+
+        Texture2D tutorialStart;
 
         public bool DebugMode { get; private set; }
         private float lastTime, cooldown = 0.5f;
@@ -91,6 +98,10 @@ namespace LudumDare41_Game {
 
             menu = new Menu();
 
+            isTutorial = true;
+            tutorial = Content.Load<Texture2D>("GUI/cardSel");
+            tutorialStart = Content.Load<Texture2D>("Tutorial/start");
+
             base.Initialize();
         }
 
@@ -114,14 +125,30 @@ namespace LudumDare41_Game {
 
         protected override void Update (GameTime gameTime) {
             KeyboardState newState = Keyboard.GetState();
-            if(newState.IsKeyDown(Keys.Escape) && oldState.IsKeyUp(Keys.Escape)) { 
-                if (isPaused) {
-                    isPaused = false;
-                }
-                else {
-                    isPaused = true;
-                }
-            }
+
+            if (!isPaused) {
+                switch (currentState) {
+                    case GameStates.MENU: //vente med denne til slutt
+                        menu.Update(gameTime);
+                        break;
+
+                    case GameStates.INGAME:
+                        level01.Update(gameTime);
+                        
+                        gui.Update(gameTime, Window, camera);
+                        cards.Update(gameTime, Window, isTutorial);
+
+                        home.Update(gameTime);
+
+                        if (!isTutorial) {
+                            if (newState.IsKeyDown(Keys.Escape) && oldState.IsKeyUp(Keys.Escape)) {
+                                if (isPaused) {
+                                    isPaused = false;
+                                }
+                                else {
+                                    isPaused = true;
+                                }
+                            }
 
             if (!isPaused) {
                 switch (currentState) {
@@ -136,112 +163,123 @@ namespace LudumDare41_Game {
                         var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
                         var keyboardState = Keyboard.GetState();
 
-                        const float cameraSpeed = 500f;
+                            const float cameraSpeed = 500f;
 
-                        var moveDirection = Vector2.Zero;
+                            var moveDirection = Vector2.Zero;
 
-                        if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up)) {
-                            if(!(camera.ScreenToWorld(0f, 0f).Y < Vector2.Zero.Y)) {
-                                moveDirection -= Vector2.UnitY;
+                            if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up)) {
+                                if(!(camera.ScreenToWorld(0f, 0f).Y < Vector2.Zero.Y)) {
+                                    moveDirection -= Vector2.UnitY;
+                                }
                             }
-                        }
 
-                        if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down)) {
-                            if (!(camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).Y > level01.map.HeightInPixels)) {
-                                moveDirection += Vector2.UnitY;
+                            if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down)) {
+                                if (!(camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).Y > level01.map.HeightInPixels)) {
+                                    moveDirection += Vector2.UnitY;
+                                }
                             }
-                        }
 
-                        if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left)) {
-                            if (!(camera.ScreenToWorld(0, 0).X < Vector2.Zero.X)) {
-                                moveDirection -= Vector2.UnitX;
+                            if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left)) {
+                                if (!(camera.ScreenToWorld(0, 0).X < Vector2.Zero.X)) {
+                                    moveDirection -= Vector2.UnitX;
+                                }
                             }
-                        }
 
-                        if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right)) {
-                            if (!(camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels)) {
-                                moveDirection += Vector2.UnitX;
+                            if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right)) {
+                                if (!(camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels)) {
+                                    moveDirection += Vector2.UnitX;
+                                }
                             }
-                        }
 
-                        if((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels + 10)) {
-                            camera.Move(new Vector2(-1, 0) * 10000 * deltaSeconds); //Nei Simon dette gikk ikke så bra, klarte det i sta før du snakket om det men nå er det helt fillerusk i hue mitt
-                        }
-
-                        if ((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).Y > level01.map.HeightInPixels + 10)) {
-                            camera.Move(new Vector2(0, -1) * 10000 * deltaSeconds);
-                        }
-
-                        if (moveDirection != Vector2.Zero) {
-                            moveDirection.Normalize();
-                            camera.Move(moveDirection * cameraSpeed * deltaSeconds);
-                        }
-
-                        level01.Update(gameTime);
-
-                        
-
-                        gui.Update(gameTime, Window, camera);
-                        cards.Update(gameTime, Window);
-
-                        #region // Towers //
-
-                        HandCard heldCard = cards.CurrentlyHeldCard();
-
-                        if (heldCard != null && !cardHasBeenHeld && !previewTowerInstantiated) {
-                            cardHasBeenHeld = true;
-                            towerManager.CreatePreviewTower(heldCard.referenceCard.TowerID, new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y), out previewTower);
-                            previewTowerInstantiated = true;
-                        }
-
-                        else if (heldCard != null && previewTowerInstantiated)
-                            previewTower.MoveTo(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
-
-                        else if (heldCard == null && cardHasBeenHeld) {
-                            if (!towerManager.InvalidCoord(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y))) {
-                                towerManager.DestroyPreviewTower(previewTower);
-                                previewTowerInstantiated = false;
-                                previewTower = null;
-                                towerManager.SpawnTower(new MageTower(towerManager, contentManager, entityManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
-                                cardHasBeenHeld = false;
-
-                                Cards.cardsInHand.Remove(Cards.previouslyHeldCard);
+                            if((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).X > level01.map.WidthInPixels + 10)) {
+                                camera.Move(new Vector2(-1, 0) * 10000 * deltaSeconds); //Nei Simon dette gikk ikke så bra, klarte det i sta før du snakket om det men nå er det helt fillerusk i hue mitt
                             }
-                            else {
+
+                            if ((camera.ScreenToWorld(Window.ClientBounds.Width, Window.ClientBounds.Height).Y > level01.map.HeightInPixels + 10)) {
+                                camera.Move(new Vector2(0, -1) * 10000 * deltaSeconds);
+                            }
+
+                            if (moveDirection != Vector2.Zero) {
+                                moveDirection.Normalize();
+                                camera.Move(moveDirection * cameraSpeed * deltaSeconds);
+                            }
+
+
+                            #region // Towers //
+
+                            HandCard heldCard = cards.CurrentlyHeldCard();
+
+                            if (heldCard != null && !cardHasBeenHeld && !previewTowerInstantiated) {
+                                cardHasBeenHeld = true;
+                                towerManager.CreatePreviewTower(heldCard.referenceCard.TowerID, new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y), out previewTower);
+                                previewTowerInstantiated = true;
+                            }
+
+                            else if (heldCard != null && previewTowerInstantiated)
+                                previewTower.MoveTo(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
+
+                            else if (heldCard == null && cardHasBeenHeld) {
+                                if (!towerManager.InvalidCoord(new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y))) {
+                                    towerManager.DestroyPreviewTower(previewTower);
+                                    previewTowerInstantiated = false;
+                                    previewTower = null;
+                                    towerManager.SpawnTower(new MageTower(towerManager, contentManager, entityManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
+                                    cardHasBeenHeld = false;
+
+                                    Cards.cardsInHand.Remove(Cards.previouslyHeldCard);
+                                }
+                                else {
+                                    towerManager.DestroyPreviewTower(previewTower);
+                                    previewTowerInstantiated = false;
+                                    previewTower = null;
+                                    cardHasBeenHeld = false; // return card to hand
+                                }
+                            }
+
+                            towerManager.Update(gameTime);
+                            entityManager.Update(gameTime);
+
+
+                            #endregion
+
+                            if(Mouse.GetState().RightButton.Equals(ButtonState.Pressed) && cardHasBeenHeld) {
                                 towerManager.DestroyPreviewTower(previewTower);
                                 previewTowerInstantiated = false;
                                 previewTower = null;
                                 cardHasBeenHeld = false; // return card to hand
+                                Cards.cardsInHand.Remove(Cards.previouslyHeldCard);
+                                Cards.returnToHand = true;
+                                Cards.anyHeld = false;
+                                Cards.heldCard = null;
+                            } else if (Cards.returnToHand 
+                                && Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
+                                Cards.cardsInHand.Add(Cards.previouslyHeldCard);
+                                Cards.returnToHand = false;
                             }
+
+                            if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
+                                entityManager.SpawnEntity(new EnemyEntity(entityManager), coordHandler.ScreenToWorld((new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y))), waveManager.Path);
+
                         }
+                        else {
+                            if (newState.IsKeyDown(Keys.Escape) && oldState.IsKeyUp(Keys.Escape)) {
+                                isTutorial = false;
+                            }
 
-                        towerManager.Update(gameTime);
-                        entityManager.Update(gameTime);
-
-
-                        #endregion
-
-                        if(Mouse.GetState().RightButton.Equals(ButtonState.Pressed) && cardHasBeenHeld) {
-                            towerManager.DestroyPreviewTower(previewTower);
-                            previewTowerInstantiated = false;
-                            previewTower = null;
-                            cardHasBeenHeld = false; // return card to hand
-                            Cards.cardsInHand.Remove(Cards.previouslyHeldCard);
-                            Cards.returnToHand = true;
-                            Cards.anyHeld = false;
-                            Cards.heldCard = null;
-                        } else if (Cards.returnToHand 
-                            && Mouse.GetState().LeftButton.Equals(ButtonState.Released)) {
-                            Cards.cardsInHand.Add(Cards.previouslyHeldCard);
-                            Cards.returnToHand = false;
+                            camera.Position = new Vector2(-320, -150);
                         }
-
-                        if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
-                            entityManager.SpawnEntity(new EnemyEntity(entityManager), coordHandler.ScreenToWorld((new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y))), waveManager.Path);
-
-                        home.Update(gameTime);
-
+                        
                         break;
+                }
+            }
+            else {
+                if (newState.IsKeyDown(Keys.Escape) && oldState.IsKeyUp(Keys.Escape)) {
+                    if (isPaused) {
+                        isPaused = false;
+                    }
+                    else {
+                        isPaused = true;
+                    }
                 }
             }
             oldState = newState;
@@ -279,10 +317,12 @@ namespace LudumDare41_Game {
                     spriteBatch.End();
 
                     //UI
-                    spriteBatch.Begin(samplerState: SamplerState.PointWrap); 
-                    gui.Draw(spriteBatch);
-                    cards.Draw(spriteBatch, Window);
+                    spriteBatch.Begin(samplerState: SamplerState.PointWrap);
+                    if(isTutorial)
+                        spriteBatch.Draw(tutorialStart, new Rectangle((Window.ClientBounds.Width / 2) - (tutorialStart.Width / 2), (Window.ClientBounds.Height / 2) - (tutorialStart.Height / 2), tutorialStart.Width, tutorialStart.Height), Color.White);
 
+                    gui.Draw(spriteBatch, Window);
+                    cards.Draw(spriteBatch, Window);
                     #region // DEBUG //
                     spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000/gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
 
