@@ -119,18 +119,6 @@
 /processorParam:TextureFormat=Color
 /build:Entities/ExampleEntity/ExampleEnemy.png
 
-#begin Towers/Debug/Circle.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Towers/Debug/Circle.png
-
 #begin GUI/Menu/title.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -430,4 +418,28 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Tutorial/drawCard.png
+
+#begin Towers/BombTower/BombTower_AttackSpritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Towers/BombTower/BombTower_AttackSpritesheet.png
+
+#begin Towers/BombTower/BombTower_IdleSpritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Towers/BombTower/BombTower_IdleSpritesheet.png
 

@@ -31,7 +31,7 @@ namespace LudumDare41_Game.Entities {
         public void Init (EntityManager _entityManager) {
             entityManager = _entityManager;
 
-            Round = new Round(new List<Wave> { CreateWave(), CreateWave(1, 1000, 100, 0, 0, 0.5f), CreateWave(1, 3, 0, 0, 0), CreateWave(1, 10, 0, 0), CreateWave(1, 15, 0, 0, 0, 0.5f), CreateWave(1, 0, 1, 0, 0, 1), CreateWave(1, 30, 5, 0, 0, 0.5f) }, entityManager);
+            Round = new Round(new List<Wave> { CreateWave(), CreateWave(1, 3, 0, 0, 0), CreateWave(1, 10, 0, 0), CreateWave(1, 15, 0, 0, 0, 0.5f), CreateWave(1, 0, 1, 0, 0, 1), CreateWave(1, 30, 5, 0, 0, 0.5f), CreateWave(1, 1000, 100, 0, 0, 0.5f) }, entityManager);
         }
 
         public void Update (GameTime gameTime) {

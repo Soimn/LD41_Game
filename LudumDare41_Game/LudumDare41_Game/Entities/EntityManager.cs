@@ -39,7 +39,7 @@ namespace LudumDare41_Game.Entities {
             for (int i = 0; i < Entities.Count; i++) { 
                 Entities[i].Update(gameTime);
 
-                if(Entities[i].Position.Y == 930)
+                if (Entities[i].Position.Y == 930) { }
             }
         }
 
