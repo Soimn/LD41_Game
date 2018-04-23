@@ -13,6 +13,9 @@ namespace LudumDare41_Game.Entities {
         public abstract EntityHealth Health { get; }
         public abstract EntityAnimationState AnimationState { get; }
 
+        public abstract EntityAttackPower AttackPower { get; }
+        public abstract EntityAttackSpeed AttackSpeed { get; }
+
         public abstract void Init_Wave (Vector2 _position);
         public abstract void Update (GameTime gameTime);
         public abstract void Draw (SpriteBatch spriteBatch);
@@ -28,4 +31,6 @@ namespace LudumDare41_Game.Entities {
 
     public enum EntityHealth { low = 6, medium = 12, large = 16 }
     public enum EntityAnimationState { Idle, Attack }
+    public enum EntityAttackPower { low = 3, medium = 6, high = 12}
+    public enum EntityAttackSpeed { low = 3, medium = 2, high = 1}
 }
