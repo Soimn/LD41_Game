@@ -340,18 +340,6 @@
 /processorParam:TextureFormat=Color
 /build:GUI/Menu/exitSelect.png
 
-#begin Entities/Home/gate.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Entities/Home/gate.png
-
 #begin GUI/Cards/drawCard.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -399,4 +387,16 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Audio/mainSong.mp3
+
+#begin Entities/Home/gate.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Entities/Home/gate.png
 

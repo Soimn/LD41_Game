@@ -116,7 +116,7 @@ namespace LudumDare41_Game {
             gui.Load();
             cards.Load(Content);
 
-            home = new Home(new Vector2(19, 30), Content);
+            home = new Home(new Vector2(19, 31), Content);
 
             debugFont = Content.Load<SpriteFont>("GUI/Debug/debugFont");
 

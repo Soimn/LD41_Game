@@ -24,7 +24,7 @@ namespace LudumDare41_Game.World {
             position = _position;
 
             currentAnimation = AnimationState.Idle;
-            idleAnimation = new Animation(_content.Load<Texture2D>("Entities/Home/gate"), new Vector2(192, 64), 3, 750);
+            idleAnimation = new Animation(_content.Load<Texture2D>("Entities/Home/gate"), new Vector2(192, 128), 3, 750);
             //idleAnimation = new Animation(_content.Load<Texture2D>("Entities/Home/hurtAnim"), new Vector2(64, 64), 3, 750);
         }
 
