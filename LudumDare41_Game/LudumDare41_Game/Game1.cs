@@ -140,7 +140,7 @@ namespace LudumDare41_Game {
 
                         level01.Update(gameTime);
 
-                        gui.Update(gameTime, Window, camera);
+                        gui.Update(gameTime, Window, camera, waveManager);
                         cards.Update(gameTime, Window, isTutorial);
 
                         home.Update(gameTime);
