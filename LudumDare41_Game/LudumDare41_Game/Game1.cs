@@ -21,7 +21,7 @@ namespace LudumDare41_Game {
 
         public enum GameStates { MENU, INGAME }; //gamestates, legg til om vi trenger
         bool isPaused = false;
-        public static GameStates currentState = GameStates.INGAME;
+        public static GameStates currentState = GameStates.MENU;
 
         public static Camera2D camera { get; private set; }
         public static bool isTutorial { get; set; }
@@ -131,7 +131,7 @@ namespace LudumDare41_Game {
             if (!isPaused) {
                 switch (currentState) {
                     case GameStates.MENU: //vente med denne til slutt
-                        menu.Update(gameTime);
+                        menu.Update(gameTime, this);
                         break;
 
                     case GameStates.INGAME:

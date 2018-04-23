@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace LudumDare41_Game.UI {
     class Menu {
-        Texture2D title, play, playSelect;
-        Rectangle mouseRect, playRect;
+        Texture2D title, play, playSelect, exit, exitSelect;
+        Rectangle mouseRect, playRect, exitRect;
 
         public Menu() {
 
@@ -19,22 +19,32 @@ namespace LudumDare41_Game.UI {
 
         public void Load(ContentManager c) {
             title = c.Load<Texture2D>("GUI/Menu/title");
+
             play = c.Load<Texture2D>("GUI/Menu/play");
             playSelect = c.Load<Texture2D>("GUI/Menu/playSelect");
+
+            exit = c.Load<Texture2D>("GUI/Menu/exit");
+            exitSelect = c.Load<Texture2D>("GUI/Menu/exitSelect");
         }
 
-        public void Update(GameTime gt) {
+        public void Update(GameTime gt, Game1 game) {
             mouseRect = new Rectangle((int)Mouse.GetState().Position.X, (int)Mouse.GetState().Position.Y, 1, 1);
 
             if (mouseRect.Intersects(playRect) 
                 && Mouse.GetState().LeftButton.Equals(ButtonState.Pressed)) {
                 Game1.currentState = Game1.GameStates.INGAME;
             }
+            if (mouseRect.Intersects(exitRect)
+                && Mouse.GetState().LeftButton.Equals(ButtonState.Pressed)) {
+                game.Exit();
+            }
+
         }
 
         public void Draw(SpriteBatch sb, GameWindow w) {
-            Texture2D playBtn;
+            Texture2D playBtn, exitBtn;
             playRect = new Rectangle((w.ClientBounds.Width / 2) - 200, 350, play.Width, play.Height);
+            exitRect = new Rectangle((w.ClientBounds.Width / 2) - 200, 450, exit.Width, exit.Height);
 
             sb.Begin();
             sb.Draw(title, new Rectangle((w.ClientBounds.Width / 2) - 200, 10, 400, 300), Color.White);
@@ -46,8 +56,15 @@ namespace LudumDare41_Game.UI {
                 playBtn = play;
             }
 
+            if (mouseRect.Intersects(exitRect)) {
+                exitBtn = exitSelect;
+            }
+            else {
+                exitBtn = exit;
+            }
+
             sb.Draw(playBtn, playRect, Color.White);
-            sb.Draw(playBtn, playRect, Color.White);
+            sb.Draw(exitBtn, exitRect, Color.White);
 
             sb.End();
         }
