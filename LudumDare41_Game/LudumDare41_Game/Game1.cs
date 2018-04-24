@@ -63,9 +63,6 @@ namespace LudumDare41_Game {
 
         private float lastTime, cooldown = 0.5f;
 
-        public const int screenWidth = 1920, screenHeight = 1080;
-
-
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

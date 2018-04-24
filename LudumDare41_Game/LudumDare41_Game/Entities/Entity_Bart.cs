@@ -84,9 +84,9 @@ namespace LudumDare41_Game.Entities {
                     break;
             }
 
-            if(Position.Y = 930) {
+            //if(Position.Y = 930) {
 
-            }
+            //}
         }
 
 
