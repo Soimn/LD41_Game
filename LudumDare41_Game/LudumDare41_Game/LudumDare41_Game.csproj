@@ -42,6 +42,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AudioManager.cs" />
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="CoordinateSystem\TileCoord.cs" />
     <Compile Include="Entities\Entity.cs" />

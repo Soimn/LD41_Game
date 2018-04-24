@@ -267,12 +267,16 @@ namespace LudumDare41_Game.UI {
 
         int countdown = 10; //hent fra Simon <- her skal jeg ha hvor lang tid det er imellom waves.
 
+        AudioManager audio;
+
         public WaveInfo(string name, Rectangle pos) : base(name, pos) {
         }
 
         public new void Load(ContentManager c) {
             waveCountdown = new Animation(c.Load<Texture2D>("GUI/WaveCountdown"), new Vector2(32, 64), 4, 500);
             waveCounterTutorial = c.Load<Texture2D>("Tutorial/Waves");
+
+            audio = new AudioManager(c);
         }
         
         public void ActualUpdate(GameTime gt, GameWindow w, WaveManager waveManager) {

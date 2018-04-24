@@ -15,6 +15,7 @@ namespace LudumDare41_Game.Entities {
         public override float Speed { get => speed; }
         private float speed;
 
+        private float timer = 0;
         private int currentHealth;
         public override int CurrentHealth { get => currentHealth; }
         private EntityHealth initHealth;
@@ -81,6 +82,10 @@ namespace LudumDare41_Game.Entities {
                     break;
                 default:
                     break;
+            }
+
+            if(Position.Y = 930) {
+
             }
         }
 
