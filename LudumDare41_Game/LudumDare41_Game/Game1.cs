@@ -325,7 +325,6 @@ namespace LudumDare41_Game {
                     //WORLD
                     level01.Draw(spriteBatch, camera, GraphicsDevice);
                     spriteBatch.Begin(samplerState: SamplerState.PointWrap);
-                    home.Draw(spriteBatch);
                     #region // Towers //
 
                     towerManager.Draw(spriteBatch);
@@ -339,8 +338,16 @@ namespace LudumDare41_Game {
                     if (isTutorial)
                         spriteBatch.Draw(tutorialStart, new Rectangle((Window.ClientBounds.Width / 2) - (tutorialStart.Width / 2), (Window.ClientBounds.Height / 2) - (tutorialStart.Height / 2), tutorialStart.Width, tutorialStart.Height), Color.White);
 
+                    home.Draw(spriteBatch);
                     gui.Draw(spriteBatch, Window);
                     cards.Draw(spriteBatch, Window);
+
+                    if (isGameOver) {
+                        spriteBatch.DrawString(Card.titleFont, "Game over!", new Vector2((Window.ClientBounds.Width / 2) - Card.titleFont.MeasureString("Game over!").X + 1, (Window.ClientBounds.Height / 2) - Card.titleFont.MeasureString("Game over!").Y + 1), Color.Black);
+                        spriteBatch.DrawString(Card.titleFont, "Game over!", new Vector2((Window.ClientBounds.Width / 2) - Card.titleFont.MeasureString("Game over!").X - 1, (Window.ClientBounds.Height / 2) - Card.titleFont.MeasureString("Game over!").Y - 1), Color.Black);
+                        spriteBatch.DrawString(Card.titleFont, "Game over!", new Vector2((Window.ClientBounds.Width / 2) - Card.titleFont.MeasureString("Game over!").X, (Window.ClientBounds.Height / 2) - Card.titleFont.MeasureString("Game over!").Y), Color.White);
+                    }
+
                     #region // DEBUG //
                     spriteBatch.DrawString(debugFont, "FPS: " + (Math.Round(1000 / gameTime.ElapsedGameTime.TotalMilliseconds)).ToString(), new Vector2(0, 0), Color.Black); //FPS Counter
 
