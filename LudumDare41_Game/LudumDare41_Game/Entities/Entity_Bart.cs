@@ -93,6 +93,7 @@ namespace LudumDare41_Game.Entities {
                     Home.TakeDamage((int)entityAttackPower);
                 }
             }
+
         }
 
 

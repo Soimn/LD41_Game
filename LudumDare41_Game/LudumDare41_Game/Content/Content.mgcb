@@ -449,3 +449,15 @@
 /processorParam:TextureFormat=Color
 /build:Towers/BombTower/BombTower_IdleSpritesheet.png
 
+#begin GUI/Menu/MenuBG.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:GUI/Menu/MenuBG.png
+
