@@ -84,7 +84,7 @@ namespace LudumDare41_Game {
             cards = new Cards();
 
 
-            Window.Title = "Ludum Dare 41: Card game tower defence";
+            Window.Title = "God does play cards!";
 
             #region // Towers //
 
