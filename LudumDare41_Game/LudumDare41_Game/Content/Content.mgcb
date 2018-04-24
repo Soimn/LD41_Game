@@ -71,30 +71,6 @@
 /processorParam:TextureFormat=Color
 /build:GUI/Cards/Mage Tower/mageBg.png
 
-#begin Towers/MageTower/MageTower_IdleSpritesheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Towers/MageTower/MageTower_IdleSpritesheet.png
-
-#begin Towers/MageTower/MageTower_AttackSpritesheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Towers/MageTower/MageTower_AttackSpritesheet.png
-
 #begin Entities/ExampleEntity/ExampleEnemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -106,18 +82,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Entities/ExampleEntity/ExampleEnemy.png
-
-#begin GUI/Menu/title.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:GUI/Menu/title.png
 
 #begin Levels/level01.tmx
 /importer:TiledMapImporter
@@ -425,6 +389,18 @@
 /processorParam:Quality=Best
 /build:Audio/ambiance.mp3
 
+#begin GUI/Menu/MenuBG.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:GUI/Menu/MenuBG.png
+
 #begin Towers/BombTower/BombTower_AttackSpritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -449,7 +425,7 @@
 /processorParam:TextureFormat=Color
 /build:Towers/BombTower/BombTower_IdleSpritesheet.png
 
-#begin GUI/Menu/MenuBG.png
+#begin Towers/MageTower/MageTower_AttackSpritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -459,5 +435,29 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:GUI/Menu/MenuBG.png
+/build:Towers/MageTower/MageTower_AttackSpritesheet.png
+
+#begin Towers/MageTower/MageTower_IdleSpritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Towers/MageTower/MageTower_IdleSpritesheet.png
+
+#begin GUI/Menu/Title.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:GUI/Menu/Title.png
 

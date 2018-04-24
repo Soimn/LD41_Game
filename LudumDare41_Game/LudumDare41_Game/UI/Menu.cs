@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LudumDare41_Game.UI {
     class Menu {
-        Texture2D title, play, playSelect, exit, exitSelect;
+        Texture2D title, play, playSelect, exit, exitSelect, menuBG;
         Rectangle mouseRect, playRect, exitRect;
         Song menuSong;
 
@@ -27,6 +27,8 @@ namespace LudumDare41_Game.UI {
 
             exit = c.Load<Texture2D>("GUI/Menu/exit");
             exitSelect = c.Load<Texture2D>("GUI/Menu/exitSelect");
+
+            menuBG = c.Load<Texture2D>("GUI/Menu/MenuBG");
 
             menuSong = c.Load<Song>("Audio/mainSong");
 
@@ -57,7 +59,8 @@ namespace LudumDare41_Game.UI {
             exitRect = new Rectangle((w.ClientBounds.Width / 2) - 200, 450, exit.Width, exit.Height);
 
             sb.Begin(samplerState: SamplerState.PointWrap);
-            sb.Draw(title, new Rectangle((w.ClientBounds.Width / 2) - 200, 10, 400, 300), Color.White);
+            sb.Draw(menuBG, new Rectangle(0,0, w.ClientBounds.Width, w.ClientBounds.Height), Color.White);
+            sb.Draw(title, new Rectangle((w.ClientBounds.Width / 2) - (1570 / 4), 100, 1570 / 2, 270 / 2), Color.White);
 
             if (mouseRect.Intersects(playRect)) {
                 playBtn = playSelect;

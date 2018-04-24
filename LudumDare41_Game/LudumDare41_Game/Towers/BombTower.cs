@@ -58,7 +58,7 @@ namespace LudumDare41_Game.Towers {
             size = new TowerSize(TowerWidth.narrow, TowerHeight.tall);
 
             idleAnimation = contentManager.LoadAnimation("BombTower", "Idle", (int)size.Width, (int)size.Height, 350f);
-            attackAnimation = contentManager.LoadAnimation("BombTower", "Attack", (int)size.Width, (int)size.Height, 350f);
+            attackAnimation = contentManager.LoadAnimation("BombTower", "Attack", (int)size.Width, (int)size.Height, 100f);
             //attack animation
 
             coord = _coord;
