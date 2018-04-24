@@ -64,6 +64,8 @@ namespace LudumDare41_Game {
 
         private float lastTime, cooldown = 0.5f;
 
+        private HandCard previousHeldCard;
+
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -222,6 +224,7 @@ namespace LudumDare41_Game {
                                 cardHasBeenHeld = true;
                                 towerManager.CreatePreviewTower(heldCard.referenceCard.TowerID, new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y), out previewTower);
                                 previewTowerInstantiated = true;
+                                previousHeldCard = heldCard;
                             }
 
                             else if (heldCard != null && previewTowerInstantiated)
@@ -232,8 +235,9 @@ namespace LudumDare41_Game {
                                     towerManager.DestroyPreviewTower(previewTower);
                                     previewTowerInstantiated = false;
                                     previewTower = null;
-                                    towerManager.SpawnTower(new MageTower(towerManager, contentManager, entityManager), new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
+                                    towerManager.SpawnTower(previousHeldCard.referenceCard.TowerID, new CoordinateSystem.TileCoord(UI.WorldSelector.selectedTile.X, UI.WorldSelector.selectedTile.Y));
                                     cardHasBeenHeld = false;
+                                    previousHeldCard = null;
 
                                     Cards.cardsInHand.Remove(Cards.previouslyHeldCard);
                                 }
