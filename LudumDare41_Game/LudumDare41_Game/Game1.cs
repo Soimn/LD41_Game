@@ -28,6 +28,7 @@ namespace LudumDare41_Game {
 
         public static Camera2D camera { get; private set; }
         public static bool isTutorial { get; set; }
+        public static bool isGameOver { get; set; }
 
         private static Level level01;
         internal static Level Level01 { get => level01; }
@@ -73,7 +74,6 @@ namespace LudumDare41_Game {
             Window.AllowUserResizing = true;
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
-
         }
 
         protected override void Initialize() {
@@ -106,6 +106,8 @@ namespace LudumDare41_Game {
             tutorial = Content.Load<Texture2D>("GUI/cardSel");
             tutorialStart = Content.Load<Texture2D>("Tutorial/start");
 
+            isGameOver = false;
+
             base.Initialize();
         }
 
@@ -132,7 +134,7 @@ namespace LudumDare41_Game {
             KeyboardState newState = Keyboard.GetState();
             GameStates newGameState = currentState;
 
-            if (!isPaused) {
+            if (!isPaused && !isGameOver) {
                 switch (currentState) {
                     case GameStates.MENU: //vente med denne til slutt
                         menu.Update(gameTime, this);
@@ -280,14 +282,20 @@ namespace LudumDare41_Game {
                 }
             }
             else {
-                if (newState.IsKeyDown(Keys.Escape) && oldState.IsKeyUp(Keys.Escape)) {
-                    if (isPaused) {
-                        isPaused = false;
-                    }
-                    else {
-                        isPaused = true;
+                if (!isGameOver) {
+                    if (newState.IsKeyDown(Keys.Escape) && oldState.IsKeyUp(Keys.Escape)) {
+                        if (isPaused) {
+                            isPaused = false;
+                        }
+                        else {
+                            isPaused = true;
+                        }
                     }
                 }
+                else {
+
+                }
+                
             }
 
             lastState = newGameState;

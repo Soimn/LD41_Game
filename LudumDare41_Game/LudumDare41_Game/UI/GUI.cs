@@ -286,10 +286,12 @@ namespace LudumDare41_Game.UI {
                 if (newRoundState && !oldRoundState) {
                     waveCountdown.ResetAnimation();
                     showCountdown = true;
+                    audio.UpdateState(AudioManager.AudioStates.BetweenWave);
                 }
 
                 if (!newRoundState && oldRoundState) {
                     showCountdown = false;
+                    audio.UpdateState(AudioManager.AudioStates.InWave);
                 }
 
                 if (showCountdown) {
@@ -299,6 +301,7 @@ namespace LudumDare41_Game.UI {
             } else {
                 showCountdown = true;
                 newRoundState = true;
+                audio.UpdateState(AudioManager.AudioStates.BetweenWave);
             }
 
             pos = new Rectangle((int)Game1.camera.WorldToScreen(320, 80).X, (int)Game1.camera.WorldToScreen(400, 80).Y, 32, 64);

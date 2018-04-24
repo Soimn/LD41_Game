@@ -1,6 +1,7 @@
 ﻿using LudumDare41_Game.Content;
 using LudumDare41_Game.Graphics;
 using LudumDare41_Game.Physics;
+using LudumDare41_Game.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -15,6 +16,7 @@ namespace LudumDare41_Game.Entities {
         public override float Speed { get => speed; }
         private float speed;
 
+        private float timer = 0;
         private int currentHealth;
         public override int CurrentHealth { get => currentHealth; }
         private EntityHealth initHealth;
@@ -81,6 +83,15 @@ namespace LudumDare41_Game.Entities {
                     break;
                 default:
                     break;
+            }
+
+            if (position.Y == 930) {
+                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (timer > (int)entityAttackSpeed) {
+                    timer = 0;
+                    Home.TakeDamage((int)entityAttackPower);
+                }
             }
         }
 

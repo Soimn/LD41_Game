@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LudumDare41_Game.World {
     class Home {
-        public int health { get; set; }
+        public static int health { get; set; }
         public static Vector2 position { get; private set; }
 
         enum AnimationState { Idle, Hurt };
@@ -37,6 +37,10 @@ namespace LudumDare41_Game.World {
                 case AnimationState.Hurt:
                     break;
             }
+
+            if (health < 0) {
+                Game1.isGameOver = true;
+            }
         }
 
         public void Draw(SpriteBatch sb) {
@@ -48,35 +52,9 @@ namespace LudumDare41_Game.World {
                     break;
             }
         }
-    }
-}
-/*
-        public override void Init(Vector2 _position) {
-            animationState = EntityAnimationState.Idle;
 
-            size = new EntitySize(EntityWidth.medium, EntityHeight.tall);
-
-        }
-
-        public override void Update(GameTime gt) {
-            switch (animationState) {
-                case EntityAnimationState.Idle: //default
-                    idleAnim.updateAnimation(gt);
-                    break;
-            }
-        }
-
-        public override void Draw(SpriteBatch sb) {
-            switch (animationState) {
-                case EntityAnimationState.Idle: //default
-                    idleAnim.drawAnimation(sb, GetDrawPos(new TileCoord((int)Position.X * 32, (int)Position.Y * 32)));
-                    break;
-            }
-        }
-
-        public Vector2 GetDrawPos(TileCoord coord) {
-            return new Vector2((int)coordHandler.WorldToScreen(coord.ToVector2()).X, (int)coordHandler.WorldToScreen(coord.ToVector2()).Y);
+        public static void TakeDamage(int damage) {
+            health -= damage;
         }
     }
 }
-*/

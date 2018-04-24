@@ -20,7 +20,7 @@ namespace LudumDare41_Game {
             between = c.Load<Song>("Audio/ambiance");
         }
 
-        public void UpdateState(SpriteBatch sb, AudioStates newState) {
+        public void UpdateState(AudioStates newState) {
             MediaPlayer.Stop();
 
             switch (newState) {

@@ -47,6 +47,8 @@ namespace LudumDare41_Game.UI {
                 game.Exit();
             }
 
+            
+
         }
 
         public void Draw(SpriteBatch sb, GameWindow w) {
@@ -54,7 +56,7 @@ namespace LudumDare41_Game.UI {
             playRect = new Rectangle((w.ClientBounds.Width / 2) - 200, 350, play.Width, play.Height);
             exitRect = new Rectangle((w.ClientBounds.Width / 2) - 200, 450, exit.Width, exit.Height);
 
-            sb.Begin();
+            sb.Begin(samplerState: SamplerState.PointWrap);
             sb.Draw(title, new Rectangle((w.ClientBounds.Width / 2) - 200, 10, 400, 300), Color.White);
 
             if (mouseRect.Intersects(playRect)) {
