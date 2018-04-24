@@ -1,4 +1,5 @@
 ﻿using LudumDare41_Game.Graphics;
+using LudumDare41_Game.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -51,6 +52,11 @@ namespace LudumDare41_Game.World {
                 case AnimationState.Hurt:
                     break;
             }
+            sb.DrawString(Card.titleFont, "Health: " + health.ToString(), Game1.camera.WorldToScreen((position.X * 32) + 55, (position.Y * 32) - 70 + 1), Color.Black);
+            sb.DrawString(Card.titleFont, "Health: " + health.ToString(), Game1.camera.WorldToScreen((position.X * 32 + 1) + 55, (position.Y * 32) - 70), Color.Black);
+            sb.DrawString(Card.titleFont, "Health: " + health.ToString(), Game1.camera.WorldToScreen((position.X * 32) + 55, (position.Y * 32) - 70 - 1), Color.Black);
+            sb.DrawString(Card.titleFont, "Health: " + health.ToString(), Game1.camera.WorldToScreen((position.X * 32 - 1) + 55, (position.Y * 32) - 70), Color.Black);
+            sb.DrawString(Card.titleFont, "Health: " + health.ToString(), Game1.camera.WorldToScreen((position.X * 32) + 55, (position.Y * 32) - 70), Color.White);
         }
 
         public static void TakeDamage(int damage) {
